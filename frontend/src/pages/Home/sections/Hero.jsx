@@ -4,6 +4,7 @@ import {
     ArrowRight,
     Check,
     Leaf,
+    Phone,
     Sun,
     TrendingDown,
     Zap,
@@ -17,11 +18,11 @@ export default function Hero() {
             className="
                 relative
                 isolate
-                overflow-hidden
+                min-h-[100svh]
                 bg-app-bg
-                pt-16
-                sm:pt-20
-                lg:pt-24
+                pt-20
+                sm:pt-24
+                lg:pt-28
             "
         >
             {/* =========================================================
@@ -101,7 +102,7 @@ export default function Hero() {
 
 
             {/* =========================================================
-                CONTENT
+                HERO CONTENT
                ========================================================= */}
 
             <div
@@ -113,12 +114,9 @@ export default function Hero() {
                     flex-col
                     items-center
                     px-6
-                    pb-14
                     text-center
                     sm:px-8
-                    sm:pb-18
                     lg:px-10
-                    lg:pb-20
                 "
             >
 
@@ -171,14 +169,14 @@ export default function Hero() {
 
                 <h1
                     className="
-                        mt-7
+                        mt-4
                         max-w-5xl
-                        text-[3.35rem]
+                        text-[3.2rem]
                         font-semibold
                         leading-[0.94]
                         tracking-[-0.055em]
                         text-text
-                        sm:mt-8
+                        sm:mt-5
                         sm:text-6xl
                         md:text-7xl
                         lg:text-[5.7rem]
@@ -218,12 +216,12 @@ export default function Hero() {
                 <p
                     className="
                         mx-auto
-                        mt-8
+                        mt-6
                         max-w-2xl
                         text-base
                         leading-7
                         text-text-secondary
-                        sm:mt-9
+                        sm:mt-7
                         sm:text-lg
                         sm:leading-8
                         lg:text-xl
@@ -237,10 +235,22 @@ export default function Hero() {
 
 
                 {/* =====================================================
-                    PRIMARY CTA
+                    CTA BUTTONS
                    ===================================================== */}
 
-                <div className="mt-8">
+                <div
+                    className="
+                        mt-7
+                        flex
+                        flex-wrap
+                        items-center
+                        justify-center
+                        gap-3
+                        sm:mt-8
+                    "
+                >
+                    {/* Get Started */}
+
                     <Link
                         to="/login"
                         className="
@@ -251,7 +261,7 @@ export default function Hero() {
                             gap-2.5
                             rounded-full
                             bg-primary
-                            px-8
+                            px-7
                             py-3.5
                             text-sm
                             font-semibold
@@ -266,7 +276,7 @@ export default function Hero() {
                             focus:outline-none
                             focus:ring-2
                             focus:ring-primary/30
-                            sm:px-9
+                            sm:px-8
                             sm:py-4
                             sm:text-base
                         "
@@ -286,6 +296,45 @@ export default function Hero() {
                             "
                         />
                     </Link>
+
+
+                    {/* Contact Us */}
+
+                    <Link
+                        to="/contact"
+                        className="
+                            inline-flex
+                            items-center
+                            justify-center
+                            gap-2
+                            rounded-full
+                            border
+                            border-border-strong
+                            bg-surface
+                            px-7
+                            py-3.5
+                            text-sm
+                            font-semibold
+                            text-text
+                            shadow-sm
+                            transition-all
+                            duration-300
+                            hover:-translate-y-1
+                            hover:border-primary
+                            hover:text-primary
+                            hover:shadow-md
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-primary/30
+                            sm:px-8
+                            sm:py-4
+                            sm:text-base
+                        "
+                    >
+                        <Phone className="h-4 w-4" />
+
+                        Contact Us
+                    </Link>
                 </div>
 
 
@@ -295,7 +344,7 @@ export default function Hero() {
 
                 <div
                     className="
-                        mt-6
+                        mt-5
                         flex
                         flex-wrap
                         items-center
@@ -304,7 +353,7 @@ export default function Hero() {
                         gap-y-3
                         text-xs
                         text-text-muted
-                        sm:mt-7
+                        sm:mt-6
                         sm:text-sm
                     "
                 >
@@ -324,20 +373,24 @@ export default function Hero() {
 
                 {/* =====================================================
                     PRODUCT SHOWCASE
+
+                    Kept in normal document flow.
+                    This allows the dashboard to peek below the
+                    100svh hero and appear naturally when scrolling.
                    ===================================================== */}
 
                 <div
                     className="
                         relative
-                        mt-14
+                        mt-10
                         w-full
                         max-w-6xl
-                        sm:mt-16
-                        lg:mt-20
+                        sm:mt-12
+                        lg:mt-14
                     "
                 >
-
                     {/* Dashboard glow */}
+
                     <div
                         className="
                             pointer-events-none
@@ -355,10 +408,10 @@ export default function Hero() {
                     />
 
                     {/* Dashboard */}
+
                     <div className="relative z-10">
                         <EnergyDashboard />
                     </div>
-
                 </div>
 
 
@@ -369,11 +422,12 @@ export default function Hero() {
                 <a
                     href="#what-we-do"
                     className="
-                        mt-10
+                        mt-8
                         inline-flex
                         flex-col
                         items-center
                         gap-2
+                        pb-8
                         text-[10px]
                         font-medium
                         tracking-[0.18em]
@@ -381,7 +435,8 @@ export default function Hero() {
                         transition-colors
                         duration-300
                         hover:text-primary
-                        sm:mt-12
+                        sm:mt-10
+                        sm:pb-10
                         sm:text-xs
                     "
                 >
@@ -389,6 +444,7 @@ export default function Hero() {
 
                     <ArrowDown className="h-4 w-4 animate-bounce" />
                 </a>
+
             </div>
         </section>
     );
@@ -448,6 +504,7 @@ function EnergyDashboard() {
         >
 
             {/* Top highlight */}
+
             <div
                 className="
                     pointer-events-none
@@ -555,6 +612,7 @@ function EnergyDashboard() {
                 >
 
                     {/* Main consumption */}
+
                     <div className="flex items-start justify-between">
                         <div>
                             <p className="text-xs text-text-muted">
@@ -636,6 +694,7 @@ function EnergyDashboard() {
 
 
                     {/* Performance status */}
+
                     <div
                         className="
                             mt-8
@@ -717,12 +776,14 @@ function EnergyDashboard() {
 
 
                     {/* Chart */}
+
                     <div className="mt-6">
                         <EnergyChart />
                     </div>
 
 
                     {/* Time labels */}
+
                     <div
                         className="
                             mt-3
@@ -741,6 +802,7 @@ function EnergyDashboard() {
 
 
                     {/* Bottom metrics */}
+
                     <div className="mt-7 grid grid-cols-3 gap-3">
 
                         <DashboardStat
@@ -762,6 +824,7 @@ function EnergyDashboard() {
 
 
                     {/* Insight */}
+
                     <div
                         className="
                             mt-4
@@ -807,7 +870,6 @@ function DashboardMetric({
 }) {
     return (
         <div>
-
             <div className="flex items-center justify-between gap-3">
 
                 <div className="flex items-center gap-2.5">
@@ -839,16 +901,12 @@ function DashboardMetric({
 
             </div>
 
-
             <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-soft">
-
                 <div
                     className={`h-full rounded-full ${bar}`}
                     style={{ width: percentage }}
                 />
-
             </div>
-
         </div>
     );
 }
@@ -894,6 +952,7 @@ function EnergyChart() {
         <div className="relative h-48 w-full overflow-hidden sm:h-52">
 
             {/* Grid */}
+
             <div
                 className="
                     absolute
@@ -911,14 +970,13 @@ function EnergyChart() {
 
 
             {/* Chart */}
+
             <svg
                 viewBox="0 0 800 220"
                 preserveAspectRatio="none"
                 className="absolute inset-0 h-full w-full"
             >
-
                 <defs>
-
                     <linearGradient
                         id="urjasathiEnergyFill"
                         x1="0"
@@ -938,11 +996,11 @@ function EnergyChart() {
                             stopOpacity="0"
                         />
                     </linearGradient>
-
                 </defs>
 
 
                 {/* Area */}
+
                 <path
                     d="
                         M0 165
@@ -962,6 +1020,7 @@ function EnergyChart() {
 
 
                 {/* Main line */}
+
                 <path
                     d="
                         M0 165
@@ -981,6 +1040,7 @@ function EnergyChart() {
 
 
                 {/* End glow */}
+
                 <circle
                     cx="800"
                     cy="35"
@@ -995,7 +1055,6 @@ function EnergyChart() {
                     r="5"
                     fill="rgb(1 172 159)"
                 />
-
             </svg>
         </div>
     );
