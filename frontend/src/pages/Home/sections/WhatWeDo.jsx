@@ -3,27 +3,29 @@ import {
     ArrowUpRight,
     BatteryCharging,
     ChartNoAxesCombined,
+    CircleGauge,
     Sun,
+    Zap,
 } from "lucide-react";
 
 const capabilities = [
     {
         icon: Activity,
-        title: "Understand consumption",
+        title: "Understand",
         description:
-            "See when, where, and how energy is being consumed across your home or business.",
+            "See where your energy goes across consumption, generation, and grid usage.",
     },
     {
         icon: Sun,
-        title: "Track generation",
+        title: "Optimize",
         description:
-            "Monitor renewable generation and understand how much of your demand it can cover.",
+            "Identify opportunities to use renewable energy and reduce unnecessary demand.",
     },
     {
         icon: ChartNoAxesCombined,
-        title: "Optimize performance",
+        title: "Improve",
         description:
-            "Turn your energy patterns into actionable opportunities for greater efficiency.",
+            "Track performance over time and turn energy data into measurable results.",
     },
 ];
 
@@ -33,14 +35,49 @@ export default function WhatWeDo() {
             id="what-we-do"
             className="
                 relative
+                overflow-hidden
                 bg-app-bg
-                py-24
-                sm:py-28
-                lg:py-36
+                py-20
+                sm:py-24
+                lg:py-28
             "
         >
+            {/* =====================================================
+                BACKGROUND ATMOSPHERE
+               ===================================================== */}
+
+            <div className="pointer-events-none absolute inset-0">
+                <div
+                    className="
+                        absolute
+                        -right-40
+                        top-20
+                        h-96
+                        w-96
+                        rounded-full
+                        bg-primary/5
+                        blur-[120px]
+                    "
+                />
+
+                <div
+                    className="
+                        absolute
+                        -left-40
+                        bottom-0
+                        h-80
+                        w-80
+                        rounded-full
+                        bg-secondary/5
+                        blur-[110px]
+                    "
+                />
+            </div>
+
+
             <div
                 className="
+                    relative
                     mx-auto
                     max-w-7xl
                     px-6
@@ -48,141 +85,133 @@ export default function WhatWeDo() {
                     lg:px-10
                 "
             >
-                {/* =====================================================
-                    INTRO
-                   ===================================================== */}
+                {/* =================================================
+                    MAIN LAYOUT
+                   ================================================= */}
 
                 <div
                     className="
                         grid
-                        gap-8
-                        lg:grid-cols-[0.8fr_1.2fr]
-                        lg:items-end
+                        items-center
+                        gap-14
+                        lg:grid-cols-[0.85fr_1.15fr]
+                        lg:gap-20
                     "
                 >
+
+                    {/* =================================================
+                        LEFT — PRODUCT MESSAGE
+                       ================================================= */}
+
                     <div>
-                        <p
+                        {/* Eyebrow */}
+
+                        <div
                             className="
+                                inline-flex
+                                items-center
+                                gap-2
+                                rounded-full
+                                border
+                                border-secondary/20
+                                bg-secondary/5
+                                px-3.5
+                                py-1.5
                                 text-xs
                                 font-semibold
                                 uppercase
-                                tracking-[0.18em]
+                                tracking-[0.16em]
                                 text-secondary
-                                sm:text-sm
                             "
                         >
-                            What we do
-                        </p>
+                            <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
+
+                            Energy intelligence
+                        </div>
+
+
+                        {/* Heading */}
 
                         <h2
                             className="
-                                mt-4
+                                mt-6
                                 max-w-xl
                                 text-4xl
                                 font-semibold
-                                leading-[1.05]
-                                tracking-[-0.035em]
+                                leading-[1.04]
+                                tracking-[-0.04em]
                                 text-text
                                 sm:text-5xl
-                                lg:text-6xl
+                                lg:text-[3.5rem]
                             "
                         >
-                            Understand your energy.
+                            Know your energy.
                             <br />
 
                             <span className="text-primary">
-                                Then make it work smarter.
+                                Make it work smarter.
                             </span>
                         </h2>
-                    </div>
-
-                    <p
-                        className="
-                            max-w-2xl
-                            text-base
-                            leading-7
-                            text-text-secondary
-                            sm:text-lg
-                            sm:leading-8
-                            lg:justify-self-end
-                        "
-                    >
-                        UrjaSathi brings consumption, generation, grid usage,
-                        and energy performance into one clear view — so you
-                        can move from simply seeing your energy to making
-                        better decisions about it.
-                    </p>
-                </div>
 
 
-                {/* =====================================================
-                    MAIN CONTENT
-                   ===================================================== */}
+                        {/* Description */}
 
-                <div
-                    className="
-                        mt-16
-                        grid
-                        gap-6
-                        lg:grid-cols-[1.05fr_0.95fr]
-                        lg:gap-8
-                    "
-                >
+                        <p
+                            className="
+                                mt-6
+                                max-w-xl
+                                text-base
+                                leading-7
+                                text-text-secondary
+                                sm:text-lg
+                                sm:leading-8
+                            "
+                        >
+                            Solar Sathi brings consumption, solar generation,
+                            grid dependency, and efficiency into one simple
+                            view — giving you the clarity to make better
+                            energy decisions.
+                        </p>
 
-                    {/* =================================================
-                        ENERGY VISUAL
-                       ================================================= */}
 
-                    <EnergyOverview />
+                        {/* Capability cards */}
 
+                        <div className="mt-9 space-y-3">
+                            {capabilities.map((item, index) => {
+                                const Icon = item.icon;
 
-                    {/* =================================================
-                        CAPABILITIES
-                       ================================================= */}
+                                return (
+                                    <div
+                                        key={item.title}
+                                        className="
+                                            group
+                                            flex
+                                            items-center
+                                            gap-4
+                                            rounded-2xl
+                                            border
+                                            border-border
+                                            bg-surface/70
+                                            p-4
+                                            transition-all
+                                            duration-300
+                                            hover:-translate-y-0.5
+                                            hover:border-primary/20
+                                            hover:bg-surface
+                                            hover:shadow-card
+                                            sm:p-5
+                                        "
+                                    >
+                                        {/* Number */}
 
-                    <div
-                        className="
-                            overflow-hidden
-                            rounded-2xl
-                            border
-                            border-border
-                            bg-surface
-                            shadow-card
-                            sm:rounded-3xl
-                        "
-                    >
-                        {capabilities.map((item, index) => {
-                            const Icon = item.icon;
-
-                            return (
-                                <div
-                                    key={item.title}
-                                    className={`
-                                        group
-                                        relative
-                                        p-6
-                                        transition-colors
-                                        duration-300
-                                        hover:bg-surface-soft
-                                        sm:p-8
-                                        ${
-                                            index !==
-                                            capabilities.length - 1
-                                                ? "border-b border-border"
-                                                : ""
-                                        }
-                                    `}
-                                >
-                                    <div className="flex gap-5">
-
-                                        {/* Icon */}
                                         <div
                                             className="
-                                                grid
-                                                h-11
-                                                w-11
+                                                flex
+                                                h-10
+                                                w-10
                                                 shrink-0
-                                                place-items-center
+                                                items-center
+                                                justify-center
                                                 rounded-xl
                                                 bg-primary/10
                                                 text-primary
@@ -192,57 +221,65 @@ export default function WhatWeDo() {
                                                 group-hover:text-white
                                             "
                                         >
-                                            <Icon className="h-5 w-5" />
+                                            <Icon className="h-4.5 w-4.5" />
                                         </div>
 
-                                        {/* Text */}
-                                        <div className="min-w-0">
-                                            <div className="flex items-start justify-between gap-4">
-                                                <h3
-                                                    className="
-                                                        text-lg
-                                                        font-semibold
-                                                        text-text
-                                                        sm:text-xl
-                                                    "
-                                                >
+
+                                        {/* Content */}
+
+                                        <div className="min-w-0 flex-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xs font-medium text-text-muted">
+                                                    0{index + 1}
+                                                </span>
+
+                                                <h3 className="text-sm font-semibold text-text sm:text-base">
                                                     {item.title}
                                                 </h3>
-
-                                                <ArrowUpRight
-                                                    className="
-                                                        h-5
-                                                        w-5
-                                                        shrink-0
-                                                        text-text-muted
-                                                        transition-all
-                                                        duration-300
-                                                        group-hover:-translate-y-0.5
-                                                        group-hover:translate-x-0.5
-                                                        group-hover:text-primary
-                                                    "
-                                                />
                                             </div>
 
                                             <p
                                                 className="
-                                                    mt-2
-                                                    max-w-lg
-                                                    text-sm
-                                                    leading-6
+                                                    mt-1
+                                                    text-xs
+                                                    leading-5
                                                     text-text-secondary
-                                                    sm:text-base
-                                                    sm:leading-7
+                                                    sm:text-sm
+                                                    sm:leading-6
                                                 "
                                             >
                                                 {item.description}
                                             </p>
                                         </div>
+
+
+                                        {/* Arrow */}
+
+                                        <ArrowUpRight
+                                            className="
+                                                h-4
+                                                w-4
+                                                shrink-0
+                                                text-text-muted
+                                                transition-all
+                                                duration-300
+                                                group-hover:-translate-y-0.5
+                                                group-hover:translate-x-0.5
+                                                group-hover:text-primary
+                                            "
+                                        />
                                     </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })}
+                        </div>
                     </div>
+
+
+                    {/* =================================================
+                        RIGHT — ENERGY INTELLIGENCE VISUAL
+                       ================================================= */}
+
+                    <EnergyOverview />
                 </div>
             </div>
         </section>
@@ -256,134 +293,281 @@ export default function WhatWeDo() {
 
 function EnergyOverview() {
     return (
-        <div
-            className="
-                relative
-                overflow-hidden
-                rounded-2xl
-                border
-                border-border
-                bg-surface
-                p-6
-                shadow-card
-                sm:rounded-3xl
-                sm:p-8
-                lg:p-10
-            "
-        >
-            {/* Subtle purple atmosphere */}
+        <div className="relative">
+
+            {/* Floating top metric */}
+
             <div
                 className="
-                    pointer-events-none
                     absolute
-                    -right-32
-                    -top-32
-                    h-80
-                    w-80
-                    rounded-full
-                    bg-primary/5
-                    blur-[100px]
+                    -right-2
+                    -top-5
+                    z-20
+                    hidden
+                    rounded-2xl
+                    border
+                    border-border
+                    bg-surface
+                    px-4
+                    py-3
+                    shadow-card
+                    sm:block
+                    lg:-right-8
+                    lg:-top-6
                 "
-            />
-
-            <div className="relative">
-
-                {/* Header */}
-                <div className="flex items-start justify-between gap-5">
-                    <div>
-                        <p className="text-xs text-text-muted">
-                            Energy overview
-                        </p>
-
-                        <h3
-                            className="
-                                mt-1
-                                text-xl
-                                font-semibold
-                                text-text
-                                sm:text-2xl
-                            "
-                        >
-                            See the bigger picture.
-                        </h3>
-                    </div>
-
+            >
+                <div className="flex items-center gap-3">
                     <div
                         className="
                             grid
-                            h-10
-                            w-10
-                            shrink-0
+                            h-9
+                            w-9
                             place-items-center
                             rounded-xl
                             bg-secondary/10
                             text-secondary
                         "
                     >
-                        <BatteryCharging className="h-5 w-5" />
+                        <CircleGauge className="h-4 w-4" />
+                    </div>
+
+                    <div>
+                        <p className="text-[10px] text-text-muted">
+                            Efficiency
+                        </p>
+
+                        <p className="text-sm font-semibold text-text">
+                            +18.6%
+                        </p>
                     </div>
                 </div>
+            </div>
 
 
-                {/* Main metric */}
-                <div className="mt-10">
-                    <p className="text-sm text-text-muted">
-                        Today's energy consumption
-                    </p>
+            {/* Floating bottom metric */}
 
-                    <div className="mt-1 flex items-baseline gap-2">
-                        <span
-                            className="
-                                text-5xl
-                                font-semibold
-                                tracking-tight
-                                text-text
-                                sm:text-6xl
-                            "
-                        >
-                            18.4
-                        </span>
+            <div
+                className="
+                    absolute
+                    -bottom-5
+                    -left-2
+                    z-20
+                    hidden
+                    rounded-2xl
+                    border
+                    border-border
+                    bg-surface
+                    px-4
+                    py-3
+                    shadow-card
+                    sm:block
+                    lg:-left-8
+                    lg:-bottom-6
+                "
+            >
+                <div className="flex items-center gap-3">
+                    <div
+                        className="
+                            grid
+                            h-9
+                            w-9
+                            place-items-center
+                            rounded-xl
+                            bg-primary/10
+                            text-primary
+                        "
+                    >
+                        <Sun className="h-4 w-4" />
+                    </div>
 
-                        <span className="text-sm text-text-muted">
-                            kWh
-                        </span>
+                    <div>
+                        <p className="text-[10px] text-text-muted">
+                            Renewable share
+                        </p>
+
+                        <p className="text-sm font-semibold text-text">
+                            47.3%
+                        </p>
                     </div>
                 </div>
+            </div>
 
 
-                {/* Chart */}
-                <EnergyChart />
+            {/* Main dashboard */}
 
+            <div
+                className="
+                    relative
+                    overflow-hidden
+                    rounded-3xl
+                    border
+                    border-border
+                    bg-surface
+                    shadow-card
+                "
+            >
+                {/* Atmosphere */}
 
-                {/* Bottom data */}
                 <div
                     className="
-                        mt-7
-                        grid
-                        grid-cols-3
-                        gap-4
-                        border-t
+                        pointer-events-none
+                        absolute
+                        -right-24
+                        -top-24
+                        h-72
+                        w-72
+                        rounded-full
+                        bg-primary/10
+                        blur-[100px]
+                    "
+                />
+
+                <div
+                    className="
+                        pointer-events-none
+                        absolute
+                        -bottom-32
+                        -left-20
+                        h-64
+                        w-64
+                        rounded-full
+                        bg-secondary/10
+                        blur-[90px]
+                    "
+                />
+
+
+                {/* Dashboard header */}
+
+                <div
+                    className="
+                        relative
+                        flex
+                        items-center
+                        justify-between
+                        border-b
                         border-border
-                        pt-6
+                        px-5
+                        py-4
+                        sm:px-7
+                        sm:py-5
                     "
                 >
-                    <OverviewMetric
-                        label="Solar"
-                        value="8.7 kWh"
-                        accent="text-solar"
-                    />
+                    <div className="flex items-center gap-2.5">
+                        <span className="h-2.5 w-2.5 rounded-full bg-secondary" />
 
-                    <OverviewMetric
-                        label="Grid"
-                        value="5.2 kWh"
-                        accent="text-primary"
-                    />
+                        <span className="text-xs font-medium text-text-secondary sm:text-sm">
+                            Solar Sathi Intelligence
+                        </span>
+                    </div>
 
-                    <OverviewMetric
-                        label="Efficiency"
-                        value="+18.6%"
-                        accent="text-secondary"
-                    />
+                    <span
+                        className="
+                            rounded-full
+                            bg-secondary/10
+                            px-2.5
+                            py-1
+                            text-[9px]
+                            font-semibold
+                            tracking-wide
+                            text-secondary
+                            sm:text-[10px]
+                        "
+                    >
+                        LIVE
+                    </span>
+                </div>
+
+
+                {/* Dashboard body */}
+
+                <div className="relative p-5 sm:p-7">
+
+                    {/* Main metric */}
+
+                    <div className="flex items-end justify-between gap-4">
+                        <div>
+                            <p className="text-xs text-text-muted">
+                                Today's consumption
+                            </p>
+
+                            <div className="mt-1 flex items-baseline gap-2">
+                                <span
+                                    className="
+                                        text-4xl
+                                        font-semibold
+                                        tracking-tight
+                                        text-text
+                                        sm:text-5xl
+                                    "
+                                >
+                                    18.4
+                                </span>
+
+                                <span className="text-xs text-text-muted sm:text-sm">
+                                    kWh
+                                </span>
+                            </div>
+                        </div>
+
+                        <div
+                            className="
+                                flex
+                                items-center
+                                gap-1.5
+                                rounded-full
+                                bg-secondary/10
+                                px-2.5
+                                py-1
+                                text-[10px]
+                                font-semibold
+                                text-secondary
+                            "
+                        >
+                            <Zap className="h-3 w-3" />
+
+                            8.4%
+                        </div>
+                    </div>
+
+
+                    {/* Chart */}
+
+                    <EnergyChart />
+
+
+                    {/* Metrics */}
+
+                    <div
+                        className="
+                            mt-6
+                            grid
+                            grid-cols-3
+                            gap-2
+                            sm:gap-3
+                        "
+                    >
+                        <Metric
+                            icon={Sun}
+                            label="Solar"
+                            value="8.7 kWh"
+                            accent="secondary"
+                        />
+
+                        <Metric
+                            icon={BatteryCharging}
+                            label="Grid"
+                            value="5.2 kWh"
+                            accent="primary"
+                        />
+
+                        <Metric
+                            icon={ChartNoAxesCombined}
+                            label="Saved"
+                            value="18.6%"
+                            accent="secondary"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -392,14 +576,15 @@ function EnergyOverview() {
 
 
 /* =========================================================
-   CHART
+   ENERGY CHART
    ========================================================= */
 
 function EnergyChart() {
     return (
-        <div className="relative mt-8 h-52 w-full overflow-hidden">
+        <div className="relative mt-7 h-48 w-full overflow-hidden sm:h-56">
 
             {/* Grid */}
+
             <div
                 className="
                     absolute
@@ -416,7 +601,8 @@ function EnergyChart() {
             </div>
 
 
-            {/* SVG */}
+            {/* Chart */}
+
             <svg
                 viewBox="0 0 800 220"
                 preserveAspectRatio="none"
@@ -424,7 +610,7 @@ function EnergyChart() {
             >
                 <defs>
                     <linearGradient
-                        id="whatWeDoEnergyFill"
+                        id="solarSathiEnergyFill"
                         x1="0"
                         y1="0"
                         x2="0"
@@ -433,7 +619,7 @@ function EnergyChart() {
                         <stop
                             offset="0%"
                             stopColor="rgb(1 172 159)"
-                            stopOpacity="0.22"
+                            stopOpacity="0.24"
                         />
 
                         <stop
@@ -458,7 +644,7 @@ function EnergyChart() {
                         L0 220
                         Z
                     "
-                    fill="url(#whatWeDoEnergyFill)"
+                    fill="url(#solarSathiEnergyFill)"
                 />
 
                 <path
@@ -488,35 +674,79 @@ function EnergyChart() {
                 <circle
                     cx="800"
                     cy="38"
-                    r="10"
+                    r="11"
                     fill="rgb(1 172 159)"
                     fillOpacity="0.12"
                 />
             </svg>
+
+
+            {/* Time labels */}
+
+            <div
+                className="
+                    absolute
+                    bottom-0
+                    left-0
+                    right-0
+                    flex
+                    justify-between
+                    text-[9px]
+                    text-text-muted
+                    sm:text-[10px]
+                "
+            >
+                <span>00:00</span>
+                <span>06:00</span>
+                <span>12:00</span>
+                <span>18:00</span>
+                <span>24:00</span>
+            </div>
         </div>
     );
 }
 
 
 /* =========================================================
-   OVERVIEW METRIC
+   METRIC
    ========================================================= */
 
-function OverviewMetric({ label, value, accent }) {
+function Metric({
+    icon: Icon,
+    label,
+    value,
+    accent,
+}) {
     return (
-        <div>
-            <p className="text-xs text-text-muted">
-                {label}
-            </p>
+        <div
+            className="
+                rounded-2xl
+                border
+                border-border
+                bg-surface-soft/60
+                p-3
+                sm:p-4
+            "
+        >
+            <div className="flex items-center gap-2">
+                <Icon
+                    className={`
+                        h-3.5
+                        w-3.5
+                        ${
+                            accent === "primary"
+                                ? "text-primary"
+                                : "text-secondary"
+                        }
+                    `}
+                />
 
-            <p
-                className={`
-                    mt-1
-                    text-sm
-                    font-semibold
-                    ${accent}
-                `}
-            >
+                <span className="text-[10px] text-text-muted sm:text-xs">
+                    {label}
+                </span>
+            </div>
+
+            <p className="mt-2 text-sm font-semibold text-text sm:text-base">
                 {value}
             </p>
         </div>

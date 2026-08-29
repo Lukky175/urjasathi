@@ -1,8 +1,11 @@
 import {
+    Activity,
     ArrowDown,
     ArrowRight,
     Check,
     Leaf,
+    Sun,
+    TrendingDown,
     Zap,
 } from "lucide-react";
 
@@ -10,52 +13,64 @@ import { Link } from "react-router-dom";
 
 export default function Hero() {
     return (
-        <section className="relative isolate min-h-[calc(100svh-5.5rem)] overflow-hidden bg-app-bg">
+        <section
+            className="
+                relative
+                isolate
+                overflow-hidden
+                bg-app-bg
+                pt-16
+                sm:pt-20
+                lg:pt-24
+            "
+        >
             {/* =========================================================
                 BACKGROUND ATMOSPHERE
                ========================================================= */}
 
-            <div className="pointer-events-none absolute inset-0 -z-10">
-                {/* Primary glow */}
+            <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+
+                {/* Left energy glow */}
                 <div
                     className="
                         absolute
-                        -left-40
-                        top-10
-                        h-[520px]
-                        w-[520px]
+                        -left-64
+                        top-0
+                        h-[620px]
+                        w-[620px]
                         rounded-full
                         bg-primary/10
-                        blur-[120px]
+                        blur-[150px]
                     "
                 />
 
-                {/* Secondary glow */}
+                {/* Right renewable glow */}
                 <div
                     className="
                         absolute
-                        -right-40
+                        -right-64
                         top-24
-                        h-[560px]
-                        w-[560px]
+                        h-[620px]
+                        w-[620px]
                         rounded-full
                         bg-secondary/10
-                        blur-[130px]
+                        blur-[150px]
                     "
                 />
 
-                {/* Bottom energy glow */}
+                {/* Dashboard glow */}
                 <div
                     className="
                         absolute
-                        bottom-[-250px]
                         left-1/2
-                        h-[500px]
-                        w-[900px]
+                        top-[58%]
+                        h-[520px]
+                        w-[1000px]
                         -translate-x-1/2
+                        -translate-y-1/2
                         rounded-full
                         bg-primary/5
-                        blur-[120px]
+                        blur-[140px]
                     "
                 />
 
@@ -64,16 +79,29 @@ export default function Hero() {
                     className="
                         absolute
                         inset-0
-                        opacity-[0.035]
+                        opacity-[0.025]
                         [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)]
                         [background-size:72px_72px]
+                    "
+                />
+
+                {/* Bottom fade */}
+                <div
+                    className="
+                        absolute
+                        inset-x-0
+                        bottom-0
+                        h-56
+                        bg-gradient-to-t
+                        from-app-bg
+                        to-transparent
                     "
                 />
             </div>
 
 
             {/* =========================================================
-                HERO CONTENT
+                CONTENT
                ========================================================= */}
 
             <div
@@ -81,18 +109,16 @@ export default function Hero() {
                     relative
                     mx-auto
                     flex
-                    min-h-[calc(100svh-5.5rem)]
                     max-w-7xl
                     flex-col
                     items-center
-                    justify-center
                     px-6
-                    pb-20
-                    pt-20
+                    pb-14
                     text-center
                     sm:px-8
+                    sm:pb-18
                     lg:px-10
-                    lg:pb-24
+                    lg:pb-20
                 "
             >
 
@@ -105,28 +131,26 @@ export default function Hero() {
                         inline-flex
                         items-center
                         gap-2.5
-                        rounded-pill
+                        rounded-full
                         border
                         border-primary/20
                         bg-primary/5
                         px-4
                         py-2
-                        text-xs
+                        text-[11px]
                         font-semibold
                         uppercase
                         tracking-[0.18em]
                         text-primary
-                        backdrop-blur-sm
-                        sm:text-sm
+                        backdrop-blur-md
+                        sm:text-xs
                     "
                 >
                     <span className="relative flex h-2 w-2">
                         <span
                             className="
                                 absolute
-                                inline-flex
-                                h-full
-                                w-full
+                                inset-0
                                 animate-ping
                                 rounded-full
                                 bg-secondary
@@ -134,7 +158,7 @@ export default function Hero() {
                             "
                         />
 
-                        <span className="relative inline-flex h-2 w-2 rounded-full bg-secondary" />
+                        <span className="relative h-2 w-2 rounded-full bg-secondary" />
                     </span>
 
                     Intelligent Energy Management
@@ -142,21 +166,22 @@ export default function Hero() {
 
 
                 {/* =====================================================
-                    MAIN HEADING
+                    HEADING
                    ===================================================== */}
 
                 <h1
                     className="
-                        mt-8
+                        mt-7
                         max-w-5xl
-                        text-5xl
+                        text-[3.35rem]
                         font-semibold
-                        leading-[0.98]
-                        tracking-[-0.045em]
+                        leading-[0.94]
+                        tracking-[-0.055em]
                         text-text
+                        sm:mt-8
                         sm:text-6xl
                         md:text-7xl
-                        lg:text-[5.75rem]
+                        lg:text-[5.7rem]
                         xl:text-[6.5rem]
                     "
                 >
@@ -165,8 +190,23 @@ export default function Hero() {
 
                     of energy{" "}
 
-                    <span className="text-primary">
+                    <span className="relative inline-block text-primary">
                         count.
+
+                        <span
+                            className="
+                                absolute
+                                -bottom-2
+                                left-1/2
+                                h-1
+                                w-14
+                                -translate-x-1/2
+                                rounded-full
+                                bg-secondary
+                                sm:-bottom-3
+                                sm:w-16
+                            "
+                        />
                     </span>
                 </h1>
 
@@ -183,98 +223,69 @@ export default function Hero() {
                         text-base
                         leading-7
                         text-text-secondary
+                        sm:mt-9
                         sm:text-lg
                         sm:leading-8
                         lg:text-xl
                     "
                 >
-                    UrjaSathi brings your energy consumption, generation,
-                    and efficiency into one intelligent platform —
-                    helping homes and businesses understand where their
-                    energy goes and how to use it better.
+                    UrjaSathi brings consumption, renewable generation,
+                    and energy performance into one intelligent platform —
+                    helping homes and businesses understand their energy
+                    and use it better.
                 </p>
 
 
                 {/* =====================================================
-                    CTA
+                    PRIMARY CTA
                    ===================================================== */}
 
-                <div
-                    className="
-                        mt-9
-                        flex
-                        flex-wrap
-                        justify-center
-                        gap-4
-                    "
-                >
+                <div className="mt-8">
                     <Link
                         to="/login"
                         className="
                             group
                             inline-flex
                             items-center
+                            justify-center
                             gap-2.5
-                            rounded-pill
+                            rounded-full
                             bg-primary
-                            px-7
+                            px-8
                             py-3.5
                             text-sm
                             font-semibold
                             text-white
-                            shadow-card
+                            shadow-[0_14px_35px_rgb(124_58_237_/_0.20)]
                             transition-all
                             duration-300
                             hover:-translate-y-1
                             hover:bg-primary-dark
-                            hover:shadow-hover
-                            sm:px-8
+                            hover:text-white
+                            hover:shadow-[0_20px_45px_rgb(124_58_237_/_0.26)]
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-primary/30
+                            sm:px-9
                             sm:py-4
                             sm:text-base
                         "
                     >
-                        Get started
+                        <span className="text-white">
+                            Get started
+                        </span>
 
                         <ArrowRight
                             className="
                                 h-4
                                 w-4
+                                text-white
                                 transition-transform
                                 duration-300
                                 group-hover:translate-x-1
                             "
                         />
                     </Link>
-
-                    <a
-                        href="#how-it-works"
-                        className="
-                            inline-flex
-                            items-center
-                            gap-2
-                            rounded-pill
-                            border
-                            border-border-strong
-                            bg-surface/70
-                            px-7
-                            py-3.5
-                            text-sm
-                            font-semibold
-                            text-text
-                            backdrop-blur-sm
-                            transition-all
-                            duration-300
-                            hover:-translate-y-1
-                            hover:border-primary/40
-                            hover:bg-surface
-                            hover:text-primary
-                            sm:px-8
-                            sm:py-4
-                            sm:text-base
-                        "
-                    >
-                        How it Works
-                    </a>
                 </div>
 
 
@@ -284,14 +295,16 @@ export default function Hero() {
 
                 <div
                     className="
-                        mt-9
+                        mt-6
                         flex
                         flex-wrap
+                        items-center
                         justify-center
                         gap-x-7
                         gap-y-3
                         text-xs
                         text-text-muted
+                        sm:mt-7
                         sm:text-sm
                     "
                 >
@@ -310,119 +323,42 @@ export default function Hero() {
 
 
                 {/* =====================================================
-                    HERO PRODUCT VISUAL
+                    PRODUCT SHOWCASE
                    ===================================================== */}
 
-                <div className="relative mt-16 w-full max-w-5xl sm:mt-20">
+                <div
+                    className="
+                        relative
+                        mt-14
+                        w-full
+                        max-w-6xl
+                        sm:mt-16
+                        lg:mt-20
+                    "
+                >
 
-                    {/* Glow */}
+                    {/* Dashboard glow */}
                     <div
                         className="
                             pointer-events-none
                             absolute
                             left-1/2
                             top-1/2
-                            h-72
-                            w-3/4
+                            h-80
+                            w-4/5
                             -translate-x-1/2
                             -translate-y-1/2
                             rounded-full
                             bg-secondary/10
-                            blur-[100px]
+                            blur-[110px]
                         "
                     />
 
                     {/* Dashboard */}
-                    <EnergyDashboard />
-
-                    {/* Floating renewable card */}
-                    <div
-                        className="
-                            absolute
-                            -bottom-5
-                            -left-2
-                            hidden
-                            rounded-xl
-                            border
-                            border-border
-                            bg-surface
-                            p-3
-                            shadow-card
-                            sm:block
-                            lg:-left-8
-                        "
-                    >
-                        <div className="flex items-center gap-3">
-                            <div
-                                className="
-                                    grid
-                                    h-10
-                                    w-10
-                                    place-items-center
-                                    rounded-lg
-                                    bg-secondary/10
-                                    text-secondary
-                                "
-                            >
-                                <Leaf className="h-5 w-5" />
-                            </div>
-
-                            <div className="text-left">
-                                <p className="text-[11px] text-text-muted">
-                                    Renewable usage
-                                </p>
-
-                                <p className="text-sm font-semibold text-text">
-                                    47.3%
-                                </p>
-                            </div>
-                        </div>
+                    <div className="relative z-10">
+                        <EnergyDashboard />
                     </div>
 
-
-                    {/* Floating optimization card */}
-                    <div
-                        className="
-                            absolute
-                            -right-2
-                            -top-5
-                            hidden
-                            rounded-xl
-                            border
-                            border-border
-                            bg-surface
-                            p-3
-                            shadow-card
-                            sm:block
-                            lg:-right-8
-                        "
-                    >
-                        <div className="flex items-center gap-3">
-                            <div
-                                className="
-                                    grid
-                                    h-10
-                                    w-10
-                                    place-items-center
-                                    rounded-lg
-                                    bg-primary/10
-                                    text-primary
-                                "
-                            >
-                                <Zap className="h-5 w-5" />
-                            </div>
-
-                            <div className="text-left">
-                                <p className="text-[11px] text-text-muted">
-                                    Efficiency
-                                </p>
-
-                                <p className="text-sm font-semibold text-text">
-                                    +18.6%
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
 
@@ -433,16 +369,20 @@ export default function Hero() {
                 <a
                     href="#what-we-do"
                     className="
-                        mt-14
+                        mt-10
                         inline-flex
                         flex-col
                         items-center
                         gap-2
-                        text-xs
-                        tracking-[0.16em]
+                        text-[10px]
+                        font-medium
+                        tracking-[0.18em]
                         text-text-muted
                         transition-colors
+                        duration-300
                         hover:text-primary
+                        sm:mt-12
+                        sm:text-xs
                     "
                 >
                     <span>EXPLORE</span>
@@ -467,6 +407,7 @@ function ValuePoint({ children }) {
                     grid
                     h-5
                     w-5
+                    shrink-0
                     place-items-center
                     rounded-full
                     bg-secondary/10
@@ -494,10 +435,10 @@ function EnergyDashboard() {
                 overflow-hidden
                 rounded-2xl
                 border
-                border-border
+                border-border-strong
                 bg-surface
                 text-left
-                shadow-card
+                shadow-[0_30px_90px_rgb(15_23_42_/_0.13)]
                 transition-all
                 duration-500
                 hover:-translate-y-1
@@ -505,7 +446,27 @@ function EnergyDashboard() {
                 sm:rounded-3xl
             "
         >
-            {/* Top bar */}
+
+            {/* Top highlight */}
+            <div
+                className="
+                    pointer-events-none
+                    absolute
+                    inset-x-0
+                    top-0
+                    h-px
+                    bg-gradient-to-r
+                    from-transparent
+                    via-primary/50
+                    to-transparent
+                "
+            />
+
+
+            {/* =====================================================
+                DASHBOARD HEADER
+               ===================================================== */}
+
             <div
                 className="
                     flex
@@ -516,37 +477,71 @@ function EnergyDashboard() {
                     px-5
                     py-4
                     sm:px-7
+                    sm:py-5
+                    lg:px-8
                 "
             >
                 <div className="flex items-center gap-2.5">
-                    <div className="h-2.5 w-2.5 rounded-full bg-secondary" />
+                    <span
+                        className="
+                            relative
+                            flex
+                            h-2.5
+                            w-2.5
+                        "
+                    >
+                        <span
+                            className="
+                                absolute
+                                inset-0
+                                animate-ping
+                                rounded-full
+                                bg-secondary
+                                opacity-50
+                            "
+                        />
+
+                        <span className="relative h-2.5 w-2.5 rounded-full bg-secondary" />
+                    </span>
 
                     <span className="text-xs font-medium text-text-secondary sm:text-sm">
                         UrjaSathi Energy Intelligence
                     </span>
                 </div>
 
-                <span
+                <div
                     className="
-                        rounded-pill
+                        flex
+                        items-center
+                        gap-2
+                        rounded-full
                         bg-success/10
                         px-3
-                        py-1
+                        py-1.5
                         text-[10px]
                         font-semibold
+                        tracking-wide
                         text-success
                         sm:text-xs
                     "
                 >
+                    <span className="h-1.5 w-1.5 rounded-full bg-success" />
+
                     SYSTEM OPTIMIZED
-                </span>
+                </div>
             </div>
 
 
-            {/* Dashboard */}
-            <div className="grid gap-0 lg:grid-cols-[0.7fr_1.3fr]">
+            {/* =====================================================
+                DASHBOARD BODY
+               ===================================================== */}
 
-                {/* Metrics */}
+            <div className="grid lg:grid-cols-[0.72fr_1.28fr]">
+
+                {/* =================================================
+                    LEFT — OVERVIEW
+                   ================================================= */}
+
                 <div
                     className="
                         border-b
@@ -555,76 +550,177 @@ function EnergyDashboard() {
                         sm:p-7
                         lg:border-b-0
                         lg:border-r
+                        lg:p-8
                     "
                 >
-                    <p className="text-xs text-text-muted">
-                        Today's consumption
-                    </p>
 
-                    <div className="mt-2 flex items-baseline gap-2">
-                        <span
+                    {/* Main consumption */}
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <p className="text-xs text-text-muted">
+                                Today's consumption
+                            </p>
+
+                            <div className="mt-2 flex items-baseline gap-2">
+                                <span
+                                    className="
+                                        text-4xl
+                                        font-semibold
+                                        tracking-[-0.04em]
+                                        text-text
+                                        sm:text-5xl
+                                    "
+                                >
+                                    18.4
+                                </span>
+
+                                <span className="text-xs text-text-muted sm:text-sm">
+                                    kWh
+                                </span>
+                            </div>
+
+                            <div className="mt-2 flex items-center gap-1.5 text-xs font-medium text-success">
+                                <TrendingDown className="h-3.5 w-3.5" />
+
+                                12% lower than usual
+                            </div>
+                        </div>
+
+                        <div
                             className="
-                                text-4xl
-                                font-semibold
-                                tracking-tight
-                                text-text
-                                sm:text-5xl
+                                grid
+                                h-10
+                                w-10
+                                place-items-center
+                                rounded-xl
+                                bg-primary/10
+                                text-primary
                             "
                         >
-                            18.4
-                        </span>
-
-                        <span className="text-xs text-text-muted sm:text-sm">
-                            kWh
-                        </span>
+                            <Activity className="h-5 w-5" />
+                        </div>
                     </div>
 
-                    <div className="mt-7 space-y-5">
+
+                    {/* =================================================
+                        KEY ENERGY METRICS
+                       ================================================= */}
+
+                    <div className="mt-8 space-y-6">
+
                         <DashboardMetric
-                            label="Solar generation"
+                            icon={Sun}
+                            label="Renewable generation"
                             value="8.7 kWh"
                             percentage="47%"
                             bar="bg-solar"
                         />
 
                         <DashboardMetric
-                            label="Grid usage"
-                            value="5.2 kWh"
-                            percentage="28%"
+                            icon={Zap}
+                            label="Total consumption"
+                            value="18.4 kWh"
+                            percentage="72%"
                             bar="bg-primary"
                         />
 
                         <DashboardMetric
+                            icon={TrendingDown}
                             label="Energy saved"
                             value="12%"
                             percentage="12%"
                             bar="bg-secondary"
                         />
+
                     </div>
+
+
+                    {/* Performance status */}
+                    <div
+                        className="
+                            mt-8
+                            flex
+                            items-center
+                            gap-3
+                            rounded-xl
+                            border
+                            border-border
+                            bg-surface-soft/60
+                            p-3
+                        "
+                    >
+                        <div
+                            className="
+                                grid
+                                h-8
+                                w-8
+                                shrink-0
+                                place-items-center
+                                rounded-lg
+                                bg-secondary/10
+                                text-secondary
+                            "
+                        >
+                            <Leaf className="h-4 w-4" />
+                        </div>
+
+                        <div>
+                            <p className="text-[10px] text-text-muted">
+                                Renewable contribution
+                            </p>
+
+                            <p className="text-xs font-semibold text-text">
+                                47.3% of today's energy
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
 
 
-                {/* Chart */}
-                <div className="p-5 sm:p-7">
+                {/* =================================================
+                    RIGHT — ENERGY FLOW
+                   ================================================= */}
+
+                <div className="p-5 sm:p-7 lg:p-8">
+
                     <div className="flex items-start justify-between">
                         <div>
                             <p className="text-xs text-text-muted">
                                 Energy flow
                             </p>
 
-                            <p className="mt-1 text-lg font-semibold text-text">
-                                Today
+                            <p className="mt-1 text-lg font-semibold text-text sm:text-xl">
+                                Today's energy performance
                             </p>
                         </div>
 
-                        <span className="text-xs font-medium text-secondary">
-                            +8.4%
-                        </span>
+                        <div
+                            className="
+                                flex
+                                items-center
+                                gap-1.5
+                                rounded-full
+                                bg-secondary/10
+                                px-2.5
+                                py-1
+                                text-[10px]
+                                font-semibold
+                                text-secondary
+                            "
+                        >
+                            <Sun className="h-3 w-3" />
+
+                            Renewable
+                        </div>
                     </div>
 
-                    <div className="mt-5">
+
+                    {/* Chart */}
+                    <div className="mt-6">
                         <EnergyChart />
                     </div>
+
 
                     {/* Time labels */}
                     <div
@@ -642,7 +738,56 @@ function EnergyDashboard() {
                         <span>18:00</span>
                         <span>24:00</span>
                     </div>
+
+
+                    {/* Bottom metrics */}
+                    <div className="mt-7 grid grid-cols-3 gap-3">
+
+                        <DashboardStat
+                            label="Peak demand"
+                            value="4.8 kW"
+                        />
+
+                        <DashboardStat
+                            label="Renewable"
+                            value="47.3%"
+                        />
+
+                        <DashboardStat
+                            label="Efficiency"
+                            value="+18.6%"
+                        />
+
+                    </div>
+
+
+                    {/* Insight */}
+                    <div
+                        className="
+                            mt-4
+                            flex
+                            items-center
+                            gap-3
+                            rounded-xl
+                            border
+                            border-secondary/20
+                            bg-secondary/5
+                            px-4
+                            py-3
+                        "
+                    >
+                        <div className="text-secondary">
+                            <Zap className="h-4 w-4" />
+                        </div>
+
+                        <p className="text-xs leading-5 text-text-secondary">
+                            Renewable energy is covering a larger share of
+                            today's demand.
+                        </p>
+                    </div>
+
                 </div>
+
             </div>
         </div>
     );
@@ -654,6 +799,7 @@ function EnergyDashboard() {
    ========================================================= */
 
 function DashboardMetric({
+    icon: Icon,
     label,
     value,
     percentage,
@@ -661,22 +807,79 @@ function DashboardMetric({
 }) {
     return (
         <div>
+
             <div className="flex items-center justify-between gap-3">
-                <span className="text-xs text-text-secondary">
-                    {label}
-                </span>
+
+                <div className="flex items-center gap-2.5">
+
+                    <div
+                        className="
+                            grid
+                            h-8
+                            w-8
+                            shrink-0
+                            place-items-center
+                            rounded-lg
+                            bg-surface-soft
+                            text-text-muted
+                        "
+                    >
+                        <Icon className="h-4 w-4" />
+                    </div>
+
+                    <span className="text-xs text-text-secondary">
+                        {label}
+                    </span>
+
+                </div>
 
                 <span className="text-xs font-semibold text-text">
                     {value}
                 </span>
+
             </div>
 
+
             <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-soft">
+
                 <div
                     className={`h-full rounded-full ${bar}`}
                     style={{ width: percentage }}
                 />
+
             </div>
+
+        </div>
+    );
+}
+
+
+/* =========================================================
+   DASHBOARD STAT
+   ========================================================= */
+
+function DashboardStat({
+    label,
+    value,
+}) {
+    return (
+        <div
+            className="
+                rounded-xl
+                border
+                border-border
+                bg-surface-soft/50
+                px-3
+                py-3
+            "
+        >
+            <p className="text-[10px] text-text-muted">
+                {label}
+            </p>
+
+            <p className="mt-1 text-sm font-semibold text-text">
+                {value}
+            </p>
         </div>
     );
 }
@@ -688,21 +891,34 @@ function DashboardMetric({
 
 function EnergyChart() {
     return (
-        <div className="relative h-48 w-full overflow-hidden">
+        <div className="relative h-48 w-full overflow-hidden sm:h-52">
+
             {/* Grid */}
-            <div className="absolute inset-0 flex flex-col justify-between">
+            <div
+                className="
+                    absolute
+                    inset-0
+                    flex
+                    flex-col
+                    justify-between
+                "
+            >
                 <span className="h-px w-full bg-border" />
                 <span className="h-px w-full bg-border" />
                 <span className="h-px w-full bg-border" />
                 <span className="h-px w-full bg-border" />
             </div>
 
+
+            {/* Chart */}
             <svg
                 viewBox="0 0 800 220"
                 preserveAspectRatio="none"
                 className="absolute inset-0 h-full w-full"
             >
+
                 <defs>
+
                     <linearGradient
                         id="urjasathiEnergyFill"
                         x1="0"
@@ -722,8 +938,11 @@ function EnergyChart() {
                             stopOpacity="0"
                         />
                     </linearGradient>
+
                 </defs>
 
+
+                {/* Area */}
                 <path
                     d="
                         M0 165
@@ -741,6 +960,8 @@ function EnergyChart() {
                     fill="url(#urjasathiEnergyFill)"
                 />
 
+
+                {/* Main line */}
                 <path
                     d="
                         M0 165
@@ -758,21 +979,23 @@ function EnergyChart() {
                     strokeLinecap="round"
                 />
 
-                {/* End point */}
+
+                {/* End glow */}
                 <circle
                     cx="800"
                     cy="35"
-                    r="6"
+                    r="13"
                     fill="rgb(1 172 159)"
+                    fillOpacity="0.12"
                 />
 
                 <circle
                     cx="800"
                     cy="35"
-                    r="11"
+                    r="5"
                     fill="rgb(1 172 159)"
-                    fillOpacity="0.12"
                 />
+
             </svg>
         </div>
     );

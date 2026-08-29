@@ -1,8 +1,10 @@
 import Hero from "./sections/Hero";
 import EnergyValueStrip from "./sections/EnergyValueStrip";
+
 import WhatWeDo from "./sections/WhatWeDo";
-import HowItWorks from "./sections/HowItWorks";
+import JourneyTimeline from "./sections/JourneyTimeline";
 import EnergyIntelligence from "./sections/EnergyIntelligence";
+import WhoItsFor from "./sections/WhoItsFor";
 
 export default function Home() {
     return (
@@ -13,9 +15,11 @@ export default function Home() {
 
             <WhatWeDo />
 
-            <HowItWorks />
+            <JourneyTimeline />
 
             <EnergyIntelligence />
+
+            <WhoItsFor />
         </main>
     );
 }
