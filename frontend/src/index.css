@@ -1,0 +1,181 @@
+@import "tailwindcss";
+@import "./theme/token.css";
+
+
+/* =========================================================
+   TAILWIND THEME
+   ========================================================= */
+
+@theme {
+  /* ---------- Brand ---------- */
+
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-dark: var(--secondary-dark);
+  --color-secondary-light: var(--secondary-light);
+
+  --color-action: var(--action);
+  --color-action-dark: var(--action-dark);
+  --color-action-light: var(--action-light);
+
+  /* ---------- Energy ---------- */
+
+  --color-solar: var(--solar);
+  --color-battery: var(--battery);
+  --color-grid: var(--grid);
+  --color-consumption: var(--consumption);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+
+  /* ---------- Surfaces ---------- */
+
+  --color-app-bg: rgb(var(--bg));
+  --color-surface: rgb(var(--surface));
+  --color-surface-soft: rgb(var(--surface-soft));
+
+  /* ---------- Borders ---------- */
+
+  --color-border: rgb(var(--border));
+  --color-border-strong: rgb(var(--border-strong));
+
+  /* ---------- Text ---------- */
+
+  --color-text: rgb(var(--text));
+  --color-text-secondary: rgb(var(--text-secondary));
+  --color-text-muted: rgb(var(--text-muted));
+
+  /* ---------- Radius ---------- */
+
+  --radius-sm: var(--radius-small);
+  --radius-md: var(--radius-medium);
+  --radius-lg: var(--radius-large);
+  --radius-xl: var(--radius-xl-size);
+  --radius-pill: var(--radius-pill-size);
+
+  /* ---------- Shadows ---------- */
+
+  --shadow-card: var(--shadow-card-value);
+  --shadow-hover: var(--shadow-hover-value);
+
+  /* ---------- Typography ---------- */
+
+  --font-sans: var(--font-family);
+}
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  background: rgb(var(--bg));
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+
+  background: rgb(var(--bg));
+  color: rgb(var(--text));
+
+  font-family: var(--font-family);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 3px;
+}
+
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+::selection {
+  background: rgb(108 29 95 / 0.20);
+  color: rgb(var(--text));
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

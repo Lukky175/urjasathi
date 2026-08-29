@@ -1,0 +1,8 @@
+services/
+├── api.js
+├── authService.js
+├── energyService.js
+├── solarService.js
+└── optimizerService.js
+
+add these in future
