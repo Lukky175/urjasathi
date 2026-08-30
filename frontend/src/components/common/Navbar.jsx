@@ -1,3 +1,16 @@
+/**
+ * ============================================================================
+ * File        : Navbar.jsx
+ * Project     : UrjaSathi
+ *
+ * Description:
+ * Public navigation bar for the UrjaSathi application.
+ *
+ * The Navbar is rendered only by the public layout.
+ * Dashboard routes use DashboardSidebar + DashboardTopbar instead.
+ * ============================================================================
+ */
+
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
 
@@ -9,23 +22,25 @@ import {
     MessageCircle,
     Menu,
     X,
-    LayoutDashboard,
 } from "lucide-react";
 
 import { useTheme } from "../../context/ThemeContext";
-import { useAuth } from "../../context/AuthContext";
+
 
 export default function Navbar() {
+
     const { theme, toggle } = useTheme();
-    const { status } = useAuth();
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const isAuthenticated = status === "authenticated";
+
+    /* =========================================================================
+       NAVIGATION ITEMS
+       ========================================================================= */
 
     const navItems = [
         {
-            to: "/",
+            to: "/home",
             label: "Home",
             icon: Home,
         },
@@ -41,9 +56,19 @@ export default function Navbar() {
         },
     ];
 
+
+    /* =========================================================================
+       HELPERS
+       ========================================================================= */
+
     const closeMenu = () => {
         setIsMenuOpen(false);
     };
+
+
+    /* =========================================================================
+       RENDER
+       ========================================================================= */
 
     return (
         <nav
@@ -57,9 +82,10 @@ export default function Navbar() {
                 sm:px-4
             "
         >
-            {/* =====================================================
+
+            {/* ================================================================
                 MAIN NAVBAR
-               ===================================================== */}
+               ================================================================ */}
 
             <div
                 className="
@@ -82,12 +108,12 @@ export default function Navbar() {
                 "
             >
 
-                {/* =================================================
+                {/* ============================================================
                     LOGO
-                   ================================================= */}
+                   ============================================================ */}
 
                 <Link
-                    to="/"
+                    to="/home"
                     onClick={closeMenu}
                     aria-label="UrjaSathi Home"
                     className="
@@ -115,9 +141,9 @@ export default function Navbar() {
                 </Link>
 
 
-                {/* =================================================
+                {/* ============================================================
                     DESKTOP NAVIGATION
-                   ================================================= */}
+                   ============================================================ */}
 
                 <div
                     className="
@@ -127,7 +153,9 @@ export default function Navbar() {
                         md:flex
                     "
                 >
+
                     {navItems.map(({ to, label, icon: Icon }) => (
+
                         <NavLink
                             key={to}
                             to={to}
@@ -149,11 +177,15 @@ export default function Navbar() {
                                 `
                             }
                         >
+
                             <Icon className="h-[18px] w-[18px]" />
 
-                            <span>{label}</span>
+                            <span>
+                                {label}
+                            </span>
 
-                            {/* Underline */}
+                            {/* Active / Hover underline */}
+
                             <span
                                 className="
                                     absolute
@@ -168,18 +200,23 @@ export default function Navbar() {
                                     group-hover:w-full
                                 "
                             />
+
                         </NavLink>
+
                     ))}
+
                 </div>
 
 
-                {/* =================================================
+                {/* ============================================================
                     RIGHT SIDE
-                   ================================================= */}
+                   ============================================================ */}
 
                 <div className="flex items-center gap-2 sm:gap-3">
 
-                    {/* Theme toggle */}
+                    {/* ========================================================
+                        THEME TOGGLE
+                       ======================================================== */}
 
                     <button
                         type="button"
@@ -216,70 +253,64 @@ export default function Navbar() {
                             sm:w-[48px]
                         "
                     >
+
                         {theme === "light" ? (
-                            <Moon className="h-4 w-4 sm:h-[19px] sm:w-[19px]" />
+
+                            <Moon
+                                className="
+                                    h-4
+                                    w-4
+                                    sm:h-[19px]
+                                    sm:w-[19px]
+                                "
+                            />
+
                         ) : (
-                            <Sun className="h-4 w-4 sm:h-[19px] sm:w-[19px]" />
+
+                            <Sun
+                                className="
+                                    h-4
+                                    w-4
+                                    sm:h-[19px]
+                                    sm:w-[19px]
+                                "
+                            />
+
                         )}
+
                     </button>
 
 
-                    {/* =================================================
-                        DESKTOP CTA
-                       ================================================= */}
+                    {/* ========================================================
+                        GET STARTED
+                       ======================================================== */}
 
-                    {isAuthenticated ? (
-                        <Link
-                            to="/dashboard"
-                            className="
-                                hidden
-                                items-center
-                                gap-2
-                                rounded-full
-                                bg-primary
-                                px-6
-                                py-3
-                                font-semibold
-                                text-white
-                                shadow-lg
-                                transition-all
-                                duration-300
-                                hover:-translate-y-1
-                                hover:shadow-xl
-                                md:flex
-                            "
-                        >
-                            <LayoutDashboard className="h-4 w-4" />
-                            Dashboard
-                        </Link>
-                    ) : (
-                        <Link
-                            to="/login"
-                            className="
-                                hidden
-                                rounded-full
-                                bg-primary
-                                px-6
-                                py-3
-                                font-semibold
-                                !text-white
-                                shadow-lg
-                                transition-all
-                                duration-300
-                                hover:-translate-y-1
-                                hover:bg-primary-dark
-                                hover:shadow-xl
-                                md:block
-                            "
-                        >
-                            Get Started
-                        </Link>
-                    )}
+                    <Link
+                        to="/login"
+                        className="
+                            hidden
+                            rounded-full
+                            bg-primary
+                            px-6
+                            py-3
+                            font-semibold
+                            !text-white
+                            shadow-lg
+                            transition-all
+                            duration-300
+                            hover:-translate-y-1
+                            hover:bg-primary-dark
+                            hover:shadow-xl
+                            md:block
+                        "
+                    >
+                        Get Started
+                    </Link>
 
 
-                    {/* =================================================
+                    {/* ========================================================
                         MOBILE MENU BUTTON
-                       ================================================= */}
+                       ======================================================== */}
 
                     <button
                         type="button"
@@ -312,22 +343,30 @@ export default function Navbar() {
                             md:hidden
                         "
                     >
+
                         {isMenuOpen ? (
+
                             <X className="h-5 w-5" />
+
                         ) : (
+
                             <Menu className="h-5 w-5" />
+
                         )}
+
                     </button>
 
                 </div>
+
             </div>
 
 
-            {/* =====================================================
+            {/* ================================================================
                 MOBILE NAVIGATION
-               ===================================================== */}
+               ================================================================ */}
 
             {isMenuOpen && (
+
                 <div
                     className="
                         mt-3
@@ -341,9 +380,15 @@ export default function Navbar() {
                         md:hidden
                     "
                 >
+
                     <div className="flex flex-col gap-3">
 
+                        {/* ====================================================
+                            MOBILE NAVIGATION LINKS
+                           ==================================================== */}
+
                         {navItems.map(({ to, label, icon: Icon }) => (
+
                             <NavLink
                                 key={to}
                                 to={to}
@@ -366,66 +411,52 @@ export default function Navbar() {
                                     `
                                 }
                             >
+
                                 <Icon className="h-[18px] w-[18px]" />
 
-                                <span>{label}</span>
+                                <span>
+                                    {label}
+                                </span>
+
                             </NavLink>
+
                         ))}
 
 
-                        {/* Mobile CTA */}
+                        {/* ====================================================
+                            MOBILE GET STARTED
+                           ==================================================== */}
 
                         <div className="border-t border-border pt-3">
 
-                            {isAuthenticated ? (
-                                <Link
-                                    to="/dashboard"
-                                    onClick={closeMenu}
-                                    className="
-                                        flex
-                                        w-full
-                                        items-center
-                                        justify-center
-                                        gap-2
-                                        rounded-xl
-                                        bg-primary
-                                        px-2
-                                        py-2.5
-                                        font-semibold
-                                        text-white
-                                        shadow-md
-                                    "
-                                >
-                                    <LayoutDashboard className="h-[17px] w-[17px]" />
-                                    Dashboard
-                                </Link>
-                            ) : (
-                                <Link
-                                    to="/login"
-                                    onClick={closeMenu}
-                                    className="
-                                        flex
-                                        w-full
-                                        items-center
-                                        justify-center
-                                        rounded-xl
-                                        bg-primary
-                                        px-2
-                                        py-2.5
-                                        font-semibold
-                                        text-white
-                                        shadow-md
-                                    "
-                                >
-                                    Get Started
-                                </Link>
-                            )}
+                            <Link
+                                to="/login"
+                                onClick={closeMenu}
+                                className="
+                                    flex
+                                    w-full
+                                    items-center
+                                    justify-center
+                                    rounded-xl
+                                    bg-primary
+                                    px-2
+                                    py-2.5
+                                    font-semibold
+                                    !text-white
+                                    shadow-md
+                                "
+                            >
+                                Get Started
+                            </Link>
 
                         </div>
 
                     </div>
+
                 </div>
+
             )}
+
         </nav>
     );
 }
