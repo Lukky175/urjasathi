@@ -51,9 +51,47 @@ class Settings(BaseModel):
     TARGET_COST_REDUCTION_PCT: float = 15.0
     TARGET_PEAK_REDUCTION_PCT: float = 10.0
 
-    # --- Model artifact locations (relative to repo root unless overridden) ---
-    DEMAND_MODEL_PATH: str = "backend/app/models/demand_model.joblib"
-    SOLAR_MODEL_PATH: str = "backend/app/models/solar_model.joblib"
+    # --- Model artifacts and site defaults ---
+    MODEL_1A_PATH: str = "backend/app/models/model1a_xgb.json"
+    MODEL_1B_PATH: str = "backend/app/models/model1b_xgb.json"
+    SOLAR_DATA_PATH: str = "backend/app/models/solar_delhi.csv"
+    DEFAULT_SITE: str = "delhi"
+    DEFAULT_CAPACITY_SCALE: float = 1.0
+    DEFAULT_PV_CAPACITY_KWP: float = 40.0
+    WATTS_PER_KILOWATT: float = 1000.0
+    MODEL_1B_BOOSTER_COUNT: int = 10
+    MODEL_1A_FEATURES: tuple[str, ...] = Field(
+        default=(
+            "hour",
+            "day_of_week",
+            "month",
+            "is_weekend",
+            "temperature_c",
+            "relative_humidity",
+            "occupancy",
+            "lag_demand_1h",
+            "lag_demand_24h",
+        )
+    )
+    MODEL_1B_FEATURES: tuple[str, ...] = Field(
+        default=(
+            "hour",
+            "day_of_week",
+            "is_weekend",
+            "occupancy",
+            "temperature_c",
+            "month",
+        )
+    )
+    MODEL_1B_AC_BOOSTER_INDICES: tuple[int, ...] = Field(default=(0, 1, 2))
+    MODEL_1B_LIGHT_BOOSTER_INDICES: tuple[int, ...] = Field(default=(3, 4, 5))
+    MODEL_1B_PLUG_BOOSTER_INDICES: tuple[int, ...] = Field(default=(6, 7, 8))
+    MODEL_1B_OTHER_BOOSTER_INDICES: tuple[int, ...] = Field(default=(9,))
+    FALLBACK_AC_SHARE: float = 0.50
+    FALLBACK_LIGHT_SHARE: float = 0.20
+    FALLBACK_PLUG_SHARE: float = 0.30
+    SOLAR_FALLBACK_SUNRISE_HOUR: float = 6.0
+    SOLAR_FALLBACK_SUNSET_HOUR: float = 18.0
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -106,5 +144,24 @@ SOLVER_TIME_LIMIT_SECONDS = settings.SOLVER_TIME_LIMIT_SECONDS
 TARGET_COST_REDUCTION_PCT = settings.TARGET_COST_REDUCTION_PCT
 TARGET_PEAK_REDUCTION_PCT = settings.TARGET_PEAK_REDUCTION_PCT
 
-DEMAND_MODEL_PATH = settings.DEMAND_MODEL_PATH
-SOLAR_MODEL_PATH = settings.SOLAR_MODEL_PATH
+DEMAND_MODEL_PATH = settings.MODEL_1A_PATH
+SOLAR_MODEL_PATH = settings.SOLAR_DATA_PATH
+MODEL_1A_PATH = settings.MODEL_1A_PATH
+MODEL_1B_PATH = settings.MODEL_1B_PATH
+SOLAR_DATA_PATH = settings.SOLAR_DATA_PATH
+DEFAULT_SITE = settings.DEFAULT_SITE
+DEFAULT_CAPACITY_SCALE = settings.DEFAULT_CAPACITY_SCALE
+DEFAULT_PV_CAPACITY_KWP = settings.DEFAULT_PV_CAPACITY_KWP
+WATTS_PER_KILOWATT = settings.WATTS_PER_KILOWATT
+MODEL_1B_BOOSTER_COUNT = settings.MODEL_1B_BOOSTER_COUNT
+MODEL_1A_FEATURES = settings.MODEL_1A_FEATURES
+MODEL_1B_FEATURES = settings.MODEL_1B_FEATURES
+MODEL_1B_AC_BOOSTER_INDICES = settings.MODEL_1B_AC_BOOSTER_INDICES
+MODEL_1B_LIGHT_BOOSTER_INDICES = settings.MODEL_1B_LIGHT_BOOSTER_INDICES
+MODEL_1B_PLUG_BOOSTER_INDICES = settings.MODEL_1B_PLUG_BOOSTER_INDICES
+MODEL_1B_OTHER_BOOSTER_INDICES = settings.MODEL_1B_OTHER_BOOSTER_INDICES
+FALLBACK_AC_SHARE = settings.FALLBACK_AC_SHARE
+FALLBACK_LIGHT_SHARE = settings.FALLBACK_LIGHT_SHARE
+FALLBACK_PLUG_SHARE = settings.FALLBACK_PLUG_SHARE
+SOLAR_FALLBACK_SUNRISE_HOUR = settings.SOLAR_FALLBACK_SUNRISE_HOUR
+SOLAR_FALLBACK_SUNSET_HOUR = settings.SOLAR_FALLBACK_SUNSET_HOUR

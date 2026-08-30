@@ -1,0 +1,6 @@
+xgboost
+numpy
+pandas
+PuLP
+pydantic
+scipy

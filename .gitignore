@@ -1,6 +1,5 @@
 # --- Existing project-specific rules ---
 .vscode/
-branch.md
 .cursor/
 
 # --- Environment & secrets ---

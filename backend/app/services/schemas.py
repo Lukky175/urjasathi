@@ -6,13 +6,75 @@ or any HTTP layer.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
-from typing import List, Sequence
+from dataclasses import asdict, dataclass, is_dataclass
+from typing import Any, List, Mapping, Sequence
 
 import numpy as np
 import pandas as pd
 
 from backend.app.core.config import HORIZON_STEPS, PERCENT_SCALE, TIME_STEP_HOURS
+
+
+@dataclass
+class Model1AFeatures:
+    """Nine numerical features for Model 1A total-demand magnitude."""
+
+    hour: float
+    day_of_week: float
+    month: float
+    is_weekend: float
+    temperature_c: float
+    relative_humidity: float
+    occupancy: float
+    lag_demand_1h: float
+    lag_demand_24h: float
+
+
+@dataclass
+class Model1BFeatures:
+    """Six contextual features for Model 1B multi-zone disaggregation shape."""
+
+    hour: float
+    day_of_week: float
+    is_weekend: float
+    occupancy: float
+    temperature_c: float
+    month: float
+
+
+@dataclass
+class DemandForecastOutput:
+    """Horizon demand forecast with AC / lighting / plug disaggregation (kW)."""
+
+    total_demand_kw: List[float]
+    ac_kw: List[float]
+    lights_kw: List[float]
+    plugs_kw: List[float]
+
+
+def features_to_frame(
+    payload: pd.DataFrame | Model1AFeatures | Model1BFeatures | Mapping[str, Any] | Sequence[Any] | None,
+) -> pd.DataFrame:
+    """Normalize a dataclass, mapping, sequence, or frame into a feature DataFrame."""
+    if payload is None:
+        return pd.DataFrame()
+    if isinstance(payload, (str, bytes)):
+        raise TypeError("Feature payload must be a DataFrame, dataclass, or mapping")
+    if isinstance(payload, pd.DataFrame):
+        return payload
+    if is_dataclass(payload) and not isinstance(payload, type):
+        return pd.DataFrame([asdict(payload)])
+    if isinstance(payload, Mapping):
+        return pd.DataFrame([dict(payload)])
+    rows: list[dict[str, Any]] = []
+    for item in payload:
+        if is_dataclass(item) and not isinstance(item, type):
+            rows.append(asdict(item))
+        elif isinstance(item, Mapping):
+            rows.append(dict(item))
+        else:
+            raise TypeError(f"Unsupported feature row type: {type(item)!r}")
+    return pd.DataFrame(rows)
 
 
 @dataclass
