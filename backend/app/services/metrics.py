@@ -6,8 +6,8 @@ from dataclasses import asdict
 
 import pandas as pd
 
-from backend.app.core.config import PERCENT_SCALE
-from backend.app.services.schemas import MetricsComparison, OptimizationResult
+from app.core.config import PERCENT_SCALE
+from app.services.schemas import MetricsComparison, OptimizationResult
 
 
 def reduction_pct(baseline_value: float, optimized_value: float) -> float:

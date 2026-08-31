@@ -10,7 +10,7 @@ from typing import Any, Sequence
 import numpy as np
 import pandas as pd
 
-from backend.app.core.config import (
+from app.core.config import (
     DEFAULT_CAPACITY_SCALE,
     DEFAULT_PV_CAPACITY_KWP,
     DEFAULT_SITE,
@@ -33,7 +33,7 @@ from backend.app.core.config import (
     TIME_STEP_HOURS,
     WATTS_PER_KILOWATT,
 )
-from backend.app.services.schemas import (
+from app.services.schemas import (
     DemandForecastOutput,
     features_to_frame,
     values_for_horizon,

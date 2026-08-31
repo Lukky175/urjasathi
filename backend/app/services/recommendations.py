@@ -7,13 +7,13 @@ from typing import Any, Sequence
 
 import pandas as pd
 
-from backend.app.core.config import (
+from app.core.config import (
     BATTERY_MAX_SOC,
     BATTERY_MIN_SOC,
     PERCENT_SCALE,
     TARIFF_PEAK_INR_PER_KWH,
 )
-from backend.app.services.schemas import OptimizationResult, Recommendation
+from app.services.schemas import OptimizationResult, Recommendation
 
 
 def _flows_frame(opt_result: OptimizationResult) -> pd.DataFrame:

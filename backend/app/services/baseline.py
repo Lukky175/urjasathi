@@ -6,15 +6,15 @@ from typing import Sequence
 
 import numpy as np
 
-from backend.app.core.config import HORIZON_STEPS, HOURS_IN_DAY, TIME_STEP_HOURS
-from backend.app.services.battery import BatteryState
-from backend.app.services.schemas import (
+from app.core.config import HORIZON_STEPS, HOURS_IN_DAY, TIME_STEP_HOURS
+from app.services.battery import BatteryState
+from app.services.schemas import (
     HourlyEnergyFlow,
     OptimizationResult,
     build_optimization_result,
     values_for_horizon,
 )
-from backend.app.services.tariff import feed_in_rate_vector, tou_rate_vector
+from app.services.tariff import feed_in_rate_vector, tou_rate_vector
 
 
 def _non_negative_horizon(values: Sequence[float]) -> np.ndarray:

@@ -12,7 +12,7 @@ from typing import Any, List, Mapping, Sequence
 import numpy as np
 import pandas as pd
 
-from backend.app.core.config import HORIZON_STEPS, PERCENT_SCALE, TIME_STEP_HOURS
+from app.core.config import HORIZON_STEPS, PERCENT_SCALE, TIME_STEP_HOURS
 
 
 @dataclass

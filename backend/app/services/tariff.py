@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from backend.app.core.config import (
+from app.core.config import (
     FEED_IN_TARIFF_INR_PER_KWH,
     HORIZON_STEPS,
     HOURS_IN_DAY,
