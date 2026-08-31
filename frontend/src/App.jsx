@@ -6,8 +6,23 @@
  * Description:
  * Application routing and layout composition.
  *
- * Public pages use the public Navbar/Footer layout.
- * Dashboard pages use the private DashboardLayout.
+ * Public pages:
+ * - Home
+ * - FAQ
+ * - Contact
+ * - Login
+ *
+ * Dashboard pages:
+ * - Dashboard
+ * - Overview
+ * - Consumption
+ * - Generation
+ * - Battery & Storage
+ * - Cost & Savings
+ * - Recommendations
+ *
+ * Dashboard routes use DashboardLayout.
+ * Public routes use Navbar + Footer.
  * ============================================================================
  */
 
@@ -19,10 +34,25 @@ import {
     useLocation,
 } from "react-router-dom";
 
+
+/* ============================================================================
+   PUBLIC COMPONENTS
+   ============================================================================ */
+
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
 
+
+/* ============================================================================
+   DASHBOARD LAYOUT
+   ============================================================================ */
+
 import DashboardLayout from "./components/layout/DashboardLayout";
+
+
+/* ============================================================================
+   PUBLIC PAGES
+   ============================================================================ */
 
 import Home from "./pages/Home/Home";
 import FAQ from "./pages/FAQ/FAQ";
@@ -30,62 +60,33 @@ import Contact from "./pages/Contact/Contact";
 import Login from "./pages/Login/Login";
 
 
-/**
- * ============================================================================
- * Temporary Dashboard Pages
- * ============================================================================
- *
- * These are placeholders for now.
- * Later, replace them with the actual dashboard pages.
- */
+/* ============================================================================
+   DASHBOARD PAGES
+   ============================================================================ */
 
-function DashboardOverview() {
-    return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold text-text">
-                Dashboard Overview
-            </h1>
-
-            <p className="mt-2 text-text-secondary">
-                Welcome to your UrjaSathi dashboard.
-            </p>
-        </div>
-    );
-}
-
-
-function DashboardAnalytics() {
-    return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold text-text">
-                Energy Analytics
-            </h1>
-
-            <p className="mt-2 text-text-secondary">
-                Energy analytics will appear here.
-            </p>
-        </div>
-    );
-}
+import Dashboard from "./pages/SidebarPages/Dashboard/Dashboard";
+import Overview from "./pages/SidebarPages/Overview/Overview";
+import Consumption from "./pages/SidebarPages/Consumption/Consumption";
+import Generation from "./pages/SidebarPages/Generation/Generation";
+import Battery from "./pages/SidebarPages/Battery/Battery";
+import Cost from "./pages/SidebarPages/Cost/Cost";
+import Recommendations from "./pages/SidebarPages/Recommendations/Recommendations";
 
 
 /**
  * ============================================================================
- * DashboardPage
+ * DashboardRoute
  * ============================================================================
  *
- * The main dashboard route currently redirects to the overview page.
+ * Small wrapper used to keep all dashboard pages inside DashboardLayout.
  *
- * This keeps /dashboard as the root of the dashboard application while
- * allowing /dashboard/overview to become the default dashboard screen.
+ * This avoids repeating the layout structure throughout the application.
  */
-
-function DashboardPage() {
+function DashboardRoute({ children }) {
     return (
-        <Navigate
-            to="/dashboard/overview"
-            replace
-        />
+        <DashboardLayout>
+            {children}
+        </DashboardLayout>
     );
 }
 
@@ -95,7 +96,8 @@ function DashboardPage() {
  * AppContent
  * ============================================================================
  *
- * Determines which global layout should be displayed.
+ * Determines whether the current route belongs to the public application
+ * or the dashboard application.
  *
  * Public routes:
  * - Navbar
@@ -107,13 +109,14 @@ function DashboardPage() {
  * - No public Navbar
  * - No public Footer
  */
-
 function AppContent() {
+
     const location = useLocation();
 
+
     /**
-     * Every route beginning with /dashboard
-     * belongs to the dashboard application.
+     * Every route beginning with /dashboard belongs
+     * to the dashboard application.
      */
     const isDashboardRoute =
         location.pathname.startsWith("/dashboard");
@@ -122,24 +125,24 @@ function AppContent() {
     return (
         <div className="min-h-screen bg-app-bg text-text">
 
-            {/* =========================================================
+            {/* =================================================================
                 PUBLIC NAVBAR
-               ========================================================= */}
+               ================================================================= */}
 
             {!isDashboardRoute && (
                 <Navbar />
             )}
 
 
-            {/* =========================================================
-                ROUTES
-               ========================================================= */}
+            {/* =================================================================
+                APPLICATION ROUTES
+               ================================================================= */}
 
             <Routes>
 
-                {/* =====================================================
+                {/* =============================================================
                     PUBLIC ROUTES
-                   ===================================================== */}
+                   ============================================================= */}
 
                 <Route
                     path="/"
@@ -172,41 +175,77 @@ function AppContent() {
                 />
 
 
-                {/* =====================================================
+                {/* =============================================================
                     DASHBOARD ROUTES
-                   ===================================================== */}
+                   ============================================================= */}
 
                 <Route
                     path="/dashboard"
                     element={
-                        <DashboardLayout>
-                            <DashboardPage />
-                        </DashboardLayout>
+                        <DashboardRoute>
+                            <Dashboard />
+                        </DashboardRoute>
                     }
                 />
 
                 <Route
                     path="/dashboard/overview"
                     element={
-                        <DashboardLayout>
-                            <DashboardOverview />
-                        </DashboardLayout>
+                        <DashboardRoute>
+                            <Overview />
+                        </DashboardRoute>
                     }
                 />
 
                 <Route
-                    path="/dashboard/analytics"
+                    path="/dashboard/consumption"
                     element={
-                        <DashboardLayout>
-                            <DashboardAnalytics />
-                        </DashboardLayout>
+                        <DashboardRoute>
+                            <Consumption />
+                        </DashboardRoute>
+                    }
+                />
+
+                <Route
+                    path="/dashboard/generation"
+                    element={
+                        <DashboardRoute>
+                            <Generation />
+                        </DashboardRoute>
+                    }
+                />
+
+                <Route
+                    path="/dashboard/battery"
+                    element={
+                        <DashboardRoute>
+                            <Battery />
+                        </DashboardRoute>
+                    }
+                />
+
+                <Route
+                    path="/dashboard/cost"
+                    element={
+                        <DashboardRoute>
+                            <Cost />
+                        </DashboardRoute>
+                    }
+                />
+
+                <Route
+                    path="/dashboard/recommendations"
+                    element={
+                        <DashboardRoute>
+                            <Recommendations />
+                        </DashboardRoute>
                     }
                 />
 
 
-                {/* =====================================================
+                {/* =============================================================
                     FALLBACK
-                   ===================================================== */}
+                   ============================================================= */}
 
                 <Route
                     path="*"
@@ -221,9 +260,9 @@ function AppContent() {
             </Routes>
 
 
-            {/* =========================================================
+            {/* =================================================================
                 PUBLIC FOOTER
-               ========================================================= */}
+               ================================================================= */}
 
             {!isDashboardRoute && (
                 <Footer />
@@ -241,8 +280,8 @@ function AppContent() {
  *
  * BrowserRouter must wrap AppContent because AppContent uses useLocation().
  */
-
 export default function App() {
+
     return (
         <BrowserRouter>
             <AppContent />

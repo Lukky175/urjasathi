@@ -4,7 +4,7 @@
  * Project     : UrjaSathi
  *
  * Description:
- * Main application shell for authenticated dashboard pages.
+ * Main application shell for UrjaSathi dashboard pages.
  *
  * Structure:
  *
@@ -12,6 +12,12 @@
  * ├── DashboardSidebar
  * ├── DashboardTopbar
  * └── Page Content
+ *
+ * Features:
+ * - Desktop sidebar expand / collapse
+ * - Mobile sidebar drawer
+ * - Animated layout transitions
+ * - Responsive dashboard content area
  * ============================================================================
  */
 
@@ -23,8 +29,24 @@ import DashboardTopbar from "../common/DashboardTopbar";
 
 export default function DashboardLayout({ children }) {
 
+    /**
+     * ================================================================
+     * SIDEBAR STATE
+     * ================================================================
+     */
+
+    // Mobile sidebar drawer
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
+    // Desktop sidebar collapse state
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+
+    /**
+     * ================================================================
+     * MOBILE SIDEBAR CONTROLS
+     * ================================================================
+     */
 
     const openSidebar = () => {
         setSidebarOpen(true);
@@ -35,6 +57,23 @@ export default function DashboardLayout({ children }) {
         setSidebarOpen(false);
     };
 
+
+    /**
+     * ================================================================
+     * DESKTOP SIDEBAR CONTROL
+     * ================================================================
+     */
+
+    const toggleSidebar = () => {
+        setSidebarCollapsed((collapsed) => !collapsed);
+    };
+
+
+    /**
+     * ================================================================
+     * RENDER
+     * ================================================================
+     */
 
     return (
         <div
@@ -52,6 +91,8 @@ export default function DashboardLayout({ children }) {
             <DashboardSidebar
                 isOpen={sidebarOpen}
                 onClose={closeSidebar}
+                isCollapsed={sidebarCollapsed}
+                onToggleCollapse={toggleSidebar}
             />
 
 
@@ -60,20 +101,32 @@ export default function DashboardLayout({ children }) {
                ========================================================= */}
 
             <div
-                className="
+                className={`
                     min-h-screen
-                    lg:pl-64
-                "
+                    transition-[padding]
+                    duration-300
+                    ease-in-out
+
+                    ${
+                        sidebarCollapsed
+                            ? "lg:pl-[76px]"
+                            : "lg:pl-64"
+                    }
+                `}
             >
 
-                {/* Topbar */}
+                {/* =====================================================
+                    TOPBAR
+                   ===================================================== */}
 
                 <DashboardTopbar
                     onMenuClick={openSidebar}
                 />
 
 
-                {/* Page content */}
+                {/* =====================================================
+                    PAGE CONTENT
+                   ===================================================== */}
 
                 <main
                     className="
