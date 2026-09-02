@@ -1,0 +1,147 @@
+{
+  "calendar_and_temporal_context": {
+    "date": "31 August 2026",
+    "day": "Monday",
+    "year": 2026,
+    "month": "August",
+    "time": "12:00 AM (00:00 IST)",
+    "site": "IIIT-Delhi Academic Complex (11kV Substation)",
+    "ambient_temperature_c": 28.6,
+    "relative_humidity_pct": 72.0,
+    "historical_benchmark_dataset": "I-BLEND (38,496 continuous hourly records, Aug 2013 - Dec 2017)"
+  },
+  "model_1a_accuracy_and_blend_breakdown": {
+    "r2_score_increase": {
+      "ridge_baseline_r2": 0.7239,
+      "single_xgboost_r2": 0.7389,
+      "single_lightgbm_r2": 0.74,
+      "weighted_blend_r2": 0.7488,
+      "net_r2_improvement": "+0.0099 (+0.0249 over Ridge)",
+      "mae_reduction_kw": "4.343 kW -> 4.254 kW (Lowest Error)"
+    },
+    "ensemble_weights": {
+      "xgb": 0.5,
+      "lgb": 0.35,
+      "ridge": 0.15
+    },
+    "component_predictions_kw": {
+      "xgboost_pred_kw": 16.24,
+      "lightgbm_pred_kw": 15.82,
+      "ridge_pred_kw": 24.6,
+      "final_weighted_blend_total_kw": 17.35
+    }
+  },
+  "model_1b_zone_and_appliance_shares": {
+    "appliances": {
+      "ac_kw": 13.86,
+      "ac_share_pct": 79.9,
+      "light_kw": 1.54,
+      "light_share_pct": 8.9,
+      "plug_kw": 1.96,
+      "plug_share_pct": 11.3
+    },
+    "zones": {
+      "z1": {
+        "name": "Zone 1 (Executive Offices & Meeting Rooms)",
+        "total_kw": 1.01,
+        "share_pct": 5.82
+      },
+      "z2": {
+        "name": "Zone 2 (Open Workstations & Computer Hall)",
+        "total_kw": 14.32,
+        "share_pct": 82.54
+      },
+      "z3": {
+        "name": "Zone 3 (Central Lobby & Corridors)",
+        "total_kw": 1.74,
+        "share_pct": 9.99
+      },
+      "z4": {
+        "name": "Zone 4 (Seminar Rooms & Conference Hall)",
+        "total_kw": 0.29,
+        "share_pct": 1.66
+      }
+    }
+  },
+  "model_2_solar_generation_kw": 0.0,
+  "optimizer_dispatch_and_actions": {
+    "timestamp": "2026-08-31 00:00:00",
+    "hour": 0,
+    "tariff_regime": "PEAK (\u20b910.63/kWh)",
+    "import_rate_inr_kwh": 10.625,
+    "export_rate_inr_kwh": 4.2,
+    "total_demand_kw": 17.35,
+    "solar_generation_kw": 0.0,
+    "net_power_kw": -17.35,
+    "battery_status": {
+      "capacity_kwh": 50.0,
+      "current_energy_kwh": 7.5,
+      "soc_pct": 15.0,
+      "soc_bar": "[\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591] 15.0%",
+      "min_reserve_kwh": 7.5,
+      "max_usable_kwh": 47.5,
+      "available_headroom_kwh": 40.0,
+      "available_discharge_kwh": 0.0,
+      "max_charge_rate_kw": 15.0,
+      "max_discharge_rate_kw": 20.0,
+      "status": "HEALTHY"
+    },
+    "battery_action": {
+      "mode": "DISCHARGING_PEAK_SHAVING",
+      "power_delivered_kw": 9.2,
+      "energy_delivered_kwh": 9.2,
+      "new_soc_pct": 15.0,
+      "current_energy_kwh": 7.5
+    },
+    "grid_export_profit": {},
+    "grid_import_cost": {
+      "import_kw": 8.15,
+      "import_kwh": 8.15,
+      "tariff_rate_inr_kwh": 10.62,
+      "tariff_slab": "PEAK (\u20b910.63/kWh)",
+      "total_cost_inr": 86.54
+    },
+    "arbitrage_reasoning": "Peak tariff window (PEAK (\u20b910.63/kWh)). Discharged battery by 9.20 kW, saving \u20b997.75 in avoided peak grid charges. Remaining grid import: 8.15 kW.",
+    "recommendations": [
+      {
+        "zone_id": "z2",
+        "zone_name": "Zone 2 (Open Workstations & Computer Hall)",
+        "appliance": "AIR CONDITIONING",
+        "action_title": "Zone 2 Modular AC Cycling (+2\u00b0C Setback)",
+        "description": "Set back thermostat from 22\u00b0C to 24\u00b0C and duty-cycle 4 of the 14 AC units in open office hall. Reduces cooling draw from 13.9 kW to 10.0 kW.",
+        "reduction_kw": 3.88,
+        "savings_inr_per_hr": 41.23,
+        "carbon_avoided_kg_per_hr": 2.779,
+        "comfort_impact": "LOW",
+        "time_window": "00:00 - 02:00"
+      },
+      {
+        "zone_id": "campus_wide",
+        "zone_name": "Campus-Wide Zones (Z1-Z4)",
+        "appliance": "PLUG LOADS",
+        "action_title": "Non-Essential Standby Power Shedding",
+        "description": "Deactivate water heaters, idle printers, and non-critical laboratory displays. Saves 0.49 kW with zero productivity impact.",
+        "reduction_kw": 0.49,
+        "savings_inr_per_hr": 5.21,
+        "carbon_avoided_kg_per_hr": 0.351,
+        "comfort_impact": "LOW",
+        "time_window": "00:00 - 02:00"
+      }
+    ],
+    "savings_summary": {
+      "baseline_demand_kw": 17.35,
+      "optimized_demand_kw": 12.97,
+      "total_reduction_kw": 4.37,
+      "energy_saved_pct": 25.2,
+      "total_savings_inr_hr": 46.44,
+      "carbon_emissions_avoided_kg": 3.129,
+      "environmental_metrics": {
+        "carbon_avoided_kg": 3.129,
+        "coal_burn_avoided_kg": 1.967,
+        "mature_tree_seedling_days": 51.9,
+        "grid_emission_standard": "CEA Baseline v19 (0.716 kg CO2e / kWh)"
+      },
+      "executive_callout": "Implementing these zone and appliance recommendations will save 25.2% energy during this hour (reducing demand by 4.37 kW and saving \u20b946.44/hr on peak commercial tariffs)!"
+    }
+  }
+}

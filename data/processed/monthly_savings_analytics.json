@@ -1,0 +1,881 @@
+{
+  "monthly_summary": {
+    "period": "2023-05-01 to 2023-05-30 (30 Days)",
+    "total_baseline_energy_kwh": 12772.6,
+    "total_optimized_energy_kwh": 9957.7,
+    "total_energy_saved_kwh": 2815.0,
+    "overall_energy_saved_pct": 22.0,
+    "total_solar_generated_kwh": 5147.2,
+    "solar_self_consumption_pct": 40.3,
+    "total_carbon_emissions_avoided_kg": 2015.5,
+    "total_carbon_emissions_avoided_tonnes": 2.02,
+    "mature_trees_equivalent": 92,
+    "grid_emission_factor_kg_per_kwh": 0.716,
+    "grid_carbon_standard": "Central Electricity Authority (CEA) CO2 Baseline Database v19",
+    "gross_bill_without_optimization_inr": 113409.02,
+    "net_bill_with_urja_saathi_inr": 68734.3,
+    "total_money_saved_inr": 44674.72,
+    "overall_bill_saved_pct": 39.4,
+    "total_solar_export_revenue_inr": 0.52,
+    "best_savings_day": {
+      "date": "2023-05-22",
+      "day": "Monday",
+      "money_saved_inr": 2262.93,
+      "energy_saved_pct": 25.0
+    },
+    "zone_savings_distribution_kwh": {
+      "Zone 1 (Executive Offices & Faculty Suites)": 203.9,
+      "Zone 2 (Open Workstations, Computing & Robotics Labs)": 2352.5,
+      "Zone 3 (Central Atrium & Academic Corridors)": 54.6,
+      "Zone 4 (Auditorium, Lecture Theatres & Seminar Halls)": 203.9
+    },
+    "appliance_savings_distribution_kwh": {
+      "Air Conditioning": 2585.8,
+      "Lighting": 10.7,
+      "Plug Loads": 218.4
+    },
+    "executive_headline": "Over the past 30 days, Urja Saathi reduced campus energy consumption by 22.0% (saving 2,815.0 kWh) and slashed electricity bills by 39.4% (saving \u20b944,674.72 including \u20b90.52 in solar feed-in revenue)!"
+  },
+  "daily_time_series": [
+    {
+      "date": "2023-05-01",
+      "day_of_week": "Monday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 511.8,
+      "optimized_energy_kwh": 382.9,
+      "energy_saved_kwh": 128.9,
+      "energy_saved_pct": 25.2,
+      "solar_generated_kwh": 153.4,
+      "peak_demand_shaved_kw": 6.15,
+      "gross_electricity_cost_inr": 4540.43,
+      "optimized_net_bill_inr": 2573.84,
+      "bill_savings_inr": 1966.59,
+      "bill_saved_pct": 43.3,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 92.32,
+      "zone_curtailment_kwh": {
+        "z1": 8.7,
+        "z2": 109.2,
+        "z3": 2.5,
+        "z4": 8.7
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 118.7,
+        "light": 0.3,
+        "plug": 9.9
+      }
+    },
+    {
+      "date": "2023-05-02",
+      "day_of_week": "Tuesday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 499.7,
+      "optimized_energy_kwh": 386.3,
+      "energy_saved_kwh": 113.4,
+      "energy_saved_pct": 22.7,
+      "solar_generated_kwh": 173.9,
+      "peak_demand_shaved_kw": 5.92,
+      "gross_electricity_cost_inr": 4433.14,
+      "optimized_net_bill_inr": 2972.35,
+      "bill_savings_inr": 1460.79,
+      "bill_saved_pct": 33.0,
+      "solar_export_revenue_inr": 0.02,
+      "carbon_emissions_avoided_kg": 81.18,
+      "zone_curtailment_kwh": {
+        "z1": 6.6,
+        "z2": 97.8,
+        "z3": 2.4,
+        "z4": 6.6
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 103.5,
+        "light": 0.4,
+        "plug": 9.5
+      }
+    },
+    {
+      "date": "2023-05-03",
+      "day_of_week": "Wednesday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 508.1,
+      "optimized_energy_kwh": 381.9,
+      "energy_saved_kwh": 126.2,
+      "energy_saved_pct": 24.8,
+      "solar_generated_kwh": 174.6,
+      "peak_demand_shaved_kw": 6.11,
+      "gross_electricity_cost_inr": 4507.87,
+      "optimized_net_bill_inr": 3044.41,
+      "bill_savings_inr": 1463.46,
+      "bill_saved_pct": 32.5,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 90.32,
+      "zone_curtailment_kwh": {
+        "z1": 9.7,
+        "z2": 104.1,
+        "z3": 2.5,
+        "z4": 9.7
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 114.5,
+        "light": 1.5,
+        "plug": 10.1
+      }
+    },
+    {
+      "date": "2023-05-04",
+      "day_of_week": "Thursday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 517.9,
+      "optimized_energy_kwh": 390.5,
+      "energy_saved_kwh": 127.5,
+      "energy_saved_pct": 24.6,
+      "solar_generated_kwh": 164.0,
+      "peak_demand_shaved_kw": 5.97,
+      "gross_electricity_cost_inr": 4591.84,
+      "optimized_net_bill_inr": 3204.45,
+      "bill_savings_inr": 1387.39,
+      "bill_saved_pct": 30.2,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 91.26,
+      "zone_curtailment_kwh": {
+        "z1": 11.9,
+        "z2": 101.3,
+        "z3": 2.4,
+        "z4": 11.9
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 117.5,
+        "light": 0.4,
+        "plug": 9.6
+      }
+    },
+    {
+      "date": "2023-05-05",
+      "day_of_week": "Friday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 493.0,
+      "optimized_energy_kwh": 389.1,
+      "energy_saved_kwh": 103.9,
+      "energy_saved_pct": 21.1,
+      "solar_generated_kwh": 182.5,
+      "peak_demand_shaved_kw": 5.7,
+      "gross_electricity_cost_inr": 4376.63,
+      "optimized_net_bill_inr": 2836.82,
+      "bill_savings_inr": 1539.81,
+      "bill_saved_pct": 35.2,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 74.41,
+      "zone_curtailment_kwh": {
+        "z1": 8.9,
+        "z2": 83.9,
+        "z3": 2.2,
+        "z4": 8.9
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 94.8,
+        "light": 0.3,
+        "plug": 8.8
+      }
+    },
+    {
+      "date": "2023-05-06",
+      "day_of_week": "Saturday",
+      "is_weekend": true,
+      "baseline_energy_kwh": 228.8,
+      "optimized_energy_kwh": 191.1,
+      "energy_saved_kwh": 37.7,
+      "energy_saved_pct": 16.5,
+      "solar_generated_kwh": 123.7,
+      "peak_demand_shaved_kw": 2.57,
+      "gross_electricity_cost_inr": 2036.72,
+      "optimized_net_bill_inr": 998.52,
+      "bill_savings_inr": 1038.2,
+      "bill_saved_pct": 51.0,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 27.01,
+      "zone_curtailment_kwh": {
+        "z1": 1.4,
+        "z2": 34.7,
+        "z3": 0.4,
+        "z4": 1.4
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 36.3,
+        "light": 0.0,
+        "plug": 1.4
+      }
+    },
+    {
+      "date": "2023-05-07",
+      "day_of_week": "Sunday",
+      "is_weekend": true,
+      "baseline_energy_kwh": 228.3,
+      "optimized_energy_kwh": 193.7,
+      "energy_saved_kwh": 34.6,
+      "energy_saved_pct": 15.2,
+      "solar_generated_kwh": 169.8,
+      "peak_demand_shaved_kw": 2.38,
+      "gross_electricity_cost_inr": 2031.47,
+      "optimized_net_bill_inr": 944.18,
+      "bill_savings_inr": 1087.29,
+      "bill_saved_pct": 53.5,
+      "solar_export_revenue_inr": 0.05,
+      "carbon_emissions_avoided_kg": 24.77,
+      "zone_curtailment_kwh": {
+        "z1": 0.9,
+        "z2": 32.6,
+        "z3": 0.2,
+        "z4": 0.9
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 33.8,
+        "light": 0.0,
+        "plug": 0.8
+      }
+    },
+    {
+      "date": "2023-05-08",
+      "day_of_week": "Monday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 512.2,
+      "optimized_energy_kwh": 382.6,
+      "energy_saved_kwh": 129.7,
+      "energy_saved_pct": 25.3,
+      "solar_generated_kwh": 155.0,
+      "peak_demand_shaved_kw": 6.15,
+      "gross_electricity_cost_inr": 4546.04,
+      "optimized_net_bill_inr": 2790.36,
+      "bill_savings_inr": 1755.68,
+      "bill_saved_pct": 38.6,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 92.83,
+      "zone_curtailment_kwh": {
+        "z1": 8.5,
+        "z2": 110.2,
+        "z3": 2.4,
+        "z4": 8.5
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 119.9,
+        "light": 0.3,
+        "plug": 9.5
+      }
+    },
+    {
+      "date": "2023-05-09",
+      "day_of_week": "Tuesday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 492.8,
+      "optimized_energy_kwh": 369.5,
+      "energy_saved_kwh": 123.3,
+      "energy_saved_pct": 25.0,
+      "solar_generated_kwh": 168.2,
+      "peak_demand_shaved_kw": 5.97,
+      "gross_electricity_cost_inr": 4375.25,
+      "optimized_net_bill_inr": 2953.29,
+      "bill_savings_inr": 1421.96,
+      "bill_saved_pct": 32.5,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 88.28,
+      "zone_curtailment_kwh": {
+        "z1": 7.8,
+        "z2": 105.1,
+        "z3": 2.6,
+        "z4": 7.8
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 112.5,
+        "light": 0.3,
+        "plug": 10.5
+      }
+    },
+    {
+      "date": "2023-05-10",
+      "day_of_week": "Wednesday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 508.1,
+      "optimized_energy_kwh": 399.9,
+      "energy_saved_kwh": 108.2,
+      "energy_saved_pct": 21.3,
+      "solar_generated_kwh": 189.3,
+      "peak_demand_shaved_kw": 6.11,
+      "gross_electricity_cost_inr": 4507.61,
+      "optimized_net_bill_inr": 2905.44,
+      "bill_savings_inr": 1602.17,
+      "bill_saved_pct": 35.5,
+      "solar_export_revenue_inr": 0.02,
+      "carbon_emissions_avoided_kg": 77.47,
+      "zone_curtailment_kwh": {
+        "z1": 7.3,
+        "z2": 91.5,
+        "z3": 2.2,
+        "z4": 7.3
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 98.3,
+        "light": 1.1,
+        "plug": 8.9
+      }
+    },
+    {
+      "date": "2023-05-11",
+      "day_of_week": "Thursday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 492.9,
+      "optimized_energy_kwh": 389.4,
+      "energy_saved_kwh": 103.5,
+      "energy_saved_pct": 21.0,
+      "solar_generated_kwh": 190.3,
+      "peak_demand_shaved_kw": 5.71,
+      "gross_electricity_cost_inr": 4376.53,
+      "optimized_net_bill_inr": 2764.44,
+      "bill_savings_inr": 1612.09,
+      "bill_saved_pct": 36.8,
+      "solar_export_revenue_inr": 0.02,
+      "carbon_emissions_avoided_kg": 74.08,
+      "zone_curtailment_kwh": {
+        "z1": 9.0,
+        "z2": 83.1,
+        "z3": 2.3,
+        "z4": 9.0
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 94.1,
+        "light": 0.3,
+        "plug": 9.1
+      }
+    },
+    {
+      "date": "2023-05-12",
+      "day_of_week": "Friday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 491.7,
+      "optimized_energy_kwh": 371.6,
+      "energy_saved_kwh": 120.0,
+      "energy_saved_pct": 24.4,
+      "solar_generated_kwh": 186.4,
+      "peak_demand_shaved_kw": 5.7,
+      "gross_electricity_cost_inr": 4365.24,
+      "optimized_net_bill_inr": 2786.62,
+      "bill_savings_inr": 1578.62,
+      "bill_saved_pct": 36.2,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 85.94,
+      "zone_curtailment_kwh": {
+        "z1": 11.6,
+        "z2": 94.2,
+        "z3": 2.5,
+        "z4": 11.6
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 109.5,
+        "light": 0.3,
+        "plug": 10.2
+      }
+    },
+    {
+      "date": "2023-05-13",
+      "day_of_week": "Saturday",
+      "is_weekend": true,
+      "baseline_energy_kwh": 227.7,
+      "optimized_energy_kwh": 193.2,
+      "energy_saved_kwh": 34.6,
+      "energy_saved_pct": 15.2,
+      "solar_generated_kwh": 175.3,
+      "peak_demand_shaved_kw": 2.4,
+      "gross_electricity_cost_inr": 2026.57,
+      "optimized_net_bill_inr": 945.81,
+      "bill_savings_inr": 1080.76,
+      "bill_saved_pct": 53.3,
+      "solar_export_revenue_inr": 0.04,
+      "carbon_emissions_avoided_kg": 24.75,
+      "zone_curtailment_kwh": {
+        "z1": 0.9,
+        "z2": 32.5,
+        "z3": 0.2,
+        "z4": 0.9
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 33.7,
+        "light": 0.0,
+        "plug": 0.8
+      }
+    },
+    {
+      "date": "2023-05-14",
+      "day_of_week": "Sunday",
+      "is_weekend": true,
+      "baseline_energy_kwh": 223.1,
+      "optimized_energy_kwh": 191.6,
+      "energy_saved_kwh": 31.5,
+      "energy_saved_pct": 14.1,
+      "solar_generated_kwh": 174.8,
+      "peak_demand_shaved_kw": 2.2,
+      "gross_electricity_cost_inr": 1984.3,
+      "optimized_net_bill_inr": 831.02,
+      "bill_savings_inr": 1153.28,
+      "bill_saved_pct": 58.1,
+      "solar_export_revenue_inr": 0.07,
+      "carbon_emissions_avoided_kg": 22.53,
+      "zone_curtailment_kwh": {
+        "z1": 2.6,
+        "z2": 26.3,
+        "z3": 0.0,
+        "z4": 2.6
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 31.5,
+        "light": 0.0,
+        "plug": 0.0
+      }
+    },
+    {
+      "date": "2023-05-15",
+      "day_of_week": "Monday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 486.9,
+      "optimized_energy_kwh": 367.1,
+      "energy_saved_kwh": 119.8,
+      "energy_saved_pct": 24.6,
+      "solar_generated_kwh": 158.0,
+      "peak_demand_shaved_kw": 5.77,
+      "gross_electricity_cost_inr": 4326.09,
+      "optimized_net_bill_inr": 2131.83,
+      "bill_savings_inr": 2194.26,
+      "bill_saved_pct": 50.7,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 85.75,
+      "zone_curtailment_kwh": {
+        "z1": 11.8,
+        "z2": 93.9,
+        "z3": 2.3,
+        "z4": 11.8
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 110.2,
+        "light": 0.3,
+        "plug": 9.3
+      }
+    },
+    {
+      "date": "2023-05-16",
+      "day_of_week": "Tuesday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 492.7,
+      "optimized_energy_kwh": 369.6,
+      "energy_saved_kwh": 123.1,
+      "energy_saved_pct": 25.0,
+      "solar_generated_kwh": 172.5,
+      "peak_demand_shaved_kw": 5.97,
+      "gross_electricity_cost_inr": 4374.55,
+      "optimized_net_bill_inr": 2907.58,
+      "bill_savings_inr": 1466.97,
+      "bill_saved_pct": 33.5,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 88.15,
+      "zone_curtailment_kwh": {
+        "z1": 7.8,
+        "z2": 104.9,
+        "z3": 2.6,
+        "z4": 7.8
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 112.3,
+        "light": 0.3,
+        "plug": 10.5
+      }
+    },
+    {
+      "date": "2023-05-17",
+      "day_of_week": "Wednesday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 490.1,
+      "optimized_energy_kwh": 369.3,
+      "energy_saved_kwh": 120.8,
+      "energy_saved_pct": 24.6,
+      "solar_generated_kwh": 157.1,
+      "peak_demand_shaved_kw": 5.88,
+      "gross_electricity_cost_inr": 4351.77,
+      "optimized_net_bill_inr": 3025.57,
+      "bill_savings_inr": 1326.2,
+      "bill_saved_pct": 30.5,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 86.48,
+      "zone_curtailment_kwh": {
+        "z1": 9.9,
+        "z2": 98.4,
+        "z3": 2.7,
+        "z4": 9.9
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 108.6,
+        "light": 1.4,
+        "plug": 10.8
+      }
+    },
+    {
+      "date": "2023-05-18",
+      "day_of_week": "Thursday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 503.1,
+      "optimized_energy_kwh": 391.7,
+      "energy_saved_kwh": 111.4,
+      "energy_saved_pct": 22.1,
+      "solar_generated_kwh": 159.3,
+      "peak_demand_shaved_kw": 5.85,
+      "gross_electricity_cost_inr": 4461.27,
+      "optimized_net_bill_inr": 3143.07,
+      "bill_savings_inr": 1318.2,
+      "bill_saved_pct": 29.5,
+      "solar_export_revenue_inr": 0.01,
+      "carbon_emissions_avoided_kg": 79.76,
+      "zone_curtailment_kwh": {
+        "z1": 9.9,
+        "z2": 89.4,
+        "z3": 2.2,
+        "z4": 9.9
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 102.0,
+        "light": 0.4,
+        "plug": 9.0
+      }
+    },
+    {
+      "date": "2023-05-19",
+      "day_of_week": "Friday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 488.9,
+      "optimized_energy_kwh": 391.3,
+      "energy_saved_kwh": 97.6,
+      "energy_saved_pct": 20.0,
+      "solar_generated_kwh": 191.1,
+      "peak_demand_shaved_kw": 5.65,
+      "gross_electricity_cost_inr": 4340.35,
+      "optimized_net_bill_inr": 2718.04,
+      "bill_savings_inr": 1622.31,
+      "bill_saved_pct": 37.4,
+      "solar_export_revenue_inr": 0.03,
+      "carbon_emissions_avoided_kg": 69.9,
+      "zone_curtailment_kwh": {
+        "z1": 8.2,
+        "z2": 79.1,
+        "z3": 2.2,
+        "z4": 8.2
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 88.5,
+        "light": 0.3,
+        "plug": 8.8
+      }
+    },
+    {
+      "date": "2023-05-20",
+      "day_of_week": "Saturday",
+      "is_weekend": true,
+      "baseline_energy_kwh": 228.3,
+      "optimized_energy_kwh": 194.6,
+      "energy_saved_kwh": 33.7,
+      "energy_saved_pct": 14.8,
+      "solar_generated_kwh": 165.8,
+      "peak_demand_shaved_kw": 2.49,
+      "gross_electricity_cost_inr": 2031.98,
+      "optimized_net_bill_inr": 958.51,
+      "bill_savings_inr": 1073.47,
+      "bill_saved_pct": 52.8,
+      "solar_export_revenue_inr": 0.08,
+      "carbon_emissions_avoided_kg": 24.13,
+      "zone_curtailment_kwh": {
+        "z1": 1.4,
+        "z2": 30.6,
+        "z3": 0.3,
+        "z4": 1.4
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 32.5,
+        "light": 0.0,
+        "plug": 1.2
+      }
+    },
+    {
+      "date": "2023-05-21",
+      "day_of_week": "Sunday",
+      "is_weekend": true,
+      "baseline_energy_kwh": 227.7,
+      "optimized_energy_kwh": 195.3,
+      "energy_saved_kwh": 32.4,
+      "energy_saved_pct": 14.2,
+      "solar_generated_kwh": 185.7,
+      "peak_demand_shaved_kw": 2.37,
+      "gross_electricity_cost_inr": 2026.67,
+      "optimized_net_bill_inr": 838.06,
+      "bill_savings_inr": 1188.61,
+      "bill_saved_pct": 58.6,
+      "solar_export_revenue_inr": 0.07,
+      "carbon_emissions_avoided_kg": 23.2,
+      "zone_curtailment_kwh": {
+        "z1": 0.7,
+        "z2": 30.8,
+        "z3": 0.2,
+        "z4": 0.7
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 31.6,
+        "light": 0.0,
+        "plug": 0.8
+      }
+    },
+    {
+      "date": "2023-05-22",
+      "day_of_week": "Monday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 498.9,
+      "optimized_energy_kwh": 373.9,
+      "energy_saved_kwh": 125.0,
+      "energy_saved_pct": 25.0,
+      "solar_generated_kwh": 166.5,
+      "peak_demand_shaved_kw": 5.99,
+      "gross_electricity_cost_inr": 4429.8,
+      "optimized_net_bill_inr": 2166.87,
+      "bill_savings_inr": 2262.93,
+      "bill_saved_pct": 51.1,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 89.47,
+      "zone_curtailment_kwh": {
+        "z1": 8.7,
+        "z2": 105.1,
+        "z3": 2.5,
+        "z4": 8.7
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 114.6,
+        "light": 0.3,
+        "plug": 10.1
+      }
+    },
+    {
+      "date": "2023-05-23",
+      "day_of_week": "Tuesday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 499.7,
+      "optimized_energy_kwh": 374.2,
+      "energy_saved_kwh": 125.5,
+      "energy_saved_pct": 25.1,
+      "solar_generated_kwh": 152.7,
+      "peak_demand_shaved_kw": 5.98,
+      "gross_electricity_cost_inr": 4432.05,
+      "optimized_net_bill_inr": 3139.22,
+      "bill_savings_inr": 1292.83,
+      "bill_saved_pct": 29.2,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 89.88,
+      "zone_curtailment_kwh": {
+        "z1": 7.7,
+        "z2": 107.5,
+        "z3": 2.5,
+        "z4": 7.7
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 115.0,
+        "light": 0.4,
+        "plug": 10.1
+      }
+    },
+    {
+      "date": "2023-05-24",
+      "day_of_week": "Wednesday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 482.8,
+      "optimized_energy_kwh": 388.1,
+      "energy_saved_kwh": 94.7,
+      "energy_saved_pct": 19.6,
+      "solar_generated_kwh": 191.1,
+      "peak_demand_shaved_kw": 5.74,
+      "gross_electricity_cost_inr": 4288.82,
+      "optimized_net_bill_inr": 2657.34,
+      "bill_savings_inr": 1631.48,
+      "bill_saved_pct": 38.0,
+      "solar_export_revenue_inr": 0.01,
+      "carbon_emissions_avoided_kg": 67.81,
+      "zone_curtailment_kwh": {
+        "z1": 7.2,
+        "z2": 78.1,
+        "z3": 2.2,
+        "z4": 7.2
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 85.3,
+        "light": 0.7,
+        "plug": 8.7
+      }
+    },
+    {
+      "date": "2023-05-25",
+      "day_of_week": "Thursday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 492.9,
+      "optimized_energy_kwh": 400.0,
+      "energy_saved_kwh": 92.9,
+      "energy_saved_pct": 18.9,
+      "solar_generated_kwh": 197.2,
+      "peak_demand_shaved_kw": 5.71,
+      "gross_electricity_cost_inr": 4376.85,
+      "optimized_net_bill_inr": 2699.64,
+      "bill_savings_inr": 1677.21,
+      "bill_saved_pct": 38.3,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 66.55,
+      "zone_curtailment_kwh": {
+        "z1": 7.4,
+        "z2": 76.1,
+        "z3": 2.1,
+        "z4": 7.4
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 84.2,
+        "light": 0.3,
+        "plug": 8.3
+      }
+    },
+    {
+      "date": "2023-05-26",
+      "day_of_week": "Friday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 498.3,
+      "optimized_energy_kwh": 387.8,
+      "energy_saved_kwh": 110.4,
+      "energy_saved_pct": 22.2,
+      "solar_generated_kwh": 194.1,
+      "peak_demand_shaved_kw": 5.7,
+      "gross_electricity_cost_inr": 4419.94,
+      "optimized_net_bill_inr": 2773.2,
+      "bill_savings_inr": 1646.74,
+      "bill_saved_pct": 37.3,
+      "solar_export_revenue_inr": 0.01,
+      "carbon_emissions_avoided_kg": 79.07,
+      "zone_curtailment_kwh": {
+        "z1": 9.7,
+        "z2": 88.7,
+        "z3": 2.2,
+        "z4": 9.7
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 101.1,
+        "light": 0.3,
+        "plug": 9.0
+      }
+    },
+    {
+      "date": "2023-05-27",
+      "day_of_week": "Saturday",
+      "is_weekend": true,
+      "baseline_energy_kwh": 228.3,
+      "optimized_energy_kwh": 193.5,
+      "energy_saved_kwh": 34.8,
+      "energy_saved_pct": 15.2,
+      "solar_generated_kwh": 159.7,
+      "peak_demand_shaved_kw": 2.55,
+      "gross_electricity_cost_inr": 2032.22,
+      "optimized_net_bill_inr": 962.75,
+      "bill_savings_inr": 1069.47,
+      "bill_saved_pct": 52.6,
+      "solar_export_revenue_inr": 0.05,
+      "carbon_emissions_avoided_kg": 24.9,
+      "zone_curtailment_kwh": {
+        "z1": 1.6,
+        "z2": 31.1,
+        "z3": 0.6,
+        "z4": 1.6
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 32.6,
+        "light": 0.0,
+        "plug": 2.2
+      }
+    },
+    {
+      "date": "2023-05-28",
+      "day_of_week": "Sunday",
+      "is_weekend": true,
+      "baseline_energy_kwh": 226.0,
+      "optimized_energy_kwh": 192.0,
+      "energy_saved_kwh": 34.0,
+      "energy_saved_pct": 15.1,
+      "solar_generated_kwh": 168.2,
+      "peak_demand_shaved_kw": 2.31,
+      "gross_electricity_cost_inr": 2010.12,
+      "optimized_net_bill_inr": 852.6,
+      "bill_savings_inr": 1157.52,
+      "bill_saved_pct": 57.6,
+      "solar_export_revenue_inr": 0.02,
+      "carbon_emissions_avoided_kg": 24.35,
+      "zone_curtailment_kwh": {
+        "z1": 0.9,
+        "z2": 32.0,
+        "z3": 0.2,
+        "z4": 0.9
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 33.2,
+        "light": 0.0,
+        "plug": 0.8
+      }
+    },
+    {
+      "date": "2023-05-29",
+      "day_of_week": "Monday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 498.0,
+      "optimized_energy_kwh": 374.0,
+      "energy_saved_kwh": 124.0,
+      "energy_saved_pct": 24.9,
+      "solar_generated_kwh": 157.8,
+      "peak_demand_shaved_kw": 6.0,
+      "gross_electricity_cost_inr": 4423.26,
+      "optimized_net_bill_inr": 2432.37,
+      "bill_savings_inr": 1990.89,
+      "bill_saved_pct": 45.0,
+      "solar_export_revenue_inr": 0.0,
+      "carbon_emissions_avoided_kg": 88.78,
+      "zone_curtailment_kwh": {
+        "z1": 8.8,
+        "z2": 103.9,
+        "z3": 2.6,
+        "z4": 8.8
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 113.4,
+        "light": 0.3,
+        "plug": 10.3
+      }
+    },
+    {
+      "date": "2023-05-30",
+      "day_of_week": "Tuesday",
+      "is_weekend": false,
+      "baseline_energy_kwh": 493.9,
+      "optimized_energy_kwh": 381.9,
+      "energy_saved_kwh": 112.0,
+      "energy_saved_pct": 22.7,
+      "solar_generated_kwh": 189.2,
+      "peak_demand_shaved_kw": 5.9,
+      "gross_electricity_cost_inr": 4383.65,
+      "optimized_net_bill_inr": 2776.1,
+      "bill_savings_inr": 1607.55,
+      "bill_saved_pct": 36.7,
+      "solar_export_revenue_inr": 0.02,
+      "carbon_emissions_avoided_kg": 80.18,
+      "zone_curtailment_kwh": {
+        "z1": 6.5,
+        "z2": 96.6,
+        "z3": 2.4,
+        "z4": 6.5
+      },
+      "appliance_curtailment_kwh": {
+        "ac": 102.2,
+        "light": 0.3,
+        "plug": 9.5
+      }
+    }
+  ]
+}

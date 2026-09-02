@@ -52,3 +52,20 @@ htmlcov/
 # --- Local / editor leftovers ---
 *.local
 *.sw?
+
+# --- Generator scripts & scratch files excluded as requested ---
+scripts/generate_*.py
+scripts/export_chat_history.py
+src/utils/generate_shap_analysis.py
+implementation_plan.md
+fetch_solar_data.py
+solar_delhi.csv
+solar_greater_noida.csv
+.tempmediaStorage/
+
+# --- Large Raw Datasets (>50MB, processed datasets are in data/processed/) ---
+data/2019Floor*.csv
+data/raw/iblend_academic.csv
+data/raw/cubems_2019floor*.csv
+
+
