@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urja Saathi - Presentation Deliverables & Visualizations Gallery</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --border: #1f293d;
+      --accent: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 30px 24px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+    h1 { font-size: 26px; color: var(--accent); }
+    .subtitle { font-size: 14px; color: var(--text-muted); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(540px, 1fr)); gap: 24px; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    .card h3 { font-size: 16px; margin-bottom: 8px; color: #38bdf8; display: flex; justify-content: space-between; align-items: center; }
+    .badge { font-size: 11px; background: rgba(16,185,129,0.15); color: var(--accent); padding: 3px 8px; border-radius: 999px; }
+    .card p { font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px; }
+    .img-box { border-radius: 8px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; background: #fff; }
+    .img-box img { width: 100%; height: auto; display: block; }
+    .btn-group { display: flex; gap: 10px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: #022c22; }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-secondary { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⚡ Urja Saathi: Presentation Deliverables & Visualizations Gallery</h1>
+      <p class="subtitle">Complete high-resolution plots for pitch decks, technical defense, and interactive demo tabs.</p>
+    </header>
+
+    <div class="grid">
+      <!-- Diagram 1: System Architecture -->
+      <div class="card" style="grid-column: 1 / -1; border-color: #3b82f6;">
+        <h3>
+          <span style="color: #60a5fa;">🏗️ Urja Saathi — Master System Architecture Diagram</span>
+          <span class="badge" style="background: rgba(59,130,246,0.15); color: #60a5fa;">Multi-Tier Architecture</span>
+        </h3>
+        <p>Comprehensive 5-tier architecture: Ingestion, Decoupled AI Engines (1A Magnitude + 1B Shape + Model 2 Solar), Virtual Sub-meter Coupling, Closed-Loop Time-of-Day Optimizer, and SaaS Web Interface.</p>
+        <div class="img-box" style="background: #0b0f19;">
+          <img src="figures/system_architecture_diagram.png" alt="Urja Saathi Master System Architecture">
+        </div>
+        <div class="btn-group">
+          <a href="figures/system_architecture_diagram.png" target="_blank" class="btn btn-primary">🔍 View Full Size (300 DPI)</a>
+          <a href="figures/system_architecture_diagram.png" download class="btn btn-secondary">⬇️ Download High-Res PNG</a>
+        </div>
+      </div>
+
+      <!-- Diagram 2: End-to-End Pipeline -->
+      <div class="card" style="grid-column: 1 / -1; border-color: #10b981;">
+        <h3>
+          <span style="color: #34d399;">🔄 End-to-End Operational Data Pipeline</span>
+          <span class="badge" style="background: rgba(16,185,129,0.15); color: #34d399;">5-Phase Lifecycle</span>
+        </h3>
+        <p>Step-by-step data lifecycle: 11kV Substation Ingestion → Feature Engineering → Decoupled AI Forecasting → Optimization & Tariff Arbitrage → Closed-Loop Physical Actuation & Verification.</p>
+        <div class="img-box" style="background: #0b0f19;">
+          <img src="figures/end_to_end_pipeline_diagram.png" alt="Urja Saathi End-to-End Pipeline">
+        </div>
+        <div class="btn-group">
+          <a href="figures/end_to_end_pipeline_diagram.png" target="_blank" class="btn btn-primary">🔍 View Full Size (300 DPI)</a>
+          <a href="figures/end_to_end_pipeline_diagram.png" download class="btn btn-secondary">⬇️ Download High-Res PNG</a>
+        </div>
+      </div>
+
+      <!-- Plot 1 -->
+      <div class="card">
+        <h3>
+          <span>1. Upcoming 24h Energy Balance & Battery Dispatch</span>
+          <span class="badge">Plotly Interactive</span>
+        </h3>
+        <p>Shows solar generation profile, total campus demand, net grid import, and battery state-of-charge trajectory.</p>
+        <div class="img-box">
+          <img src="figures/24h_energy_balance_dispatch.png" alt="24h Energy Balance">
+        </div>
+        <div class="btn-group">
+          <a href="24h_energy_balance_dispatch.html" target="_blank" class="btn btn-primary">🔗 Open Interactive Plotly</a>
+          <a href="figures/24h_energy_balance_dispatch.png" download class="btn btn-secondary">⬇️ Download High-Res PNG</a>
+        </div>
+      </div>
+
+      <!-- Plot 2 -->
+      <div class="card">
+        <h3>
+          <span>2. Past 7 Days Bill Savings (ROI Proof)</span>
+          <span class="badge">Average: 27.8% Saved</span>
+        </h3>
+        <p>Compares baseline unmanaged commercial electricity bills vs Urja Saathi's optimized schedule (Total saved: ₹12,200).</p>
+        <div class="img-box">
+          <img src="figures/past_7_days_cost_savings.png" alt="Past 7 Days Savings">
+        </div>
+        <div class="btn-group">
+          <a href="past_7_days_cost_savings.html" target="_blank" class="btn btn-primary">🔗 Open Interactive Plotly</a>
+          <a href="figures/past_7_days_cost_savings.png" download class="btn btn-secondary">⬇️ Download High-Res PNG</a>
+        </div>
+      </div>
+
+      <!-- Plot 3 -->
+      <div class="card">
+        <h3>
+          <span>3. Zone/Appliance Disaggregation</span>
+          <span class="badge">Model 1B in Action</span>
+        </h3>
+        <p>14:00 peak hour snapshot disaggregating HVAC/AC, lighting, and plug loads across Classrooms, Labs, and Library.</p>
+        <div class="img-box">
+          <img src="figures/zone_appliance_disaggregation.png" alt="Zone Disaggregation">
+        </div>
+        <div class="btn-group">
+          <a href="zone_appliance_disaggregation.html" target="_blank" class="btn btn-primary">🔗 Open Interactive Plotly</a>
+          <a href="figures/zone_appliance_disaggregation.png" download class="btn btn-secondary">⬇️ Download High-Res PNG</a>
+        </div>
+      </div>
+
+      <!-- Plot 4 -->
+      <div class="card">
+        <h3>
+          <span>4. SHAP Global Feature Importance</span>
+          <span class="badge">Model 1A Explainability</span>
+        </h3>
+        <p>Cooperative game-theoretic Mean |SHAP| ranking proving lag-1h, diurnal cycle, and weather thermodynamic drivers.</p>
+        <div class="img-box">
+          <img src="figures/shap_feature_importance_bar.png" alt="SHAP Feature Importance">
+        </div>
+        <div class="btn-group">
+          <a href="figures/shap_feature_importance_bar.png" target="_blank" class="btn btn-primary">🔍 View Full Size</a>
+          <a href="figures/shap_feature_importance_bar.png" download class="btn btn-secondary">⬇️ Download High-Res PNG</a>
+        </div>
+      </div>
+
+      <!-- Plot 5 -->
+      <div class="card" style="grid-column: 1 / -1;">
+        <h3>
+          <span>5. SHAP Feature Impact Beeswarm Plot</span>
+          <span class="badge">Explainable AI</span>
+        </h3>
+        <p>Shows exact directional impact of each feature on predicted kW demand (high values in red, low in blue).</p>
+        <div class="img-box">
+          <img src="figures/shap_summary_beeswarm.png" alt="SHAP Beeswarm Plot">
+        </div>
+        <div class="btn-group">
+          <a href="figures/shap_summary_beeswarm.png" target="_blank" class="btn btn-primary">🔍 View Full Size</a>
+          <a href="figures/shap_summary_beeswarm.png" download class="btn btn-secondary">⬇️ Download High-Res PNG</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
