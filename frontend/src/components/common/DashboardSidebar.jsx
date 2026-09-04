@@ -25,6 +25,7 @@ import {
     BatteryCharging,
     IndianRupee,
     Lightbulb,
+    Sparkles,
     LogOut,
     X,
     ChevronLeft,
@@ -75,6 +76,11 @@ export default function DashboardSidebar({
             to: "/dashboard/cost",
             label: "Cost & Savings",
             icon: IndianRupee,
+        },
+        {
+            to: "/dashboard/urja-planner",
+            label: "Urja Planner",
+            icon: Sparkles,
         },
         {
             to: "/dashboard/recommendations",

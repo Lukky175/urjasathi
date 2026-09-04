@@ -71,6 +71,7 @@ import Generation from "./pages/SidebarPages/Generation/Generation";
 import Battery from "./pages/SidebarPages/Battery/Battery";
 import Cost from "./pages/SidebarPages/Cost/Cost";
 import Recommendations from "./pages/SidebarPages/Recommendations/Recommendations";
+import UrjaPlanner from "./pages/SidebarPages/UrjaPlanner/UrjaPlanner";
 
 
 /**
@@ -229,6 +230,15 @@ function AppContent() {
                     element={
                         <DashboardRoute>
                             <Cost />
+                        </DashboardRoute>
+                    }
+                />
+
+                <Route
+                    path="/dashboard/urja-planner"
+                    element={
+                        <DashboardRoute>
+                            <UrjaPlanner />
                         </DashboardRoute>
                     }
                 />
