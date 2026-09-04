@@ -1,8 +1,5 @@
 import {
     ArrowUp,
-    BriefcaseBusiness,
-    Camera,
-    Code2,
     Mail,
     MapPin,
 } from "lucide-react";
@@ -37,29 +34,6 @@ const FOOTER_LINKS = {
     ],
 };
 
-const SOCIAL_LINKS = [
-    {
-        label: "GitHub",
-        icon: Code2,
-        href: "#",
-    },
-    {
-        label: "LinkedIn",
-        icon: BriefcaseBusiness,
-        href: "#",
-    },
-    {
-        label: "Twitter",
-        icon: Mail,
-        href: "#",
-    },
-    {
-        label: "Instagram",
-        icon: Camera,
-        href: "#",
-    },
-];
-
 function Footer() {
     const currentYear = new Date().getFullYear();
 
@@ -72,103 +46,130 @@ function Footer() {
 
     return (
         <footer className="border-t border-border bg-surface">
-            <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-5 py-14 sm:px-7 sm:py-16 lg:px-10 lg:py-20">
 
                 {/* =====================================================
-                    MAIN FOOTER CONTENT
+                    MAIN FOOTER
                    ===================================================== */}
 
-                <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr]">
+                <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.35fr] lg:gap-16">
 
                     {/* =================================================
                         BRAND
                        ================================================= */}
 
-                    <div className="max-w-sm">
+                    <div className="max-w-md">
 
                         <Link
                             to="/home"
                             className="inline-flex items-center gap-3"
+                            aria-label="UrjaSathi home"
                         >
-                            <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl">
+                            {/* Square logo */}
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center">
                                 <img
-                                    src="/logo/urjasathi-logo.svg"
+                                    src="/logos/UrjaSathi_1.png"
                                     alt="UrjaSathi"
                                     className="h-full w-full object-contain"
                                 />
                             </div>
 
+                            {/* Brand name */}
                             <div>
-                                <span className="block text-lg font-bold leading-none text-text">
+                                <span
+                                    className="
+                                        block
+                                        text-xl
+                                        font-bold
+                                        leading-none
+                                        tracking-[-0.03em]
+                                        text-text
+                                    "
+                                >
                                     UrjaSathi
                                 </span>
 
-                                <span className="mt-1 block text-[10px] font-medium uppercase tracking-[0.18em] text-text-muted">
+                                <span
+                                    className="
+                                        mt-1.5
+                                        block
+                                        text-[9px]
+                                        font-semibold
+                                        uppercase
+                                        tracking-[0.2em]
+                                        text-text-muted
+                                    "
+                                >
                                     Smart Energy
                                 </span>
                             </div>
                         </Link>
 
-                        <p className="mt-5 text-sm leading-6 text-text-secondary">
-                            Intelligent energy management for smarter
-                            electricity consumption, solar generation,
-                            battery optimization, and renewable energy
-                            utilization.
+
+                        <p
+                            className="
+                                mt-6
+                                max-w-sm
+                                text-sm
+                                leading-6
+                                text-text-secondary
+                                sm:text-base
+                                sm:leading-7
+                            "
+                        >
+                            Intelligent energy management for homes,
+                            institutions, public facilities, and commercial
+                            buildings.
                         </p>
 
-                        {/* Social Links */}
 
-                        <div className="mt-6 flex items-center gap-2">
-                            {SOCIAL_LINKS.map((social) => {
-                                const Icon = social.icon;
+                        {/* Small brand statement */}
 
-                                return (
-                                    <a
-                                        key={social.label}
-                                        href={social.href}
-                                        aria-label={social.label}
-                                        title={social.label}
-                                        className="
-                                            flex
-                                            h-9
-                                            w-9
-                                            items-center
-                                            justify-center
-                                            rounded-lg
-                                            border
-                                            border-border
-                                            text-text-muted
-                                            transition-colors
-                                            duration-200
-                                            hover:border-primary
-                                            hover:bg-primary-tint
-                                            hover:text-primary
-                                            focus-visible:outline-2
-                                            focus-visible:outline-offset-2
-                                            focus-visible:outline-focus
-                                        "
-                                    >
-                                        <Icon
-                                            size={16}
-                                            strokeWidth={2}
-                                        />
-                                    </a>
-                                );
-                            })}
+                        <div className="mt-7 flex items-center gap-2.5">
+
+                            <span
+                                className="
+                                    h-1.5
+                                    w-1.5
+                                    rounded-full
+                                    bg-secondary
+                                "
+                            />
+
+                            <span
+                                className="
+                                    text-[10px]
+                                    font-semibold
+                                    uppercase
+                                    tracking-[0.16em]
+                                    text-text-muted
+                                "
+                            >
+                                Smarter energy. Better decisions.
+                            </span>
+
                         </div>
+
                     </div>
 
 
                     {/* =================================================
-                        PLATFORM LINKS
+                        PLATFORM
                        ================================================= */}
 
                     <div>
-                        <h3 className="text-sm font-semibold text-text">
+                        <h3
+                            className="
+                                text-sm
+                                font-semibold
+                                tracking-[-0.01em]
+                                text-text
+                            "
+                        >
                             Platform
                         </h3>
 
-                        <ul className="mt-4 space-y-3">
+                        <ul className="mt-5 space-y-3.5">
                             {FOOTER_LINKS.Platform.map((link) => (
                                 <li key={link.path}>
                                     <Link
@@ -190,15 +191,22 @@ function Footer() {
 
 
                     {/* =================================================
-                        SUPPORT LINKS
+                        SUPPORT
                        ================================================= */}
 
                     <div>
-                        <h3 className="text-sm font-semibold text-text">
+                        <h3
+                            className="
+                                text-sm
+                                font-semibold
+                                tracking-[-0.01em]
+                                text-text
+                            "
+                        >
                             Support
                         </h3>
 
-                        <ul className="mt-4 space-y-3">
+                        <ul className="mt-5 space-y-3.5">
                             {FOOTER_LINKS.Support.map((link) => (
                                 <li key={link.path}>
                                     <Link
@@ -224,62 +232,132 @@ function Footer() {
                        ================================================= */}
 
                     <div>
-                        <h3 className="text-sm font-semibold text-text">
+                        <h3
+                            className="
+                                text-sm
+                                font-semibold
+                                tracking-[-0.01em]
+                                text-text
+                            "
+                        >
                             Get in touch
                         </h3>
 
-                        <div className="mt-4 space-y-4">
+                        <div className="mt-5 space-y-5">
 
                             {/* Email */}
 
-                            <div className="flex items-start gap-3">
-                                <Mail
-                                    size={17}
-                                    strokeWidth={1.8}
-                                    className="mt-0.5 shrink-0 text-primary"
-                                />
+                            <a
+                                href="mailto:hello@urjasathi.in"
+                                className="
+                                    group
+                                    flex
+                                    items-start
+                                    gap-3
+                                "
+                            >
+                                <div
+                                    className="
+                                        flex
+                                        h-9
+                                        w-9
+                                        shrink-0
+                                        items-center
+                                        justify-center
+                                        rounded-full
+                                        bg-primary/10
+                                        text-primary
+                                        transition-colors
+                                        duration-200
+                                        group-hover:bg-primary
+                                        group-hover:text-white
+                                    "
+                                >
+                                    <Mail
+                                        size={16}
+                                        strokeWidth={1.8}
+                                    />
+                                </div>
 
                                 <div>
-                                    <p className="text-xs font-medium uppercase tracking-wide text-text-muted">
+                                    <p
+                                        className="
+                                            text-[10px]
+                                            font-semibold
+                                            uppercase
+                                            tracking-[0.15em]
+                                            text-text-muted
+                                        "
+                                    >
                                         Email
                                     </p>
 
-                                    <a
-                                        href="mailto:hello@urjasathi.in"
+                                    <p
                                         className="
                                             mt-1
-                                            block
                                             text-sm
                                             text-text-secondary
                                             transition-colors
-                                            hover:text-primary
+                                            duration-200
+                                            group-hover:text-primary
                                         "
                                     >
                                         hello@urjasathi.in
-                                    </a>
+                                    </p>
                                 </div>
-                            </div>
+                            </a>
 
 
-                            {/* Location / Purpose */}
+                            {/* Built for */}
 
                             <div className="flex items-start gap-3">
-                                <MapPin
-                                    size={17}
-                                    strokeWidth={1.8}
-                                    className="mt-0.5 shrink-0 text-primary"
-                                />
+
+                                <div
+                                    className="
+                                        flex
+                                        h-9
+                                        w-9
+                                        shrink-0
+                                        items-center
+                                        justify-center
+                                        rounded-full
+                                        bg-secondary/10
+                                        text-secondary
+                                    "
+                                >
+                                    <MapPin
+                                        size={16}
+                                        strokeWidth={1.8}
+                                    />
+                                </div>
 
                                 <div>
-                                    <p className="text-xs font-medium uppercase tracking-wide text-text-muted">
+                                    <p
+                                        className="
+                                            text-[10px]
+                                            font-semibold
+                                            uppercase
+                                            tracking-[0.15em]
+                                            text-text-muted
+                                        "
+                                    >
                                         Built for
                                     </p>
 
-                                    <p className="mt-1 text-sm leading-5 text-text-secondary">
+                                    <p
+                                        className="
+                                            mt-1
+                                            max-w-[220px]
+                                            text-sm
+                                            leading-5
+                                            text-text-secondary
+                                        "
+                                    >
                                         Sustainable energy management
                                         across India
                                     </p>
                                 </div>
+
                             </div>
 
                         </div>
@@ -294,47 +372,77 @@ function Footer() {
 
                 <div
                     className="
-                        mt-10
+                        mt-14
                         flex
                         flex-col
-                        gap-4
+                        gap-5
                         border-t
                         border-border
                         pt-6
+                        sm:mt-16
                         sm:flex-row
                         sm:items-center
                         sm:justify-between
                     "
                 >
-                    <p className="text-xs text-text-muted">
+
+                    {/* Copyright */}
+
+                    <p
+                        className="
+                            text-xs
+                            leading-5
+                            text-text-muted
+                            sm:text-sm
+                        "
+                    >
                         © {currentYear} UrjaSathi. Built for a smarter,
                         sustainable energy future.
                     </p>
+
+
+                    {/* Back to top */}
 
                     <button
                         type="button"
                         onClick={scrollToTop}
                         className="
+                            group
                             inline-flex
                             items-center
                             gap-2
                             self-start
-                            text-xs
-                            font-medium
-                            text-text-secondary
-                            transition-colors
+                            rounded-full
+                            bg-primary
+                            px-5
+                            py-2.5
+                            text-sm
+                            font-semibold
+                            text-white
+                            shadow-sm
+                            transition-all
                             duration-200
-                            hover:text-primary
+                            hover:-translate-y-0.5
+                            hover:shadow-md
+                            focus-visible:outline-2
+                            focus-visible:outline-offset-2
+                            focus-visible:outline-focus
                             sm:self-auto
                         "
                     >
                         Back to top
 
                         <ArrowUp
-                            size={14}
-                            strokeWidth={2}
+                            size={15}
+                            strokeWidth={2.2}
+                            className="
+                                transition-transform
+                                duration-200
+                                group-hover:-translate-y-0.5
+                            "
                         />
                     </button>
+
                 </div>
 
             </div>

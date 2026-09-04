@@ -39,25 +39,26 @@ export default function FAQ() {
                     relative
                     isolate
                     flex
-                    min-h-[42vh]
+                    min-h-[34vh]
                     items-center
                     justify-center
                     overflow-hidden
                     bg-app-bg
                     px-6
-                    pb-14
-                    pt-24
+                    pb-10
+                    pt-20
                     text-center
-                    sm:min-h-[44vh]
+                    sm:min-h-[36vh]
                     sm:px-8
-                    sm:pb-16
-                    sm:pt-28
+                    sm:pb-12
+                    sm:pt-24
                 "
             >
 
                 {/* Background atmosphere */}
 
                 <div
+                    aria-hidden="true"
                     className="
                         pointer-events-none
                         absolute
@@ -67,33 +68,33 @@ export default function FAQ() {
                     "
                 >
 
-                    {/* Left purple atmosphere */}
+                    {/* Purple atmosphere */}
 
                     <div
                         className="
                             absolute
                             -left-56
-                            top-0
-                            h-[500px]
-                            w-[500px]
+                            -top-32
+                            h-[440px]
+                            w-[440px]
                             rounded-full
                             bg-primary/8
-                            blur-[140px]
+                            blur-[130px]
                         "
                     />
 
-                    {/* Right subtle teal atmosphere */}
+                    {/* Teal atmosphere */}
 
                     <div
                         className="
                             absolute
                             -right-56
-                            top-16
-                            h-[500px]
-                            w-[500px]
+                            top-10
+                            h-[440px]
+                            w-[440px]
                             rounded-full
                             bg-secondary/7
-                            blur-[140px]
+                            blur-[130px]
                         "
                     />
 
@@ -103,7 +104,7 @@ export default function FAQ() {
                         className="
                             absolute
                             inset-0
-                            opacity-[0.025]
+                            opacity-[0.018]
                             [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)]
                             [background-size:72px_72px]
                         "
@@ -119,20 +120,20 @@ export default function FAQ() {
                         relative
                         z-10
                         mx-auto
-                        max-w-4xl
+                        max-w-3xl
                     "
                 >
 
                     <h1
                         className="
-                            text-[3rem]
+                            text-[2.75rem]
                             font-semibold
-                            leading-[1.05]
-                            tracking-[-0.04em]
+                            leading-[1.04]
+                            tracking-[-0.045em]
                             text-text
-                            sm:text-6xl
-                            md:text-7xl
-                            lg:text-[5.5rem]
+                            sm:text-5xl
+                            md:text-6xl
+                            lg:text-[4.5rem]
                         "
                     >
                         Frequently Asked
@@ -147,15 +148,16 @@ export default function FAQ() {
                     <p
                         className="
                             mx-auto
-                            mt-8
-                            max-w-2xl
-                            text-base
-                            leading-7
+                            mt-5
+                            max-w-xl
+                            text-sm
+                            leading-6
                             text-text-secondary
-                            sm:mt-9
-                            sm:text-lg
-                            sm:leading-8
-                            lg:text-xl
+                            sm:mt-6
+                            sm:text-base
+                            sm:leading-7
+                            lg:text-lg
+                            lg:leading-8
                         "
                     >
                         Find answers to common questions about
@@ -179,14 +181,14 @@ export default function FAQ() {
                     overflow-hidden
                     bg-app-bg
                     px-6
-                    pb-20
-                    pt-16
+                    pb-16
+                    pt-10
                     sm:px-8
-                    sm:pb-24
-                    sm:pt-20
+                    sm:pb-20
+                    sm:pt-12
                     lg:px-10
-                    lg:pb-28
-                    lg:pt-24
+                    lg:pb-20
+                    lg:pt-14
                 "
             >
 
@@ -199,9 +201,9 @@ export default function FAQ() {
                         max-w-7xl
                         grid-cols-1
                         items-start
-                        gap-16
-                        lg:grid-cols-[0.82fr_1.18fr]
-                        lg:gap-28
+                        gap-10
+                        lg:grid-cols-[0.78fr_1.22fr]
+                        lg:gap-20
                     "
                 >
 
@@ -221,8 +223,8 @@ export default function FAQ() {
                         <div
                             className="
                                 flex
-                                h-11
-                                w-11
+                                h-10
+                                w-10
                                 items-center
                                 justify-center
                                 rounded-xl
@@ -230,7 +232,7 @@ export default function FAQ() {
                                 text-primary
                             "
                         >
-                            <HelpCircle className="h-5 w-5" />
+                            <HelpCircle className="h-[18px] w-[18px]" />
                         </div>
 
 
@@ -238,8 +240,8 @@ export default function FAQ() {
 
                         <p
                             className="
-                                mt-6
-                                text-xs
+                                mt-4
+                                text-[11px]
                                 font-semibold
                                 uppercase
                                 tracking-[0.18em]
@@ -254,14 +256,14 @@ export default function FAQ() {
 
                         <h2
                             className="
-                                mt-5
-                                text-4xl
+                                mt-3
+                                text-3xl
                                 font-semibold
                                 leading-[1.05]
                                 tracking-[-0.04em]
                                 text-text
-                                sm:text-5xl
-                                lg:text-[4rem]
+                                sm:text-4xl
+                                lg:text-[3.25rem]
                             "
                         >
                             Everything{" "}
@@ -284,13 +286,13 @@ export default function FAQ() {
 
                         <p
                             className="
-                                mt-8
+                                mt-5
                                 max-w-md
-                                text-base
-                                leading-7
+                                text-sm
+                                leading-6
                                 text-text-secondary
-                                sm:text-lg
-                                sm:leading-8
+                                sm:text-base
+                                sm:leading-7
                             "
                         >
                             Have questions about your energy,
@@ -311,7 +313,7 @@ export default function FAQ() {
                         className="
                             flex
                             flex-col
-                            gap-4
+                            gap-3
                         "
                     >
 
@@ -325,15 +327,15 @@ export default function FAQ() {
                                     key={index}
                                     className={`
                                         overflow-hidden
-                                        rounded-2xl
+                                        rounded-xl
                                         border
                                         bg-surface
                                         transition-all
                                         duration-300
                                         ${
                                             isActive
-                                                ? "border-primary shadow-lg shadow-primary/10"
-                                                : "border-border hover:border-primary/40"
+                                                ? "border-primary/60 shadow-md shadow-primary/8"
+                                                : "border-border hover:border-primary/30"
                                         }
                                     `}
                                 >
@@ -351,12 +353,12 @@ export default function FAQ() {
                                             w-full
                                             items-center
                                             justify-between
-                                            gap-6
+                                            gap-5
                                             px-5
-                                            py-5
+                                            py-4
                                             text-left
-                                            sm:px-6
-                                            sm:py-6
+                                            sm:px-5
+                                            sm:py-[18px]
                                         "
                                     >
 
@@ -366,8 +368,8 @@ export default function FAQ() {
                                                 font-semibold
                                                 leading-6
                                                 text-text
-                                                sm:text-base
-                                                sm:leading-7
+                                                sm:text-[15px]
+                                                sm:leading-6
                                             "
                                         >
                                             {item.question}
@@ -379,15 +381,15 @@ export default function FAQ() {
                                         <span
                                             className={`
                                                 flex
-                                                h-9
-                                                w-9
+                                                h-8
+                                                w-8
                                                 shrink-0
                                                 items-center
                                                 justify-center
                                                 rounded-full
                                                 bg-primary
                                                 text-white
-                                                transition-all
+                                                transition-transform
                                                 duration-300
                                                 ${
                                                     isActive
@@ -397,9 +399,9 @@ export default function FAQ() {
                                             `}
                                         >
                                             {isActive ? (
-                                                <FiMinus className="h-4 w-4 text-white" />
+                                                <FiMinus className="h-3.5 w-3.5 text-white" />
                                             ) : (
-                                                <FiPlus className="h-4 w-4 text-white" />
+                                                <FiPlus className="h-3.5 w-3.5 text-white" />
                                             )}
                                         </span>
 
@@ -430,14 +432,12 @@ export default function FAQ() {
                                                     border-t
                                                     border-border
                                                     px-5
-                                                    pb-6
-                                                    pt-5
+                                                    pb-5
+                                                    pt-4
                                                     text-sm
-                                                    leading-7
+                                                    leading-6
                                                     text-text-secondary
-                                                    sm:px-6
-                                                    sm:text-base
-                                                    sm:leading-8
+                                                    sm:leading-7
                                                 "
                                             >
                                                 {item.answer}
@@ -467,9 +467,10 @@ export default function FAQ() {
                 className="
                     bg-app-bg
                     px-6
-                    pb-20
+                    pb-16
+                    pt-2
                     sm:px-8
-                    sm:pb-28
+                    sm:pb-20
                     lg:px-10
                 "
             >
@@ -490,98 +491,109 @@ export default function FAQ() {
                     {/* Purple atmosphere */}
 
                     <div
+                        aria-hidden="true"
                         className="
                             pointer-events-none
                             absolute
-                            -right-32
-                            -top-32
-                            h-80
-                            w-80
+                            -right-28
+                            -top-28
+                            h-64
+                            w-64
                             rounded-full
                             bg-primary/8
-                            blur-[100px]
+                            blur-[90px]
                         "
                     />
 
                     {/* Teal atmosphere */}
 
                     <div
+                        aria-hidden="true"
                         className="
                             pointer-events-none
-                            absolute
-                            -bottom-32
-                            -left-32
-                            h-80
-                            w-80
+                            -bottom-28
+                            -left-28
+                            h-0
+                            w-64
                             rounded-full
                             bg-secondary/7
-                            blur-[100px]
+                            blur-[90px]
                         "
                     />
 
+
+                    {/* CTA content */}
 
                     <div
                         className="
                             relative
                             z-10
-                            mx-auto
                             flex
-                            max-w-3xl
                             flex-col
-                            items-center
-                            px-6
-                            py-16
-                            text-center
-                            sm:px-10
-                            sm:py-20
-                            lg:py-24
+                            gap-6
+                            px-7
+                            py-9
+                            sm:px-9
+                            sm:py-10
+                            lg:flex-row
+                            lg:items-center
+                            lg:justify-between
+                            lg:px-12
+                            lg:py-11
                         "
                     >
 
-                        <span
-                            className="
-                                text-xs
-                                font-semibold
-                                uppercase
-                                tracking-[0.18em]
-                                text-primary
-                            "
-                        >
-                            Need more help?
-                        </span>
+                        {/* Text */}
+
+                        <div className="max-w-3xl">
+
+                            <p
+                                className="
+                                    text-[10px]
+                                    font-semibold
+                                    uppercase
+                                    tracking-[0.18em]
+                                    text-primary
+                                    sm:text-[11px]
+                                "
+                            >
+                                Still have questions?
+                            </p>
 
 
-                        <h2
-                            className="
-                                mt-4
-                                text-3xl
-                                font-semibold
-                                tracking-[-0.04em]
-                                text-text
-                                sm:text-4xl
-                                lg:text-5xl
-                            "
-                        >
-                            Still have questions?
-                        </h2>
+                            <h2
+                                className="
+                                    mt-2
+                                    text-2xl
+                                    font-semibold
+                                    tracking-[-0.04em]
+                                    text-text
+                                    sm:text-3xl
+                                    lg:text-[2rem]
+                                "
+                            >
+                                Talk to the UrjaSathi team.
+                            </h2>
 
 
-                        <p
-                            className="
-                                mt-5
-                                max-w-xl
-                                text-sm
-                                leading-7
-                                text-text-secondary
-                                sm:text-base
-                                sm:leading-8
-                            "
-                        >
-                            Can't find what you're looking for?
-                            Our team is here to help you understand
-                            UrjaSathi and get the most out of your
-                            energy data.
-                        </p>
+                            <p
+                                className="
+                                    mt-3
+                                    max-w-2xl
+                                    text-sm
+                                    leading-6
+                                    text-text-secondary
+                                    sm:text-base
+                                    sm:leading-7
+                                "
+                            >
+                                We're happy to help you understand
+                                the platform and how it can fit your
+                                energy environment.
+                            </p>
+
+                        </div>
+
 
 
                         {/* Contact button */}
@@ -590,11 +602,12 @@ export default function FAQ() {
                             to="/contact"
                             className="
                                 group
-                                mt-8
                                 inline-flex
+                                shrink-0
                                 items-center
                                 justify-center
-                                gap-2.5
+                                gap-3
+                                self-start
                                 rounded-full
                                 bg-primary
                                 px-7
@@ -602,20 +615,17 @@ export default function FAQ() {
                                 text-sm
                                 font-semibold
                                 !text-white
-                                shadow-lg
-                                shadow-primary/20
+                                shadow-md
+                                shadow-primary/15
                                 transition-all
                                 duration-300
-                                hover:-translate-y-1
+                                hover:-translate-y-0.5
                                 hover:bg-primary-dark
-                                hover:!text-white
-                                hover:shadow-xl
+                                hover:shadow-lg
                                 focus:outline-none
                                 focus:ring-2
                                 focus:ring-primary/30
-                                sm:px-8
-                                sm:py-4
-                                sm:text-base
+                                lg:self-center
                             "
                         >
                             <span className="!text-white">

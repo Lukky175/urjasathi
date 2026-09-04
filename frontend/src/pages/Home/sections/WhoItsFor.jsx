@@ -1,47 +1,89 @@
 import {
     ArrowUpRight,
-    BarChart3,
-    Building2,
     Check,
-    Home as HomeIcon,
+    GraduationCap,
+    Hospital,
+    Home,
+    Landmark,
     Leaf,
-    Sun,
-    Zap,
+    Store,
 } from "lucide-react";
 
 const audiences = [
     {
-        type: "Homes",
-        eyebrow: "FOR YOUR HOME",
-        title: "Know where your\nenergy goes.",
+        id: "homes",
+        eyebrow: "RESIDENTIAL",
+        title: "Homes",
         description:
-            "See household consumption, renewable generation, and peak usage in one simple view.",
-        icon: HomeIcon,
-        visualIcon: Sun,
-        metric: "47%",
-        metricLabel: "renewable usage",
+            "Give households a clear view of consumption, solar generation, and everyday energy patterns.",
+        icon: Home,
         accent: "secondary",
-        points: [
+        featured: true,
+        capabilities: [
             "Track household consumption",
             "Monitor solar generation",
-            "Understand peak usage",
+            "Identify peak usage",
         ],
     },
+
     {
-        type: "Businesses",
-        eyebrow: "FOR YOUR BUSINESS",
-        title: "Turn energy into\nan advantage.",
+        id: "commercial",
+        eyebrow: "COMMERCIAL",
+        title: "Commercial buildings",
         description:
-            "Understand operational energy patterns and find opportunities to improve efficiency and reduce waste.",
-        icon: Building2,
-        visualIcon: BarChart3,
-        metric: "18.6%",
-        metricLabel: "efficiency improvement",
+            "Turn operational energy data into actionable insights for offices, retail spaces, and commercial facilities.",
+        icon: Store,
         accent: "primary",
-        points: [
-            "Monitor operational energy use",
-            "Identify inefficient patterns",
-            "Improve energy performance",
+        featured: true,
+        capabilities: [
+            "Monitor operational demand",
+            "Detect inefficient patterns",
+            "Optimize energy usage",
+        ],
+    },
+
+    {
+        id: "institutions",
+        eyebrow: "INSTITUTIONS",
+        title: "Institutions",
+        description:
+            "Help campuses and institutions understand where energy is being consumed and where efficiency can improve.",
+        icon: GraduationCap,
+        accent: "secondary",
+        capabilities: [
+            "Monitor multiple facilities",
+            "Understand usage patterns",
+            "Improve operational efficiency",
+        ],
+    },
+
+    {
+        id: "government",
+        eyebrow: "PUBLIC INFRASTRUCTURE",
+        title: "Government offices",
+        description:
+            "Enable public facilities to measure energy performance, reduce waste, and make informed operational decisions.",
+        icon: Landmark,
+        accent: "primary",
+        capabilities: [
+            "Track facility performance",
+            "Identify high-demand periods",
+            "Support energy-saving initiatives",
+        ],
+    },
+
+    {
+        id: "hospitals",
+        eyebrow: "CRITICAL FACILITIES",
+        title: "Hospitals & healthcare",
+        description:
+            "Maintain visibility over energy-intensive operations while supporting reliable and efficient facility management.",
+        icon: Hospital,
+        accent: "primary",
+        capabilities: [
+            "Monitor critical consumption",
+            "Understand demand behaviour",
+            "Improve energy planning",
         ],
     },
 ];
@@ -54,66 +96,125 @@ export default function WhoItsFor() {
                 relative
                 overflow-hidden
                 bg-app-bg
-                py-24
-                sm:py-28
-                lg:py-36
+                py-20
+                sm:py-24
+                lg:py-28
             "
         >
             {/* =========================================================
                 BACKGROUND ATMOSPHERE
                ========================================================= */}
 
-            <div className="pointer-events-none absolute inset-0">
+            <div
+                aria-hidden="true"
+                className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    overflow-hidden
+                "
+            >
                 <div
                     className="
                         absolute
-                        -left-48
-                        top-1/3
-                        h-[500px]
-                        w-[500px]
+                        -left-72
+                        top-1/4
+                        h-[620px]
+                        w-[620px]
                         rounded-full
                         bg-secondary/5
-                        blur-[130px]
+                        blur-[150px]
                     "
                 />
 
                 <div
                     className="
                         absolute
-                        -right-48
+                        -right-72
                         bottom-0
-                        h-[500px]
-                        w-[500px]
+                        h-[620px]
+                        w-[620px]
                         rounded-full
                         bg-primary/5
-                        blur-[130px]
+                        blur-[150px]
+                    "
+                />
+
+                <div
+                    className="
+                        absolute
+                        left-1/2
+                        top-1/2
+                        h-[500px]
+                        w-[700px]
+                        -translate-x-1/2
+                        -translate-y-1/2
+                        rounded-full
+                        bg-white/40
+                        blur-[120px]
                     "
                 />
             </div>
 
-            <div className="relative mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
+            {/* =========================================================
+                CONTENT
+               ========================================================= */}
 
+            <div
+                className="
+                    relative
+                    mx-auto
+                    max-w-7xl
+                    px-5
+                    sm:px-7
+                    lg:px-10
+                "
+            >
                 {/* =====================================================
-                    HEADER
+                    SECTION INTRO
                    ===================================================== */}
 
-                <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
+                <div
+                    className="
+                        grid
+                        gap-8
+                        lg:grid-cols-[0.7fr_1.3fr]
+                        lg:items-end
+                        lg:gap-16
+                    "
+                >
+                    {/* Left intro */}
 
                     <div>
-                        <p
+                        <div
                             className="
+                                inline-flex
+                                items-center
+                                gap-2
+                                rounded-full
+                                border
+                                border-secondary/15
+                                bg-secondary/5
+                                px-3.5
+                                py-1.5
                                 text-xs
                                 font-semibold
                                 uppercase
-                                tracking-[0.2em]
+                                tracking-[0.16em]
                                 text-secondary
-                                sm:text-sm
                             "
                         >
-                            Who it's for
-                        </p>
+                            <span
+                                className="
+                                    h-1.5
+                                    w-1.5
+                                    rounded-full
+                                    bg-secondary
+                                "
+                            />
 
-                        <div className="mt-4 h-1 w-12 rounded-full bg-secondary" />
+                            Built for every environment
+                        </div>
 
                         <p
                             className="
@@ -122,38 +223,44 @@ export default function WhoItsFor() {
                                 text-sm
                                 leading-6
                                 text-text-muted
+                                sm:text-base
+                                sm:leading-7
                             "
                         >
-                            One platform, adapted to the way different
-                            environments use energy.
+                            From individual homes to large-scale
+                            facilities, UrjaSathi adapts to how
+                            different environments consume energy.
                         </p>
                     </div>
+
+                    {/* Main heading */}
 
                     <div>
                         <h2
                             className="
-                                max-w-4xl
+                                max-w-5xl
                                 text-4xl
                                 font-semibold
                                 leading-[1.02]
-                                tracking-[-0.04em]
+                                tracking-[-0.045em]
                                 text-text
                                 sm:text-5xl
-                                lg:text-6xl
+                                lg:text-[4.2rem]
                             "
                         >
-                            Built around how
+                            One platform.
                             <br />
-                            you use{" "}
+
                             <span className="text-primary">
-                                energy.
-                            </span>
+                                Every place
+                            </span>{" "}
+                            energy matters.
                         </h2>
 
                         <p
                             className="
                                 mt-6
-                                max-w-2xl
+                                max-w-3xl
                                 text-base
                                 leading-7
                                 text-text-secondary
@@ -161,303 +268,48 @@ export default function WhoItsFor() {
                                 sm:leading-8
                             "
                         >
-                            Whether you're powering a home or running a
-                            business, UrjaSathi turns your energy data into
-                            something you can actually understand and act on.
+                            UrjaSathi brings energy intelligence to the
+                            places where people live, work, learn, heal,
+                            and serve — turning complex energy data into
+                            decisions that are easier to understand and
+                            act on.
                         </p>
                     </div>
                 </div>
 
-
                 {/* =====================================================
-                    AUDIENCE PANELS
+                    AUDIENCE GRID
+
+                    ROW 1
+                    ┌──────────────────┬──────────────────┐
+                    │      HOMES       │    COMMERCIAL    │
+                    └──────────────────┴──────────────────┘
+
+                    ROW 2
+                    ┌────────────┬────────────┬────────────┐
+                    │INSTITUTIONS│ GOVERNMENT │ HOSPITALS  │
+                    └────────────┴────────────┴────────────┘
                    ===================================================== */}
 
                 <div
                     className="
-                        mt-16
+                        mt-14
                         grid
-                        gap-6
+                        gap-5
+                        sm:mt-16
+                        sm:grid-cols-2
                         lg:mt-20
-                        lg:grid-cols-2
-                        lg:gap-8
+                        lg:grid-cols-12
+                        lg:gap-6
                     "
                 >
-                    {audiences.map((audience) => {
-                        const Icon = audience.icon;
-                        const VisualIcon = audience.visualIcon;
-                        const isPrimary = audience.accent === "primary";
-
-                        return (
-                            <article
-                                key={audience.type}
-                                className="
-                                    group
-                                    relative
-                                    overflow-hidden
-                                    rounded-3xl
-                                    border
-                                    border-border
-                                    bg-surface
-                                    shadow-card
-                                    transition-all
-                                    duration-500
-                                    hover:-translate-y-1
-                                    hover:shadow-hover
-                                "
-                            >
-                                {/* =================================================
-                                    ATMOSPHERE
-                                   ================================================= */}
-
-                                <div
-                                    className={`
-                                        pointer-events-none
-                                        absolute
-                                        -right-32
-                                        -top-32
-                                        h-96
-                                        w-96
-                                        rounded-full
-                                        blur-[110px]
-                                        ${
-                                            isPrimary
-                                                ? "bg-primary/10"
-                                                : "bg-secondary/10"
-                                        }
-                                    `}
-                                />
-
-                                <div className="relative">
-
-                                    {/* =================================================
-                                        TOP BAR
-                                       ================================================= */}
-
-                                    <div
-                                        className="
-                                            flex
-                                            items-center
-                                            justify-between
-                                            border-b
-                                            border-border
-                                            px-6
-                                            py-5
-                                            sm:px-8
-                                        "
-                                    >
-                                        <div className="flex items-center gap-3">
-
-                                            <div
-                                                className={`
-                                                    grid
-                                                    h-9
-                                                    w-9
-                                                    place-items-center
-                                                    rounded-lg
-                                                    ${
-                                                        isPrimary
-                                                            ? "bg-primary/10 text-primary"
-                                                            : "bg-secondary/10 text-secondary"
-                                                    }
-                                                `}
-                                            >
-                                                <Icon className="h-4 w-4" />
-                                            </div>
-
-                                            <span
-                                                className="
-                                                    text-xs
-                                                    font-semibold
-                                                    uppercase
-                                                    tracking-[0.16em]
-                                                    text-text-muted
-                                                "
-                                            >
-                                                {audience.eyebrow}
-                                            </span>
-                                        </div>
-
-                                        <ArrowUpRight
-                                            className={`
-                                                h-5
-                                                w-5
-                                                text-text-muted
-                                                transition-all
-                                                duration-300
-                                                group-hover:-translate-y-0.5
-                                                group-hover:translate-x-0.5
-                                                ${
-                                                    isPrimary
-                                                        ? "group-hover:text-primary"
-                                                        : "group-hover:text-secondary"
-                                                }
-                                            `}
-                                        />
-                                    </div>
-
-
-                                    {/* =================================================
-                                        CONTENT
-                                       ================================================= */}
-
-                                    <div className="p-6 sm:p-8 lg:p-10">
-
-                                        <div className="grid gap-10 sm:grid-cols-[1fr_auto]">
-
-                                            {/* Text */}
-
-                                            <div>
-                                                <h3
-                                                    className="
-                                                        whitespace-pre-line
-                                                        text-3xl
-                                                        font-semibold
-                                                        leading-[1.04]
-                                                        tracking-[-0.035em]
-                                                        text-text
-                                                        sm:text-4xl
-                                                    "
-                                                >
-                                                    {audience.title}
-                                                </h3>
-
-                                                <p
-                                                    className="
-                                                        mt-5
-                                                        max-w-md
-                                                        text-sm
-                                                        leading-7
-                                                        text-text-secondary
-                                                        sm:text-base
-                                                    "
-                                                >
-                                                    {audience.description}
-                                                </p>
-                                            </div>
-
-
-                                            {/* =================================================
-                                                BIG METRIC
-                                               ================================================= */}
-
-                                            <div
-                                                className={`
-                                                    flex
-                                                    min-w-[130px]
-                                                    flex-col
-                                                    justify-end
-                                                    rounded-2xl
-                                                    border
-                                                    border-border
-                                                    bg-app-bg
-                                                    p-5
-                                                    sm:min-w-[145px]
-                                                `}
-                                            >
-                                                <div
-                                                    className={`
-                                                        grid
-                                                        h-10
-                                                        w-10
-                                                        place-items-center
-                                                        rounded-xl
-                                                        ${
-                                                            isPrimary
-                                                                ? "bg-primary/10 text-primary"
-                                                                : "bg-secondary/10 text-secondary"
-                                                        }
-                                                    `}
-                                                >
-                                                    <VisualIcon className="h-5 w-5" />
-                                                </div>
-
-                                                <p
-                                                    className={`
-                                                        mt-6
-                                                        text-3xl
-                                                        font-semibold
-                                                        tracking-[-0.04em]
-                                                        ${
-                                                            isPrimary
-                                                                ? "text-primary"
-                                                                : "text-secondary"
-                                                        }
-                                                    `}
-                                                >
-                                                    {audience.metric}
-                                                </p>
-
-                                                <p className="mt-1 text-[11px] leading-4 text-text-muted">
-                                                    {audience.metricLabel}
-                                                </p>
-                                            </div>
-                                        </div>
-
-
-                                        {/* =================================================
-                                            POINTS
-                                           ================================================= */}
-
-                                        <div
-                                            className="
-                                                mt-10
-                                                grid
-                                                gap-3
-                                                border-t
-                                                border-border
-                                                pt-7
-                                                sm:grid-cols-3
-                                            "
-                                        >
-                                            {audience.points.map((point) => (
-                                                <div
-                                                    key={point}
-                                                    className="
-                                                        flex
-                                                        items-start
-                                                        gap-2.5
-                                                    "
-                                                >
-                                                    <span
-                                                        className={`
-                                                            mt-0.5
-                                                            grid
-                                                            h-5
-                                                            w-5
-                                                            shrink-0
-                                                            place-items-center
-                                                            rounded-full
-                                                            ${
-                                                                isPrimary
-                                                                    ? "bg-primary/10 text-primary"
-                                                                    : "bg-secondary/10 text-secondary"
-                                                            }
-                                                        `}
-                                                    >
-                                                        <Check className="h-3 w-3" />
-                                                    </span>
-
-                                                    <span
-                                                        className="
-                                                            text-xs
-                                                            leading-5
-                                                            text-text-secondary
-                                                        "
-                                                    >
-                                                        {point}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </article>
-                        );
-                    })}
+                    {audiences.map((audience) => (
+                        <AudienceCard
+                            key={audience.id}
+                            audience={audience}
+                        />
+                    ))}
                 </div>
-
 
                 {/* =====================================================
                     BOTTOM STATEMENT
@@ -465,13 +317,14 @@ export default function WhoItsFor() {
 
                 <div
                     className="
-                        mt-8
+                        mt-10
                         flex
                         flex-col
                         gap-5
                         border-t
                         border-border
                         pt-7
+                        sm:mt-12
                         sm:flex-row
                         sm:items-center
                         sm:justify-between
@@ -479,12 +332,12 @@ export default function WhoItsFor() {
                     "
                 >
                     <div className="flex items-center gap-3">
-
                         <div
                             className="
                                 grid
                                 h-9
                                 w-9
+                                shrink-0
                                 place-items-center
                                 rounded-full
                                 bg-secondary/10
@@ -494,13 +347,25 @@ export default function WhoItsFor() {
                             <Leaf className="h-4 w-4" />
                         </div>
 
-                        <p className="text-sm text-text-muted sm:text-base">
+                        <p
+                            className="
+                                text-sm
+                                leading-6
+                                text-text-muted
+                                sm:text-base
+                            "
+                        >
                             Different environments.
-                            <span className="ml-1 font-medium text-text">
+                            <span
+                                className="
+                                    ml-1
+                                    font-medium
+                                    text-text
+                                "
+                            >
                                 One intelligent energy platform.
                             </span>
                         </p>
-
                     </div>
 
                     <div
@@ -508,20 +373,423 @@ export default function WhoItsFor() {
                             flex
                             items-center
                             gap-2
-                            text-xs
+                            text-[10px]
                             font-semibold
                             uppercase
-                            tracking-[0.14em]
+                            tracking-[0.16em]
                             text-text-muted
+                            sm:text-xs
                         "
                     >
-                        <span className="h-2 w-2 rounded-full bg-secondary" />
-                        Smarter energy, everywhere
+                        <span
+                            className="
+                                h-1.5
+                                w-1.5
+                                rounded-full
+                                bg-secondary
+                            "
+                        />
+
+                        Energy intelligence at every scale
                     </div>
-
                 </div>
-
             </div>
         </section>
+    );
+}
+
+
+/* =========================================================
+   AUDIENCE CARD
+   ========================================================= */
+
+function AudienceCard({ audience }) {
+    const Icon = audience.icon;
+
+    const isPrimary = audience.accent === "primary";
+    const isFeatured = audience.featured;
+
+    /*
+        Desktop layout:
+
+        Featured:
+        Homes              Commercial
+        col-span-6         col-span-6
+
+        Standard:
+        Institutions       Government       Hospitals
+        col-span-4         col-span-4        col-span-4
+    */
+
+    const gridClass = isFeatured
+        ? "lg:col-span-6"
+        : "lg:col-span-4";
+
+    return (
+        <article
+            className={`
+                group
+                relative
+                overflow-hidden
+                rounded-3xl
+                border
+                border-border
+                bg-surface
+                shadow-card
+                transition-all
+                duration-500
+                hover:-translate-y-1
+                hover:shadow-hover
+                ${gridClass}
+            `}
+        >
+            {/* =====================================================
+                CARD ATMOSPHERE
+               ===================================================== */}
+
+            <div
+                aria-hidden="true"
+                className={`
+                    pointer-events-none
+                    absolute
+                    -right-28
+                    -top-28
+                    h-72
+                    w-72
+                    rounded-full
+                    blur-[100px]
+                    opacity-70
+                    transition-opacity
+                    duration-500
+                    group-hover:opacity-100
+                    ${
+                        isPrimary
+                            ? "bg-primary/10"
+                            : "bg-secondary/10"
+                    }
+                `}
+            />
+
+            <div
+                aria-hidden="true"
+                className={`
+                    pointer-events-none
+                    absolute
+                    -bottom-24
+                    -left-24
+                    h-56
+                    w-56
+                    rounded-full
+                    blur-[90px]
+                    opacity-40
+                    ${
+                        isPrimary
+                            ? "bg-secondary/5"
+                            : "bg-primary/5"
+                    }
+                `}
+            />
+
+            {/* =====================================================
+                CARD HEADER
+               ===================================================== */}
+
+            <div
+                className="
+                    relative
+                    flex
+                    items-center
+                    justify-between
+                    border-b
+                    border-border
+                    px-5
+                    py-4
+                    sm:px-6
+                    sm:py-5
+                "
+            >
+                <div className="flex items-center gap-3">
+                    <div
+                        className={`
+                            grid
+                            h-10
+                            w-10
+                            place-items-center
+                            rounded-xl
+                            transition-all
+                            duration-300
+                            ${
+                                isPrimary
+                                    ? "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white"
+                                    : "bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-white"
+                            }
+                        `}
+                    >
+                        <Icon className="h-5 w-5" />
+                    </div>
+
+                    <div>
+                        <p
+                            className="
+                                text-[9px]
+                                font-semibold
+                                uppercase
+                                tracking-[0.17em]
+                                text-text-muted
+                                sm:text-[10px]
+                            "
+                        >
+                            {audience.eyebrow}
+                        </p>
+
+                        <p
+                            className="
+                                mt-0.5
+                                text-sm
+                                font-medium
+                                text-text
+                            "
+                        >
+                            {audience.title}
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    className={`
+                        grid
+                        h-8
+                        w-8
+                        place-items-center
+                        rounded-full
+                        border
+                        border-border
+                        text-text-muted
+                        transition-all
+                        duration-300
+                        group-hover:-translate-y-0.5
+                        group-hover:translate-x-0.5
+                        ${
+                            isPrimary
+                                ? "group-hover:border-primary/20 group-hover:text-primary"
+                                : "group-hover:border-secondary/20 group-hover:text-secondary"
+                        }
+                    `}
+                >
+                    <ArrowUpRight className="h-4 w-4" />
+                </div>
+            </div>
+
+            {/* =====================================================
+                CARD CONTENT
+               ===================================================== */}
+
+            <div
+                className={`
+                    relative
+                    ${
+                        isFeatured
+                            ? "p-6 sm:p-8 lg:p-9"
+                            : "p-6 sm:p-7 lg:p-7"
+                    }
+                `}
+            >
+                {/* Featured cards */}
+
+                {isFeatured ? (
+                    <FeaturedAudienceContent
+                        audience={audience}
+                        isPrimary={isPrimary}
+                    />
+                ) : (
+                    <StandardAudienceContent
+                        audience={audience}
+                        isPrimary={isPrimary}
+                    />
+                )}
+            </div>
+        </article>
+    );
+}
+
+
+/* =========================================================
+   FEATURED CONTENT
+   ========================================================= */
+
+function FeaturedAudienceContent({
+    audience,
+    isPrimary,
+}) {
+    return (
+        <div>
+            <p
+                className={`
+                    text-xs
+                    font-semibold
+                    uppercase
+                    tracking-[0.15em]
+                    ${
+                        isPrimary
+                            ? "text-primary"
+                            : "text-secondary"
+                    }
+                `}
+            >
+                Energy intelligence for
+            </p>
+
+            <h3
+                className="
+                    mt-3
+                    text-3xl
+                    font-semibold
+                    leading-[1.04]
+                    tracking-[-0.04em]
+                    text-text
+                    sm:text-4xl
+                "
+            >
+                {audience.title}
+            </h3>
+
+            <p
+                className="
+                    mt-4
+                    max-w-xl
+                    text-sm
+                    leading-6
+                    text-text-secondary
+                    sm:text-base
+                    sm:leading-7
+                "
+            >
+                {audience.description}
+            </p>
+
+            <CapabilityList
+                capabilities={audience.capabilities}
+                isPrimary={isPrimary}
+                featured
+            />
+        </div>
+    );
+}
+
+
+/* =========================================================
+   STANDARD CONTENT
+   ========================================================= */
+
+function StandardAudienceContent({
+    audience,
+    isPrimary,
+}) {
+    return (
+        <div>
+            <h3
+                className="
+                    text-2xl
+                    font-semibold
+                    leading-tight
+                    tracking-[-0.035em]
+                    text-text
+                    sm:text-3xl
+                "
+            >
+                {audience.title}
+            </h3>
+
+            <p
+                className="
+                    mt-3
+                    max-w-xl
+                    text-sm
+                    leading-6
+                    text-text-secondary
+                    sm:text-base
+                    sm:leading-7
+                "
+            >
+                {audience.description}
+            </p>
+
+            <CapabilityList
+                capabilities={audience.capabilities}
+                isPrimary={isPrimary}
+            />
+        </div>
+    );
+}
+
+
+/* =========================================================
+   CAPABILITY LIST
+   ========================================================= */
+
+function CapabilityList({
+    capabilities,
+    isPrimary,
+    featured = false,
+}) {
+    return (
+        <div
+            className={`
+                border-t
+                border-border
+                ${
+                    featured
+                        ? "mt-7 pt-6"
+                        : "mt-6 pt-5"
+                }
+                grid
+                gap-3
+                ${
+                    featured
+                        ? "sm:grid-cols-3"
+                        : "sm:grid-cols-1"
+                }
+            `}
+        >
+            {capabilities.map((capability) => (
+                <div
+                    key={capability}
+                    className="
+                        flex
+                        items-start
+                        gap-2.5
+                    "
+                >
+                    <span
+                        className={`
+                            mt-0.5
+                            grid
+                            h-5
+                            w-5
+                            shrink-0
+                            place-items-center
+                            rounded-full
+                            ${
+                                isPrimary
+                                    ? "bg-primary/10 text-primary"
+                                    : "bg-secondary/10 text-secondary"
+                            }
+                        `}
+                    >
+                        <Check className="h-3 w-3" />
+                    </span>
+
+                    <span
+                        className="
+                            text-xs
+                            leading-5
+                            text-text-secondary
+                        "
+                    >
+                        {capability}
+                    </span>
+                </div>
+            ))}
+        </div>
     );
 }

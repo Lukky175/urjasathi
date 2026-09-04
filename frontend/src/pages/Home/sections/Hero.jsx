@@ -221,7 +221,7 @@ export default function Hero() {
                             gap-2.5
                             rounded-full
                             bg-primary
-                            px-8
+                            px-7
                             py-3.5
                             text-sm
                             font-semibold
@@ -237,7 +237,7 @@ export default function Hero() {
                             focus:ring-2
                             focus:ring-primary/30
                             sm:w-auto
-                            sm:px-9
+                            sm:px-7
                             sm:py-4
                             sm:text-base
                         "
@@ -899,112 +899,587 @@ function DashboardStat({
 
 function EnergyChart() {
     return (
-        <div className="relative h-48 w-full overflow-hidden sm:h-52">
+        <div className="relative w-full">
 
-            {/* Grid */}
+            {/* =====================================================
+                LEGEND
+               ===================================================== */}
+
             <div
                 className="
-                    absolute
-                    inset-0
+                    mb-4
                     flex
-                    flex-col
+                    flex-wrap
+                    items-center
                     justify-between
+                    gap-3
                 "
             >
-                <span className="h-px w-full bg-border" />
-                <span className="h-px w-full bg-border" />
-                <span className="h-px w-full bg-border" />
-                <span className="h-px w-full bg-border" />
+                <div className="flex items-center gap-4">
+
+                    {/* Consumption */}
+                    <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-primary" />
+
+                        <span className="text-[10px] font-medium text-text-secondary sm:text-xs">
+                            Consumption
+                        </span>
+                    </div>
+
+
+                    {/* Solar */}
+                    <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-solar" />
+
+                        <span className="text-[10px] font-medium text-text-secondary sm:text-xs">
+                            Solar generation
+                        </span>
+                    </div>
+
+
+                    {/* Savings */}
+                    <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-success" />
+
+                        <span className="text-[10px] font-medium text-text-secondary sm:text-xs">
+                            Energy saved
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <span className="text-[10px] font-medium text-text-muted sm:text-xs">
+                    kW
+                </span>
             </div>
 
 
-            {/* Chart */}
-            <svg
-                viewBox="0 0 800 220"
-                preserveAspectRatio="none"
-                className="absolute inset-0 h-full w-full"
-            >
+            {/* =====================================================
+                CHART
+               ===================================================== */}
 
-                <defs>
+            <div className="relative h-48 w-full sm:h-52">
 
-                    <linearGradient
-                        id="urjasathiEnergyFill"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
+                {/* Y-axis */}
+                <div
+                    className="
+                        pointer-events-none
+                        absolute
+                        -left-1
+                        inset-y-0
+                        flex
+                        flex-col
+                        justify-between
+                        pr-2
+                        text-[9px]
+                        text-text-muted
+                        sm:text-[10px]
+                    "
+                >
+                    <span>5</span>
+                    <span>4</span>
+                    <span>3</span>
+                    <span>2</span>
+                    <span>1</span>
+                    <span>0</span>
+                </div>
+
+
+                {/* =================================================
+                    GRAPH AREA
+                   ================================================= */}
+
+                <div className="absolute inset-y-0 left-5 right-0">
+
+                    {/* Grid */}
+                    <div
+                        className="
+                            pointer-events-none
+                            absolute
+                            inset-0
+                            flex
+                            flex-col
+                            justify-between
+                        "
                     >
-                        <stop
-                            offset="0%"
-                            stopColor="rgb(1 172 159)"
-                            stopOpacity="0.28"
+                        <span className="h-px w-full bg-border" />
+                        <span className="h-px w-full bg-border" />
+                        <span className="h-px w-full bg-border" />
+                        <span className="h-px w-full bg-border" />
+                        <span className="h-px w-full bg-border" />
+                        <span className="h-px w-full bg-border" />
+                    </div>
+
+
+                    <svg
+                        viewBox="0 0 960 300"
+                        preserveAspectRatio="none"
+                        className="
+                            absolute
+                            inset-0
+                            h-full
+                            w-full
+                            overflow-visible
+                        "
+                    >
+
+                        <defs>
+
+                            {/* -----------------------------------------
+                                Solar fill
+                               ----------------------------------------- */}
+
+                            <linearGradient
+                                id="solarFill"
+                                x1="0"
+                                y1="0"
+                                x2="0"
+                                y2="1"
+                            >
+                                <stop
+                                    offset="0%"
+                                    stopColor="rgb(245 183 0)"
+                                    stopOpacity="0.12"
+                                />
+
+                                <stop
+                                    offset="100%"
+                                    stopColor="rgb(245 183 0)"
+                                    stopOpacity="0"
+                                />
+                            </linearGradient>
+
+
+                            {/* -----------------------------------------
+                                Consumption fill
+                               ----------------------------------------- */}
+
+                            <linearGradient
+                                id="consumptionFill"
+                                x1="0"
+                                y1="0"
+                                x2="0"
+                                y2="1"
+                            >
+                                <stop
+                                    offset="0%"
+                                    stopColor="rgb(108 29 95)"
+                                    stopOpacity="0.07"
+                                />
+
+                                <stop
+                                    offset="100%"
+                                    stopColor="rgb(108 29 95)"
+                                    stopOpacity="0"
+                                />
+                            </linearGradient>
+
+                        </defs>
+
+
+                        {/* =================================================
+                            SOLAR GENERATION
+                            
+                            Sunrise → gradual increase
+                            Noon → rounded moderate peak
+                            Sunset → gradual decrease
+                           ================================================= */}
+
+                        <path
+                            d="
+                                M0 300
+
+                                C
+                                    105 300,
+                                    155 300,
+                                    205 296
+
+                                C
+                                    255 292,
+                                    285 270,
+                                    325 235
+
+                                C
+                                    365 200,
+                                    405 160,
+                                    455 145
+
+                                C
+                                    500 131,
+                                    545 136,
+                                    585 153
+
+                                C
+                                    625 170,
+                                    660 205,
+                                    700 238
+
+                                C
+                                    740 270,
+                                    780 292,
+                                    830 298
+
+                                C
+                                    875 300,
+                                    920 300,
+                                    960 300
+
+                                L960 300
+                                L0 300
+                                Z
+                            "
+                            fill="url(#solarFill)"
                         />
 
-                        <stop
-                            offset="100%"
-                            stopColor="rgb(1 172 159)"
-                            stopOpacity="0"
+
+                        {/* Solar line */}
+
+                        <path
+                            d="
+                                M0 300
+
+                                C
+                                    105 300,
+                                    155 300,
+                                    205 296
+
+                                C
+                                    255 292,
+                                    285 270,
+                                    325 235
+
+                                C
+                                    365 200,
+                                    405 160,
+                                    455 145
+
+                                C
+                                    500 131,
+                                    545 136,
+                                    585 153
+
+                                C
+                                    625 170,
+                                    660 205,
+                                    700 238
+
+                                C
+                                    740 270,
+                                    780 292,
+                                    830 298
+
+                                C
+                                    875 300,
+                                    920 300,
+                                    960 300
+                            "
+                            fill="none"
+                            stroke="rgb(245 183 0)"
+                            strokeWidth="3.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                         />
-                    </linearGradient>
-
-                </defs>
 
 
-                {/* Area */}
-                <path
-                    d="
-                        M0 165
-                        C55 155 75 125 130 140
-                        C185 155 205 180 260 150
-                        C315 120 330 65 385 82
-                        C440 99 455 145 510 125
-                        C565 105 585 58 640 70
-                        C695 82 720 115 755 92
-                        C775 79 790 55 800 35
-                        L800 220
-                        L0 220
-                        Z
-                    "
-                    fill="url(#urjasathiEnergyFill)"
-                />
+                        {/* =================================================
+                            CONSUMPTION
+                            
+                            Realistic building load:
+                            - overnight baseline
+                            - morning activity
+                            - daytime operating load
+                            - evening increase
+                            - gradual night reduction
+
+                            Important:
+                            No triangular spikes.
+                           ================================================= */}
+
+                        <path
+                            d="
+                                M0 216
+
+                                C
+                                    35 210,
+                                    70 222,
+                                    105 216
+
+                                C
+                                    135 217,
+                                    155 212,
+                                    175 218
+
+                                C
+                                    190 219,
+                                    198 208,
+                                    215 203
+
+                                C
+                                    235 197,
+                                    255 198,
+                                    275 201
+
+                                C
+                                    300 204,
+                                    315 211,
+                                    335 211
+
+                                C
+                                    355 211,
+                                    370 204,
+                                    390 202
+
+                                C
+                                    415 199,
+                                    435 203,
+                                    455 204
+
+                                C
+                                    475 200,
+                                    490 199,
+                                    510 193
+
+                                C
+                                    535 185,
+                                    560 183,
+                                    585 187
+
+                                C
+                                    610 191,
+                                    625 199,
+                                    645 199
+
+                                C
+                                    670 199,
+                                    690 190,
+                                    710 189
+
+                                C
+                                    735 186,
+                                    755 189,
+                                    775 195
+
+                                C
+                                    795 199,
+                                    805 202,
+                                    825 210
+
+                                C
+                                    850 220,
+                                    870 208,
+                                    890 210
+
+                                C
+                                    915 212,
+                                    935 214,
+                                    960 216
+                            "
+                            fill="none"
+                            stroke="rgb(108 29 95)"
+                            strokeWidth="3.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
 
 
-                {/* Main line */}
-                <path
-                    d="
-                        M0 165
-                        C55 155 75 125 130 140
-                        C185 155 205 180 260 150
-                        C315 120 330 65 385 82
-                        C440 99 455 145 510 125
-                        C565 105 585 58 640 70
-                        C695 82 720 115 755 92
-                        C775 79 790 55 800 35
-                    "
-                    fill="none"
-                    stroke="rgb(1 172 159)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                />
+                        {/* Consumption subtle area */}
+
+                        <path
+                            d="
+                                M0 236
+
+                                C
+                                    35 235,
+                                    70 235,
+                                    105 236
+
+                                C
+                                    135 237,
+                                    155 232,
+                                    175 225
+
+                                C
+                                    190 219,
+                                    198 208,
+                                    215 203
+
+                                C
+                                    235 197,
+                                    255 198,
+                                    275 201
+
+                                C
+                                    300 204,
+                                    315 211,
+                                    335 211
+
+                                C
+                                    355 211,
+                                    370 204,
+                                    390 202
+
+                                C
+                                    415 199,
+                                    435 203,
+                                    455 204
+
+                                C
+                                    475 205,
+                                    490 199,
+                                    510 193
+
+                                C
+                                    535 185,
+                                    560 183,
+                                    585 187
+
+                                C
+                                    610 191,
+                                    625 199,
+                                    645 199
+
+                                C
+                                    670 199,
+                                    690 190,
+                                    710 184
+
+                                C
+                                    735 177,
+                                    755 179,
+                                    775 185
+
+                                C
+                                    795 199,
+                                    805 202,
+                                    825 210
+
+                                C
+                                    850 220,
+                                    870 208,
+                                    890 210
+
+                                C
+                                    915 212,
+                                    935 214,
+                                    960 216
+
+                                L960 300
+                                L0 300
+                                Z
+                            "
+                            fill="url(#consumptionFill)"
+                        />
 
 
-                {/* End glow */}
-                <circle
-                    cx="800"
-                    cy="35"
-                    r="13"
-                    fill="rgb(1 172 159)"
-                    fillOpacity="0.12"
-                />
+                        {/* =================================================
+                            ENERGY SAVED
+                            
+                            Savings should correlate with renewable
+                            generation, therefore:
+                            
+                            low → rises → broad middle bulge → falls
 
-                <circle
-                    cx="800"
-                    cy="35"
-                    r="5"
-                    fill="rgb(1 172 159)"
-                />
+                            Kept subtle so it doesn't compete with
+                            consumption.
+                           ================================================= */}
 
-            </svg>
+                        <path
+                            d="
+                                M0 287
+
+                                C
+                                    110 287,
+                                    175 285,
+                                    230 281
+
+                                C
+                                    285 277,
+                                    325 260,
+                                    365 242
+
+                                C
+                                    405 224,
+                                    445 213,
+                                    490 211
+
+                                C
+                                    535 209,
+                                    575 217,
+                                    615 232
+
+                                C
+                                    655 247,
+                                    695 266,
+                                    735 278
+
+                                C
+                                    780 290,
+                                    835 293,
+                                    900 291
+
+                                C
+                                    925 290,
+                                    945 288,
+                                    960 287
+                            "
+                            fill="none"
+                            stroke="rgb(22 135 90)"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+
+
+                        {/* =================================================
+                            CURRENT CONSUMPTION POINT
+                           ================================================= */}
+
+                        <circle
+                            cx="960"
+                            cy="216"
+                            r="11"
+                            fill="rgb(108 29 95)"
+                            fillOpacity="0.08"
+                        />
+
+                        <circle
+                            cx="960"
+                            cy="216"
+                            r="4"
+                            fill="rgb(108 29 95)"
+                        />
+
+                    </svg>
+
+                </div>
+            </div>
+
+
+            {/* =====================================================
+                X AXIS
+               ===================================================== */}
+
+            <div
+                className="
+                    ml-5
+                    mt-3
+                    flex
+                    justify-between
+                    text-[9px]
+                    text-text-muted
+                    sm:text-[10px]
+                "
+            >
+                <span>00:00</span>
+                <span>04:00</span>
+                <span>08:00</span>
+                <span>12:00</span>
+                <span>16:00</span>
+                <span>20:00</span>
+                <span>24:00</span>
+            </div>
+
         </div>
     );
 }

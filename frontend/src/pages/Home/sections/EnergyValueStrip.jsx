@@ -37,6 +37,24 @@ const values = [
     },
 ];
 
+const accentStyles = {
+    primary: {
+        icon: "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white",
+        value: "text-primary",
+        line: "bg-primary",
+    },
+    secondary: {
+        icon: "bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-white",
+        value: "text-secondary",
+        line: "bg-secondary",
+    },
+    solar: {
+        icon: "bg-solar/10 text-solar group-hover:bg-solar group-hover:text-white",
+        value: "text-solar",
+        line: "bg-solar",
+    },
+};
+
 export default function EnergyValueStrip() {
     return (
         <section
@@ -84,24 +102,7 @@ export default function EnergyValueStrip() {
             >
                 {values.map((item) => {
                     const Icon = item.icon;
-
-                    const accent = {
-                        primary: {
-                            icon: "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white",
-                            value: "text-primary",
-                            line: "bg-primary",
-                        },
-                        secondary: {
-                            icon: "bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-white",
-                            value: "text-secondary",
-                            line: "bg-secondary",
-                        },
-                        solar: {
-                            icon: "bg-solar/10 text-solar group-hover:bg-solar group-hover:text-white",
-                            value: "text-solar",
-                            line: "bg-solar",
-                        },
-                    }[item.accent];
+                    const accent = accentStyles[item.accent];
 
                     return (
                         <div

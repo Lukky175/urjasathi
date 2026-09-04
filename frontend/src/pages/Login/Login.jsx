@@ -255,10 +255,10 @@ export default function Login() {
                     min-h-screen
                     items-center
                     justify-center
-                    px-5
-                    py-28
-                    sm:px-8
-                    lg:px-10
+                    px-4
+                    py-24
+                    sm:px-6
+                    lg:px-8
                 "
             >
 
@@ -270,15 +270,15 @@ export default function Login() {
                         max-w-6xl
                         grid-cols-1
                         items-center
-                        gap-12
+                        gap-10
                         lg:grid-cols-[0.9fr_1.1fr]
-                        lg:gap-20
+                        lg:gap-14
                     "
                 >
 
                     {/* ========================================================
                         LEFT CONTENT
-                       ======================================================== */}
+                    ======================================================== */}
 
                     <div
                         className="
@@ -291,17 +291,22 @@ export default function Login() {
 
                         <div
                             className="
+                                group
                                 flex
-                                h-12
-                                w-12
+                                h-11
+                                w-11
                                 items-center
                                 justify-center
-                                rounded-2xl
+                                rounded-xl
                                 bg-primary/10
                                 text-primary
+                                transition-colors
+                                duration-300
+                                hover:bg-primary
+                                hover:text-white
                             "
                         >
-                            <LuZap className="h-6 w-6" />
+                            <LuZap className="h-5 w-5" />
                         </div>
 
 
@@ -309,8 +314,8 @@ export default function Login() {
 
                         <p
                             className="
-                                mt-7
-                                text-xs
+                                mt-5
+                                text-[11px]
                                 font-semibold
                                 uppercase
                                 tracking-[0.2em]
@@ -325,18 +330,17 @@ export default function Login() {
 
                         <h1
                             className="
-                                mt-4
+                                mt-3
                                 max-w-lg
-                                text-5xl
+                                text-[3.5rem]
                                 font-semibold
-                                leading-[0.98]
+                                leading-[0.96]
                                 tracking-[-0.055em]
                                 text-text
-                                xl:text-[4.5rem]
+                                xl:text-[4rem]
                             "
                         >
-                            Power your
-                            <br />
+                            Power your {" "}
 
                             <span className="text-primary">
                                 energy.
@@ -349,17 +353,17 @@ export default function Login() {
 
                         <p
                             className="
-                                mt-7
-                                max-w-lg
-                                text-lg
+                                mt-5
+                                max-w-[480px]
+                                text-base
                                 font-medium
-                                leading-8
+                                leading-7
                                 text-text-secondary
                             "
                         >
-                            Sign in to your UrjaSathi account and
-                            keep track of your energy consumption,
-                            generation, and renewable energy insights.
+                            Sign in to your UrjaSathi account and keep track of
+                            your energy consumption, generation, and renewable
+                            energy insights.
                         </p>
 
 
@@ -367,39 +371,49 @@ export default function Login() {
 
                         <div
                             className="
-                                mt-10
-                                space-y-5
+                                mt-8
+                                space-y-4
                             "
                         >
 
+                            {/* ------------------------------------------------
+                                Monitor your energy
+                            ------------------------------------------------ */}
+
                             <div
                                 className="
+                                    group
                                     flex
                                     items-center
-                                    gap-4
+                                    gap-3.5
                                 "
                             >
 
                                 <div
                                     className="
                                         flex
-                                        h-11
-                                        w-11
+                                        h-10
+                                        w-10
                                         shrink-0
                                         items-center
                                         justify-center
                                         rounded-xl
                                         bg-primary/10
                                         text-primary
+                                        transition-colors
+                                        duration-300
+                                        group-hover:bg-primary
+                                        group-hover:text-white
                                     "
                                 >
-                                    <LuChartNoAxesCombined className="h-5 w-5" />
+                                    <LuChartNoAxesCombined className="h-[18px] w-[18px]" />
                                 </div>
 
                                 <div>
 
                                     <p
                                         className="
+                                            text-sm
                                             font-semibold
                                             text-text
                                         "
@@ -410,12 +424,12 @@ export default function Login() {
                                     <p
                                         className="
                                             mt-0.5
-                                            text-sm
+                                            text-[13px]
+                                            leading-5
                                             text-text-secondary
                                         "
                                     >
-                                        Understand where your energy
-                                        is being used.
+                                        Understand where your energy is being used.
                                     </p>
 
                                 </div>
@@ -423,34 +437,44 @@ export default function Login() {
                             </div>
 
 
+                            {/* ------------------------------------------------
+                                Secure access
+                            ------------------------------------------------ */}
+
                             <div
                                 className="
+                                    group
                                     flex
                                     items-center
-                                    gap-4
+                                    gap-3.5
                                 "
                             >
 
                                 <div
                                     className="
                                         flex
-                                        h-11
-                                        w-11
+                                        h-10
+                                        w-10
                                         shrink-0
                                         items-center
                                         justify-center
                                         rounded-xl
                                         bg-primary/10
                                         text-primary
+                                        transition-colors
+                                        duration-300
+                                        group-hover:bg-primary
+                                        group-hover:text-white
                                     "
                                 >
-                                    <LuShieldCheck className="h-5 w-5" />
+                                    <LuShieldCheck className="h-[18px] w-[18px]" />
                                 </div>
 
                                 <div>
 
                                     <p
                                         className="
+                                            text-sm
                                             font-semibold
                                             text-text
                                         "
@@ -461,7 +485,8 @@ export default function Login() {
                                     <p
                                         className="
                                             mt-0.5
-                                            text-sm
+                                            text-[13px]
+                                            leading-5
                                             text-text-secondary
                                         "
                                     >
@@ -618,7 +643,7 @@ export default function Login() {
                                             rounded-xl
                                             border
                                             border-border
-                                            bg-app-bg
+                                            bg-secondary/5
                                             px-4
                                             pr-12
                                             text-text
@@ -637,8 +662,8 @@ export default function Login() {
                                             absolute
                                             left-4
                                             top-4
-                                            bg-app-bg
                                             px-1
+                                            bg-secondary/2
                                             text-sm
                                             text-text-secondary
                                             transition-all
@@ -697,7 +722,7 @@ export default function Login() {
                                             rounded-xl
                                             border
                                             border-border
-                                            bg-app-bg
+                                            bg-secondary/5
                                             px-4
                                             pr-12
                                             text-text
@@ -716,7 +741,7 @@ export default function Login() {
                                             absolute
                                             left-4
                                             top-4
-                                            bg-app-bg
+                                            bg-secondary/2
                                             px-1
                                             text-sm
                                             text-text-secondary

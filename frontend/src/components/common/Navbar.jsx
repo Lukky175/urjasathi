@@ -75,10 +75,10 @@ export default function Navbar() {
             className="
                 fixed
                 inset-x-0
-                top-2
+                top-3
                 z-50
                 px-2
-                sm:top-3.5
+                sm:top-6
                 sm:px-4
             "
         >

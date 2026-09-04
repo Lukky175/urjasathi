@@ -45,6 +45,8 @@ import {
 
 import { Link } from "react-router-dom";
 
+import { officeGallery } from "./contactData";
+
 
 /* ============================================================================
    STATIC CONTACT INFORMATION
@@ -226,41 +228,6 @@ function TextAreaField({
    ============================================================================ */
 
 export default function Contact() {
-
-    /* ------------------------------------------------------------------------
-       Carousel data
-
-       Replace these images later with your actual UrjaSathi images.
-       ------------------------------------------------------------------------ */
-
-    const officeGallery = [
-        {
-            src: "/images/urjasathi-office-1.jpg",
-            title: "Building a Smarter Energy Future",
-            description:
-                "A platform designed to make energy data easier to understand and act upon.",
-        },
-        {
-            src: "/images/urjasathi-office-2.jpg",
-            title: "Technology Meets Sustainability",
-            description:
-                "Bringing intelligent monitoring and renewable energy together.",
-        },
-        {
-            src: "/images/urjasathi-office-3.jpg",
-            title: "Designed Around Your Energy",
-            description:
-                "Simple insights that help households and organizations make better decisions.",
-        },
-        {
-            src: "/images/urjasathi-office-4.jpg",
-            title: "Innovation for a Greener Tomorrow",
-            description:
-                "Helping create a more efficient and sustainable energy ecosystem.",
-        },
-    ];
-
-
     /* ------------------------------------------------------------------------
        Carousel state
        ------------------------------------------------------------------------ */
@@ -495,11 +462,11 @@ export default function Contact() {
                     overflow-hidden
                     bg-app-bg
                     px-6
-                    py-16
+                    py-15
                     sm:px-8
-                    sm:py-20
+                    sm:py-15
                     lg:px-10
-                    lg:py-24
+                    lg:py-15
                 "
             >
 
@@ -552,7 +519,7 @@ export default function Contact() {
 
                     {/* =========================================================
                         LEFT CONTACT INFORMATION
-                       ========================================================= */}
+                    ========================================================= */}
 
                     <div
                         className="
@@ -583,11 +550,11 @@ export default function Contact() {
 
                         <p
                             className="
-                                mt-6
-                                text-xs
+                                mt-5
+                                text-[11px]
                                 font-semibold
                                 uppercase
-                                tracking-[0.18em]
+                                tracking-[0.2em]
                                 text-primary
                             "
                         >
@@ -601,18 +568,15 @@ export default function Contact() {
                             className="
                                 mt-4
                                 text-5xl
-                                font-bold
-                                leading-[0.94]
-                                tracking-[-0.055em]
+                                font-semibold
+                                leading-[0.98]
+                                tracking-[-0.045em]
                                 text-text
                                 sm:text-6xl
-                                lg:text-[4.5rem]
-                                xl:text-[5rem]
+                                lg:text-[4rem]
                             "
                         >
-                            Get in
-                            <br />
-
+                            Get in {" "}
                             <span className="text-primary">
                                 touch.
                             </span>
@@ -623,73 +587,58 @@ export default function Contact() {
 
                         <p
                             className="
-                                mt-7
+                                mt-5
                                 max-w-lg
-                                text-base
-                                font-medium
-                                leading-8
+                                text-[15px]
+                                leading-6
                                 text-text-secondary
-                                sm:text-lg
+                                sm:text-base
+                                sm:leading-7
                             "
                         >
-                            Whether you need help understanding
-                            your energy data, have feedback about
-                            UrjaSathi, or simply want to know more,
-                            send us a message.
+                            Whether you need help understanding your energy data,
+                            have feedback about UrjaSathi, or simply want to know
+                            more, send us a message.
                         </p>
 
 
                         {/* -----------------------------------------------------
                             Contact details
-                           ----------------------------------------------------- */}
+                        ----------------------------------------------------- */}
 
-                        <div className="mt-10 space-y-3">
+                        <div className="mt-9 space-y-8">
 
 
                             {/* Location */}
 
-                            <div
-                                className="
-                                    group
-                                    flex
-                                    items-start
-                                    gap-4
-                                    rounded-2xl
-                                    px-3
-                                    py-4
-                                    transition-all
-                                    duration-300
-                                    hover:translate-x-1
-                                    hover:bg-surface
-                                "
-                            >
+                            <div className="group flex items-center gap-4">
 
                                 <div
                                     className="
                                         flex
                                         h-12
                                         w-12
+                                        py-2
                                         shrink-0
                                         items-center
                                         justify-center
                                         rounded-xl
                                         bg-primary/10
                                         text-primary
-                                        transition-transform
-                                        duration-300
-                                        group-hover:scale-105
+                                        transition-colors
+                                        duration-200
+                                        group-hover:bg-primary
+                                        group-hover:text-white
                                     "
                                 >
-                                    <IoLocationOutline className="text-xl" />
+                                    <IoLocationOutline className="text-[20px]" />
                                 </div>
 
-
                                 <div>
-
                                     <h3
                                         className="
-                                            text-base
-                                            font-bold
+                                            text-sm
+                                            font-semibold
                                             text-text
                                         "
                                     >
@@ -698,15 +647,14 @@ export default function Contact() {
 
                                     <p
                                         className="
-                                            mt-1
+                                            mt-0.5
                                             text-sm
-                                            leading-6
+                                            leading-5
                                             text-text-secondary
                                         "
                                     >
                                         {CONTACT_INFO.location}
                                     </p>
-
                                 </div>
 
                             </div>
@@ -714,21 +662,7 @@ export default function Contact() {
 
                             {/* Email */}
 
-                            <div
-                                className="
-                                    group
-                                    flex
-                                    items-start
-                                    gap-4
-                                    rounded-2xl
-                                    px-3
-                                    py-4
-                                    transition-all
-                                    duration-300
-                                    hover:translate-x-1
-                                    hover:bg-surface
-                                "
-                            >
+                            <div className="group flex items-center gap-4">
 
                                 <div
                                     className="
@@ -741,38 +675,41 @@ export default function Contact() {
                                         rounded-xl
                                         bg-primary/10
                                         text-primary
-                                        transition-transform
-                                        duration-300
-                                        group-hover:scale-105
+                                        transition-colors
+                                        duration-200
+                                        group-hover:bg-primary
+                                        group-hover:text-white
                                     "
                                 >
-                                    <MdOutlineAlternateEmail className="text-xl" />
+                                    <MdOutlineAlternateEmail className="text-[20px]" />
                                 </div>
 
-
                                 <div>
-
                                     <h3
                                         className="
-                                            text-base
-                                            font-bold
+                                            text-sm
+                                            font-semibold
                                             text-text
                                         "
                                     >
                                         Email Us
                                     </h3>
 
-                                    <p
+                                    <a
+                                        href={`mailto:${CONTACT_INFO.email}`}
                                         className="
-                                            mt-1
+                                            mt-0.5
+                                            block
                                             text-sm
-                                            leading-6
+                                            leading-5
                                             text-text-secondary
+                                            transition-colors
+                                            duration-200
+                                            hover:text-primary
                                         "
                                     >
                                         {CONTACT_INFO.email}
-                                    </p>
-
+                                    </a>
                                 </div>
 
                             </div>
@@ -780,21 +717,7 @@ export default function Contact() {
 
                             {/* Phone */}
 
-                            <div
-                                className="
-                                    group
-                                    flex
-                                    items-start
-                                    gap-4
-                                    rounded-2xl
-                                    px-3
-                                    py-4
-                                    transition-all
-                                    duration-300
-                                    hover:translate-x-1
-                                    hover:bg-surface
-                                "
-                            >
+                            <div className="group flex items-center gap-4">
 
                                 <div
                                     className="
@@ -807,38 +730,41 @@ export default function Contact() {
                                         rounded-xl
                                         bg-primary/10
                                         text-primary
-                                        transition-transform
-                                        duration-300
-                                        group-hover:scale-105
+                                        transition-colors
+                                        duration-200
+                                        group-hover:bg-primary
+                                        group-hover:text-white
                                     "
                                 >
-                                    <IoCallOutline className="text-xl" />
+                                    <IoCallOutline className="text-[20px]" />
                                 </div>
 
-
                                 <div>
-
                                     <h3
                                         className="
-                                            text-base
-                                            font-bold
+                                            text-sm
+                                            font-semibold
                                             text-text
                                         "
                                     >
                                         Call Us
                                     </h3>
 
-                                    <p
+                                    <a
+                                        href={`tel:${CONTACT_INFO.phone}`}
                                         className="
-                                            mt-1
+                                            mt-0.5
+                                            block
                                             text-sm
-                                            leading-6
+                                            leading-5
                                             text-text-secondary
+                                            transition-colors
+                                            duration-200
+                                            hover:text-primary
                                         "
                                     >
                                         {CONTACT_INFO.phone}
-                                    </p>
-
+                                    </a>
                                 </div>
 
                             </div>
@@ -862,7 +788,7 @@ export default function Contact() {
                             border
                             border-border
                             bg-surface
-                            p-6
+                            p-5
                             shadow-[0_20px_60px_rgba(0,0,0,0.06)]
                             sm:p-8
                             lg:p-10
@@ -903,7 +829,7 @@ export default function Contact() {
                                 className="
                                     mt-3
                                     text-sm
-                                    leading-7
+                                    leading-6
                                     text-text-secondary
                                     sm:text-base
                                 "
@@ -915,7 +841,7 @@ export default function Contact() {
                         </div>
 
 
-                        <form className="mt-8 space-y-5">
+                        <form className="mt-6 space-y-5">
 
                             {/* Name */}
 
