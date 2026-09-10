@@ -87,3 +87,4 @@ def detect_category_anomalies(category_df: pd.DataFrame | None) -> list[dict[str
         flags.extend(detected.loc[flagged].to_dict(orient="records"))
 
     return flags
+

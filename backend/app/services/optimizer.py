@@ -119,3 +119,4 @@ def run_pulp_optimization(
 
     total_cost_inr = float(np.sum((grid_kw * tariffs - export_kw * feed_in) * dt))
     return build_optimization_result(flows, total_cost_inr)
+

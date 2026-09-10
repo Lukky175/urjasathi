@@ -87,3 +87,4 @@ def get_battery() -> BatteryState:
     if _battery_instance is None:
         _battery_instance = BatteryState()
     return _battery_instance
+

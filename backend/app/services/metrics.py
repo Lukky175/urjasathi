@@ -43,3 +43,4 @@ def compare_performance(
             _peak_grid_kw(baseline_result), _peak_grid_kw(opt_result)
         ),
     )
+

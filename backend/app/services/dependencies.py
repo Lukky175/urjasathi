@@ -21,3 +21,4 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     if user_doc is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user_doc
+

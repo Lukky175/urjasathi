@@ -72,3 +72,4 @@ def run_baseline_allocation(
         np.sum((grid_kw * tariffs - export_kw * feed_in) * TIME_STEP_HOURS)
     )
     return build_optimization_result(flows, total_cost_inr)
+

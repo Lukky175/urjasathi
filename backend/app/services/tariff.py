@@ -47,3 +47,4 @@ class TariffSchedule:
 
     def feed_in_inr_per_kwh(self, step: int) -> float:
         return get_feed_in_rate(step)
+

@@ -149,3 +149,4 @@ def generate_recommendations(
         recommendations.extend(_peak_and_battery_recommendations(flows))
     recommendations.extend(_anomaly_recommendations(anomaly_flags or []))
     return recommendations
+
