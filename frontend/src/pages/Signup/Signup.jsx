@@ -1,41 +1,45 @@
 /**
  * ============================================================================
- * File        : Login.jsx
+ * File        : Signup.jsx
  * Project     : UrjaSathi
  *
  * Description:
- * Premium public authentication page for UrjaSathi.
+ * Premium public account registration page for UrjaSathi.
  *
  * Responsibilities:
- * - Collect user credentials
- * - Authenticate users through AuthContext
- * - Redirect authenticated users
- * - Display authentication errors
- * - Provide password visibility toggle
- * - Support Remember Me functionality
+ * - Collect new user information
+ * - Validate registration fields
+ * - Validate password confirmation
+ * - Display password strength
+ * - Register users through AuthContext
+ * - Display registration errors
+ * - Provide password visibility toggles
  * - Maintain UrjaSathi visual design system
  * ============================================================================
  */
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 import {
     Link,
-    useLocation,
     useNavigate,
 } from "react-router-dom";
 
 import {
     MdAlternateEmail,
+    MdPhone,
 } from "react-icons/md";
 
 import {
+    LuAtSign,
     LuChartNoAxesCombined,
+    LuCheck,
     LuEye,
     LuEyeOff,
     LuLockKeyhole,
     LuShieldCheck,
     LuSparkles,
+    LuUserRound,
     LuZap,
 } from "react-icons/lu";
 
@@ -49,19 +53,330 @@ import { useToast } from "../../context/ToastContext";
 
 /**
  * ============================================================================
- * LOGIN PAGE
+ * FLOATING FIELD
  * ============================================================================
  */
 
-export default function Login() {
+function FloatingField({
+    label,
+    value,
+    onChange,
+    type = "text",
+    autoComplete,
+    icon,
+    required = true,
+    maxLength,
+}) {
+
+    return (
+
+        <div className="relative">
+
+            <input
+                type={type}
+                value={value}
+                onChange={onChange}
+                placeholder=" "
+                required={required}
+                autoComplete={autoComplete}
+                maxLength={maxLength}
+                className="
+                    peer
+                    h-[54px]
+                    w-full
+                    rounded-xl
+                    border
+                    border-border
+                    bg-secondary/5
+                    px-4
+                    pr-12
+                    text-sm
+                    text-text
+                    outline-none
+                    transition-all
+                    duration-300
+                    hover:border-border-strong
+                    focus:border-primary
+                    focus:bg-secondary/10
+                    focus:ring-4
+                    focus:ring-primary/10
+                "
+            />
+
+            <label
+                className="
+                    pointer-events-none
+                    absolute
+                    left-4
+                    top-[15px]
+                    z-10
+                    bg-secondary/2
+                    px-1
+                    text-sm
+                    text-text-secondary
+                    transition-all
+                    duration-300
+                    peer-placeholder-shown:top-[15px]
+                    peer-placeholder-shown:text-sm
+                    peer-focus:-top-2
+                    peer-focus:text-xs
+                    peer-focus:text-primary
+                    peer-[&:not(:placeholder-shown)]:-top-2
+                    peer-[&:not(:placeholder-shown)]:text-xs
+                "
+            >
+                {label}
+            </label>
+
+            <div
+                className="
+                    pointer-events-none
+                    absolute
+                    right-4
+                    top-1/2
+                    flex
+                    -translate-y-1/2
+                    items-center
+                    justify-center
+                    text-lg
+                    text-text-secondary
+                    transition-colors
+                    duration-300
+                    peer-focus:text-primary
+                "
+            >
+                {icon}
+            </div>
+
+        </div>
+
+    );
+}
+
+
+/**
+ * ============================================================================
+ * PASSWORD FIELD
+ * ============================================================================
+ */
+
+function PasswordField({
+    label,
+    value,
+    onChange,
+    showPassword,
+    setShowPassword,
+    autoComplete,
+}) {
+
+    return (
+
+        <div className="relative">
+
+            <input
+                type={
+                    showPassword
+                        ? "text"
+                        : "password"
+                }
+                value={value}
+                onChange={onChange}
+                placeholder=" "
+                required
+                autoComplete={autoComplete}
+                className="
+                    peer
+                    h-[54px]
+                    w-full
+                    rounded-xl
+                    border
+                    border-border
+                    bg-secondary/5
+                    px-4
+                    pr-12
+                    text-sm
+                    text-text
+                    outline-none
+                    transition-all
+                    duration-300
+                    hover:border-border-strong
+                    focus:border-primary
+                    focus:bg-secondary/10
+                    focus:ring-4
+                    focus:ring-primary/10
+                "
+            />
+
+            <label
+                className="
+                    pointer-events-none
+                    absolute
+                    left-4
+                    top-[15px]
+                    z-10
+                    bg-secondary/2
+                    px-1
+                    text-sm
+                    text-text-secondary
+                    transition-all
+                    duration-300
+                    peer-placeholder-shown:top-[15px]
+                    peer-placeholder-shown:text-sm
+                    peer-focus:-top-2
+                    peer-focus:text-xs
+                    peer-focus:text-primary
+                    peer-[&:not(:placeholder-shown)]:-top-2
+                    peer-[&:not(:placeholder-shown)]:text-xs
+                "
+            >
+                {label}
+            </label>
+
+            <LuLockKeyhole
+                className="
+                    pointer-events-none
+                    absolute
+                    right-[52px]
+                    top-1/2
+                    h-[18px]
+                    w-[18px]
+                    -translate-y-1/2
+                    text-text-secondary
+                    transition-colors
+                    duration-300
+                    peer-focus:text-primary
+                "
+            />
+
+            <button
+                type="button"
+                onClick={() =>
+                    setShowPassword(
+                        (previous) => !previous
+                    )
+                }
+                className="
+                    absolute
+                    right-2
+                    top-1/2
+                    flex
+                    h-10
+                    w-10
+                    -translate-y-1/2
+                    items-center
+                    justify-center
+                    rounded-full
+                    text-text-secondary
+                    transition-all
+                    duration-300
+                    hover:bg-primary/10
+                    hover:text-primary
+                "
+                aria-label={
+                    showPassword
+                        ? "Hide password"
+                        : "Show password"
+                }
+            >
+
+                {showPassword ? (
+                    <LuEyeOff className="h-5 w-5" />
+                ) : (
+                    <LuEye className="h-5 w-5" />
+                )}
+
+            </button>
+
+        </div>
+
+    );
+}
+
+
+/**
+ * ============================================================================
+ * PASSWORD STRENGTH
+ * ============================================================================
+ */
+
+function getPasswordStrength(password) {
+
+    if (!password) {
+
+        return {
+            score: 0,
+            label: "Create a password",
+        };
+
+    }
+
+    let score = 0;
+
+    if (password.length >= 8) {
+        score++;
+    }
+
+    if (/[A-Z]/.test(password)) {
+        score++;
+    }
+
+    if (/[0-9]/.test(password)) {
+        score++;
+    }
+
+    if (/[^A-Za-z0-9]/.test(password)) {
+        score++;
+    }
+
+    if (score <= 1) {
+
+        return {
+            score,
+            label: "Weak password",
+        };
+
+    }
+
+    if (score === 2) {
+
+        return {
+            score,
+            label: "Fair password",
+        };
+
+    }
+
+    if (score === 3) {
+
+        return {
+            score,
+            label: "Good password",
+        };
+
+    }
+
+    return {
+        score,
+        label: "Strong password",
+    };
+
+}
+
+
+/**
+ * ============================================================================
+ * SIGNUP PAGE
+ * ============================================================================
+ */
+
+export default function Signup() {
 
     /* ------------------------------------------------------------------------
        Authentication
        ------------------------------------------------------------------------ */
 
     const {
-        login,
-        status,
+        signup,
     } = useAuth();
 
     const toast = useToast();
@@ -72,99 +387,185 @@ export default function Login() {
        ------------------------------------------------------------------------ */
 
     const navigate = useNavigate();
-    const location = useLocation();
 
 
     /* ------------------------------------------------------------------------
        Form state
        ------------------------------------------------------------------------ */
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [name, setName] =
+        useState("");
 
-    const [rememberMe, setRememberMe] = useState(false);
+    const [username, setUsername] =
+        useState("");
 
-    const [showPassword, setShowPassword] = useState(false);
+    const [mobile, setMobile] =
+        useState("");
 
-    const [submitting, setSubmitting] = useState(false);
+    const [email, setEmail] =
+        useState("");
 
-    const [error, setError] = useState("");
+    const [password, setPassword] =
+        useState("");
+
+    const [confirmPassword, setConfirmPassword] =
+        useState("");
 
 
     /* ------------------------------------------------------------------------
-       Redirect destination
+       UI state
        ------------------------------------------------------------------------ */
 
-    const rawFrom =
-        location.state?.from?.pathname;
+    const [showPassword, setShowPassword] =
+        useState(false);
 
-    const from =
-        !rawFrom || rawFrom === "/"
-            ? "/dashboard"
-            : rawFrom;
+    const [showConfirmPassword, setShowConfirmPassword] =
+        useState(false);
+
+    const [acceptTerms, setAcceptTerms] =
+        useState(false);
+
+    const [submitting, setSubmitting] =
+        useState(false);
+
+    const [error, setError] =
+        useState("");
 
 
     /* ------------------------------------------------------------------------
-       Redirect already authenticated users
+       Password strength
        ------------------------------------------------------------------------ */
 
-    useEffect(() => {
-
-        if (status === "authenticated") {
-
-            navigate(from, {
-                replace: true,
-            });
-
-        }
-
-    }, [
-        status,
-        from,
-        navigate,
-    ]);
+    const passwordStrength =
+        useMemo(
+            () => getPasswordStrength(password),
+            [password]
+        );
 
 
     /* ------------------------------------------------------------------------
-       Login submission
+       Password match
+       ------------------------------------------------------------------------ */
+
+    const passwordMatches =
+        confirmPassword.length > 0 &&
+        password === confirmPassword;
+
+
+    /* ------------------------------------------------------------------------
+       Signup submission
        ------------------------------------------------------------------------ */
 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        setSubmitting(true);
         setError("");
+
+
+        /* Password validation */
+
+        if (password.length < 8) {
+
+            const message =
+                "Password must be at least 8 characters.";
+
+            setError(message);
+            toast.error(message);
+
+            return;
+
+        }
+
+
+        /* Password confirmation */
+
+        if (password !== confirmPassword) {
+
+            const message =
+                "Passwords do not match.";
+
+            setError(message);
+            toast.error(message);
+
+            return;
+
+        }
+
+
+        /* Terms */
+
+        if (!acceptTerms) {
+
+            const message =
+                "Please accept the Terms and Privacy Policy.";
+
+            setError(message);
+            toast.error(message);
+
+            return;
+
+        }
+
+
+        /* Mobile validation */
+
+        const cleanMobile =
+            mobile.replace(/\D/g, "");
+
+        if (cleanMobile.length < 10) {
+
+            const message =
+                "Please enter a valid mobile number.";
+
+            setError(message);
+            toast.error(message);
+
+            return;
+
+        }
+
+
+        setSubmitting(true);
 
 
         try {
 
-            await login(
+            /*
+             * Keeping the same positional signature
+             * as your current AuthContext.
+             */
+
+            await signup(
+                name.trim(),
+                username.trim(),
+                cleanMobile,
                 email.trim(),
                 password
             );
 
 
             toast.success(
-                "Welcome back!"
+                "Account created successfully!"
             );
 
 
-            navigate(from, {
-                replace: true,
-            });
+            navigate(
+                "/dashboard",
+                {
+                    replace: true,
+                }
+            );
 
         } catch (err) {
 
             const message =
                 err?.message ||
-                "Unable to sign in.";
+                "Unable to create your account.";
 
             setError(message);
 
-            toast.error(
-                message
-            );
+            toast.error(message);
 
         } finally {
 
@@ -204,7 +605,7 @@ export default function Login() {
                 "
             >
 
-                {/* Purple atmosphere */}
+                {/* Purple glow */}
 
                 <div
                     className="
@@ -220,7 +621,7 @@ export default function Login() {
                 />
 
 
-                {/* Teal atmosphere */}
+                {/* Teal glow */}
 
                 <div
                     className="
@@ -236,7 +637,7 @@ export default function Login() {
                 />
 
 
-                {/* Central glow */}
+                {/* Central soft glow */}
 
                 <div
                     className="
@@ -254,7 +655,7 @@ export default function Login() {
                 />
 
 
-                {/* Subtle grid */}
+                {/* Grid */}
 
                 <div
                     className="
@@ -354,7 +755,7 @@ export default function Login() {
                         </div>
 
 
-                        {/* Brand label */}
+                        {/* Eyebrow */}
 
                         <p
                             className="
@@ -370,7 +771,7 @@ export default function Login() {
                         </p>
 
 
-                        {/* Main heading */}
+                        {/* Heading */}
 
                         <h1
                             className="
@@ -385,11 +786,11 @@ export default function Login() {
                             "
                         >
 
-                            Power your
+                            Make every
                             <br />
 
                             <span className="text-primary">
-                                energy.
+                                unit count.
                             </span>
 
                         </h1>
@@ -407,14 +808,15 @@ export default function Login() {
                                 text-text-secondary
                             "
                         >
-                            Sign in to your UrjaSathi account and
-                            keep track of your energy consumption,
-                            generation, and renewable energy insights.
+                            Build a smarter relationship with your
+                            energy. Track consumption, understand
+                            generation, and turn energy data into
+                            meaningful decisions.
                         </p>
 
 
                         {/* =====================================================
-                            ENERGY VISUALIZATION
+                            ENERGY VISUAL
                            ===================================================== */}
 
                         <div
@@ -447,7 +849,7 @@ export default function Login() {
                             />
 
 
-                            {/* Outer orbit */}
+                            {/* Orbit */}
 
                             <div
                                 className="
@@ -483,8 +885,6 @@ export default function Login() {
                             </div>
 
 
-                            {/* Inner orbit */}
-
                             <div
                                 className="
                                     absolute
@@ -517,7 +917,7 @@ export default function Login() {
                             </div>
 
 
-                            {/* Energy center */}
+                            {/* Center */}
 
                             <div
                                 className="
@@ -539,19 +939,12 @@ export default function Login() {
                                 "
                             >
 
-                                <LuZap
-                                    className="
-                                        h-6
-                                        w-6
-                                    "
-                                />
+                                <LuZap className="h-6 w-6" />
 
                             </div>
 
 
-                            {/* =================================================
-                                Floating card — Energy
-                               ================================================= */}
+                            {/* Floating metric — left */}
 
                             <div
                                 className="
@@ -593,14 +986,10 @@ export default function Login() {
                                     >
 
                                         <LuChartNoAxesCombined
-                                            className="
-                                                h-3.5
-                                                w-3.5
-                                            "
+                                            className="h-3.5 w-3.5"
                                         />
 
                                     </div>
-
 
                                     <div>
 
@@ -612,7 +1001,7 @@ export default function Login() {
                                                 text-text-muted
                                             "
                                         >
-                                            Dashboard
+                                            Monitor
                                         </p>
 
                                         <p
@@ -622,7 +1011,7 @@ export default function Login() {
                                                 text-text
                                             "
                                         >
-                                            Energy insights
+                                            Energy flow
                                         </p>
 
                                     </div>
@@ -632,9 +1021,7 @@ export default function Login() {
                             </div>
 
 
-                            {/* =================================================
-                                Floating card — Security
-                               ================================================= */}
+                            {/* Floating metric — right */}
 
                             <div
                                 className="
@@ -665,26 +1052,13 @@ export default function Login() {
 
                                     <div
                                         className="
-                                            flex
-                                            h-7
-                                            w-7
-                                            items-center
-                                            justify-center
-                                            rounded-lg
-                                            bg-primary/10
-                                            text-primary
+                                            h-2
+                                            w-2
+                                            rounded-full
+                                            bg-secondary
+                                            shadow-[0_0_10px_rgba(1,172,159,0.5)]
                                         "
-                                    >
-
-                                        <LuShieldCheck
-                                            className="
-                                                h-3.5
-                                                w-3.5
-                                            "
-                                        />
-
-                                    </div>
-
+                                    />
 
                                     <div>
 
@@ -696,7 +1070,7 @@ export default function Login() {
                                                 text-text-muted
                                             "
                                         >
-                                            Security
+                                            Status
                                         </p>
 
                                         <p
@@ -706,7 +1080,7 @@ export default function Login() {
                                                 text-text
                                             "
                                         >
-                                            Protected access
+                                            All systems ready
                                         </p>
 
                                     </div>
@@ -731,8 +1105,6 @@ export default function Login() {
                             "
                         >
 
-                            {/* Monitor */}
-
                             <div
                                 className="
                                     rounded-2xl
@@ -748,14 +1120,13 @@ export default function Login() {
                                 "
                             >
 
-                                <LuChartNoAxesCombined
+                                <LuShieldCheck
                                     className="
                                         h-5
                                         w-5
                                         text-primary
                                     "
                                 />
-
 
                                 <p
                                     className="
@@ -765,9 +1136,8 @@ export default function Login() {
                                         text-text
                                     "
                                 >
-                                    Monitor smarter
+                                    Secure by design
                                 </p>
-
 
                                 <p
                                     className="
@@ -777,14 +1147,11 @@ export default function Login() {
                                         text-text-secondary
                                     "
                                 >
-                                    Understand where your energy
-                                    is being used.
+                                    Your energy data stays protected.
                                 </p>
 
                             </div>
 
-
-                            {/* Insights */}
 
                             <div
                                 className="
@@ -809,7 +1176,6 @@ export default function Login() {
                                     "
                                 />
 
-
                                 <p
                                     className="
                                         mt-3
@@ -818,9 +1184,8 @@ export default function Login() {
                                         text-text
                                     "
                                 >
-                                    Better decisions
+                                    Smarter insights
                                 </p>
-
 
                                 <p
                                     className="
@@ -830,8 +1195,7 @@ export default function Login() {
                                         text-text-secondary
                                     "
                                 >
-                                    Turn energy data into
-                                    useful insights.
+                                    Turn consumption into clarity.
                                 </p>
 
                             </div>
@@ -842,15 +1206,14 @@ export default function Login() {
 
 
                     {/* =========================================================
-                        RIGHT — LOGIN CARD
+                        RIGHT — SIGNUP CARD
                        ========================================================= */}
 
                     <div
                         className="
                             w-full
-                            max-w-xl
+                            max-w-2xl
                             justify-self-center
-                            lg:max-w-[540px]
                             lg:justify-self-end
                         "
                     >
@@ -868,8 +1231,8 @@ export default function Login() {
                                 transition-shadow
                                 duration-500
                                 hover:shadow-[0_30px_90px_rgba(108,29,95,0.12)]
-                                sm:p-9
-                                lg:p-10
+                                sm:p-8
+                                lg:p-9
                             "
                         >
 
@@ -891,7 +1254,6 @@ export default function Login() {
                                 "
                             />
 
-
                             <div
                                 className="
                                     pointer-events-none
@@ -911,11 +1273,7 @@ export default function Login() {
                                 Header
                                ------------------------------------------------- */}
 
-                            <div
-                                className="
-                                    relative
-                                "
-                            >
+                            <div className="relative">
 
                                 <div
                                     className="
@@ -935,7 +1293,7 @@ export default function Login() {
                                             text-primary
                                         "
                                     >
-                                        WELCOME BACK
+                                        CREATE ACCOUNT
                                     </p>
 
 
@@ -966,7 +1324,7 @@ export default function Login() {
                                             "
                                         />
 
-                                        Secure login
+                                        Free to join
 
                                     </div>
 
@@ -976,40 +1334,40 @@ export default function Login() {
                                 <h2
                                     className="
                                         mt-3
-                                        text-[2.3rem]
+                                        text-[2.25rem]
                                         font-semibold
                                         leading-tight
                                         tracking-[-0.05em]
                                         text-text
-                                        sm:text-[2.7rem]
+                                        sm:text-[2.65rem]
                                     "
                                 >
-                                    Sign in to
+                                    Start your
                                     <span className="text-primary">
-                                        {" "}UrjaSathi.
+                                        {" "}energy journey.
                                     </span>
                                 </h2>
 
 
                                 <p
                                     className="
-                                        mt-3
-                                        max-w-lg
+                                        mt-2.5
+                                        max-w-xl
                                         text-sm
                                         leading-6
                                         text-text-secondary
                                     "
                                 >
-                                    Access your energy dashboard
-                                    and continue monitoring your
-                                    consumption.
+                                    Create your account and get a
+                                    clearer view of how your energy
+                                    is being used.
                                 </p>
 
                             </div>
 
 
                             {/* -------------------------------------------------
-                                Error message
+                                Error
                                ------------------------------------------------- */}
 
                             {error && (
@@ -1018,7 +1376,7 @@ export default function Login() {
                                     role="alert"
                                     className="
                                         relative
-                                        mt-6
+                                        mt-5
                                         rounded-xl
                                         border
                                         border-red-200
@@ -1037,323 +1395,411 @@ export default function Login() {
 
 
                             {/* -------------------------------------------------
-                                Login form
+                                Form
                                ------------------------------------------------- */}
 
                             <form
                                 onSubmit={handleSubmit}
                                 className="
                                     relative
-                                    mt-8
-                                    space-y-5
+                                    mt-7
+                                    space-y-4
                                 "
                             >
 
                                 {/* =================================================
-                                    EMAIL
+                                    NAME + USERNAME
                                    ================================================= */}
 
                                 <div
                                     className="
-                                        relative
+                                        grid
+                                        grid-cols-1
+                                        gap-4
+                                        sm:grid-cols-2
                                     "
                                 >
 
-                                    <input
-                                        type="email"
+                                    <FloatingField
+                                        label="Full Name"
+                                        value={name}
+                                        onChange={(e) =>
+                                            setName(
+                                                e.target.value
+                                            )
+                                        }
+                                        autoComplete="name"
+                                        icon={
+                                            <LuUserRound
+                                                className="h-5 w-5"
+                                            />
+                                        }
+                                    />
+
+
+                                    <FloatingField
+                                        label="Username"
+                                        value={username}
+                                        onChange={(e) =>
+                                            setUsername(
+                                                e.target.value
+                                            )
+                                        }
+                                        autoComplete="username"
+                                        icon={
+                                            <LuAtSign
+                                                className="h-5 w-5"
+                                            />
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* =================================================
+                                    MOBILE + EMAIL
+                                   ================================================= */}
+
+                                <div
+                                    className="
+                                        grid
+                                        grid-cols-1
+                                        gap-4
+                                        sm:grid-cols-2
+                                    "
+                                >
+
+                                    <FloatingField
+                                        label="Mobile Number"
+                                        value={mobile}
+                                        onChange={(e) =>
+                                            setMobile(
+                                                e.target.value
+                                            )
+                                        }
+                                        type="tel"
+                                        autoComplete="tel"
+                                        maxLength={15}
+                                        icon={
+                                            <MdPhone />
+                                        }
+                                    />
+
+
+                                    <FloatingField
+                                        label="Email Address"
                                         value={email}
                                         onChange={(e) =>
                                             setEmail(
                                                 e.target.value
                                             )
                                         }
-                                        placeholder=" "
-                                        required
+                                        type="email"
                                         autoComplete="email"
-                                        className="
-                                            peer
-                                            h-14
-                                            w-full
-                                            rounded-xl
-                                            border
-                                            border-border
-                                            bg-secondary/5
-                                            px-4
-                                            pr-12
-                                            text-sm
-                                            text-text
-                                            outline-none
-                                            transition-all
-                                            duration-300
-                                            hover:border-border-strong
-                                            focus:border-primary
-                                            focus:bg-secondary/10
-                                            focus:ring-4
-                                            focus:ring-primary/10
-                                        "
-                                    />
-
-
-                                    <label
-                                        className="
-                                            pointer-events-none
-                                            absolute
-                                            left-4
-                                            top-4
-                                            z-10
-                                            bg-secondary/2
-                                            px-1
-                                            text-sm
-                                            text-text-secondary
-                                            transition-all
-                                            duration-300
-                                            peer-placeholder-shown:top-4
-                                            peer-placeholder-shown:text-sm
-                                            peer-focus:-top-2
-                                            peer-focus:text-xs
-                                            peer-focus:text-primary
-                                            peer-[&:not(:placeholder-shown)]:-top-2
-                                            peer-[&:not(:placeholder-shown)]:text-xs
-                                        "
-                                    >
-                                        Email Address
-                                    </label>
-
-
-                                    <MdAlternateEmail
-                                        className="
-                                            pointer-events-none
-                                            absolute
-                                            right-4
-                                            top-1/2
-                                            -translate-y-1/2
-                                            text-xl
-                                            text-text-secondary
-                                            transition-colors
-                                            duration-300
-                                        "
+                                        icon={
+                                            <MdAlternateEmail />
+                                        }
                                     />
 
                                 </div>
 
 
                                 {/* =================================================
-                                    PASSWORD
+                                    PASSWORD + CONFIRM
                                    ================================================= */}
 
                                 <div
                                     className="
-                                        relative
+                                        grid
+                                        grid-cols-1
+                                        gap-4
+                                        sm:grid-cols-2
                                     "
                                 >
 
-                                    <input
-                                        type={
-                                            showPassword
-                                                ? "text"
-                                                : "password"
-                                        }
+                                    <PasswordField
+                                        label="Password"
                                         value={password}
                                         onChange={(e) =>
                                             setPassword(
                                                 e.target.value
                                             )
                                         }
-                                        placeholder=" "
-                                        required
-                                        autoComplete="current-password"
-                                        className="
-                                            peer
-                                            h-14
-                                            w-full
-                                            rounded-xl
-                                            border
-                                            border-border
-                                            bg-secondary/5
-                                            px-4
-                                            pr-24
-                                            text-sm
-                                            text-text
-                                            outline-none
-                                            transition-all
-                                            duration-300
-                                            hover:border-border-strong
-                                            focus:border-primary
-                                            focus:bg-secondary/10
-                                            focus:ring-4
-                                            focus:ring-primary/10
-                                        "
+                                        showPassword={
+                                            showPassword
+                                        }
+                                        setShowPassword={
+                                            setShowPassword
+                                        }
+                                        autoComplete="new-password"
                                     />
 
 
-                                    <label
+                                    <PasswordField
+                                        label="Confirm Password"
+                                        value={confirmPassword}
+                                        onChange={(e) =>
+                                            setConfirmPassword(
+                                                e.target.value
+                                            )
+                                        }
+                                        showPassword={
+                                            showConfirmPassword
+                                        }
+                                        setShowPassword={
+                                            setShowConfirmPassword
+                                        }
+                                        autoComplete="new-password"
+                                    />
+
+                                </div>
+
+
+                                {/* =================================================
+                                    PASSWORD STRENGTH
+                                   ================================================= */}
+
+                                <div
+                                    className="
+                                        rounded-xl
+                                        border
+                                        border-border
+                                        bg-secondary/5
+                                        px-3.5
+                                        py-3
+                                    "
+                                >
+
+                                    <div
                                         className="
-                                            pointer-events-none
-                                            absolute
-                                            left-4
-                                            top-4
-                                            z-10
-                                            bg-secondary/2
-                                            px-1
-                                            text-sm
-                                            text-text-secondary
-                                            transition-all
-                                            duration-300
-                                            peer-placeholder-shown:top-4
-                                            peer-placeholder-shown:text-sm
-                                            peer-focus:-top-2
-                                            peer-focus:text-xs
-                                            peer-focus:text-primary
-                                            peer-[&:not(:placeholder-shown)]:-top-2
-                                            peer-[&:not(:placeholder-shown)]:text-xs
+                                            flex
+                                            items-center
+                                            justify-between
+                                            gap-4
                                         "
                                     >
-                                        Password
-                                    </label>
+
+                                        <p
+                                            className="
+                                                text-[11px]
+                                                font-medium
+                                                text-text-secondary
+                                            "
+                                        >
+                                            Password strength
+                                        </p>
+
+                                        <p
+                                            className="
+                                                text-[11px]
+                                                font-semibold
+                                                text-text
+                                            "
+                                        >
+                                            {passwordStrength.label}
+                                        </p>
+
+                                    </div>
 
 
-                                    {/* Lock icon */}
-
-                                    <LuLockKeyhole
+                                    <div
                                         className="
-                                            pointer-events-none
-                                            absolute
-                                            right-[52px]
-                                            top-1/2
-                                            h-[18px]
-                                            w-[18px]
-                                            -translate-y-1/2
-                                            text-text-secondary
+                                            mt-2
+                                            grid
+                                            grid-cols-4
+                                            gap-1.5
                                         "
-                                    />
+                                    >
+
+                                        {[1, 2, 3, 4].map(
+                                            (item) => (
+
+                                                <div
+                                                    key={item}
+                                                    className={`
+                                                        h-1
+                                                        rounded-full
+                                                        transition-all
+                                                        duration-500
+                                                        ${
+                                                            passwordStrength.score >= item
+                                                                ? "bg-primary"
+                                                                : "bg-border"
+                                                        }
+                                                    `}
+                                                />
+
+                                            )
+                                        )}
+
+                                    </div>
 
 
-                                    {/* Show / hide */}
+                                    <div
+                                        className="
+                                            mt-2
+                                            flex
+                                            items-center
+                                            gap-1.5
+                                        "
+                                    >
 
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setShowPassword(
+                                        {password.length >= 8 ? (
+
+                                            <LuCheck
+                                                className="
+                                                    h-3.5
+                                                    w-3.5
+                                                    text-secondary
+                                                "
+                                            />
+
+                                        ) : null}
+
+                                        <p
+                                            className="
+                                                text-[11px]
+                                                text-text-muted
+                                            "
+                                        >
+                                            Use 8+ characters with
+                                            uppercase letters,
+                                            numbers, or symbols.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                {/* =================================================
+                                    PASSWORD MATCH
+                                   ================================================= */}
+
+                                {confirmPassword && (
+
+                                    <div
+                                        className={`
+                                            flex
+                                            items-center
+                                            gap-2
+                                            text-xs
+                                            font-medium
+                                            ${
+                                                passwordMatches
+                                                    ? "text-secondary"
+                                                    : "text-danger"
+                                            }
+                                        `}
+                                    >
+
+                                        {passwordMatches ? (
+                                            <LuCheck className="h-4 w-4" />
+                                        ) : (
+                                            <span
+                                                className="
+                                                    flex
+                                                    h-4
+                                                    w-4
+                                                    items-center
+                                                    justify-center
+                                                    rounded-full
+                                                    border
+                                                    border-current
+                                                    text-[9px]
+                                                "
+                                            >
+                                                !
+                                            </span>
+                                        )}
+
+                                        {passwordMatches
+                                            ? "Passwords match."
+                                            : "Passwords do not match."
+                                        }
+
+                                    </div>
+
+                                )}
+
+
+                                {/* =================================================
+                                    TERMS
+                                   ================================================= */}
+
+                                <label
+                                    className="
+                                        flex
+                                        cursor-pointer
+                                        items-start
+                                        gap-3
+                                        rounded-xl
+                                        border
+                                        border-transparent
+                                        p-1
+                                        transition-colors
+                                        duration-300
+                                        hover:border-border
+                                    "
+                                >
+
+                                    <input
+                                        type="checkbox"
+                                        checked={acceptTerms}
+                                        onChange={() =>
+                                            setAcceptTerms(
                                                 (previous) =>
                                                     !previous
                                             )
                                         }
                                         className="
-                                            absolute
-                                            right-2
-                                            top-1/2
-                                            flex
-                                            h-10
-                                            w-10
-                                            -translate-y-1/2
-                                            items-center
-                                            justify-center
-                                            rounded-full
-                                            text-text-secondary
-                                            transition-all
-                                            duration-300
-                                            hover:bg-primary/10
-                                            hover:text-primary
-                                        "
-                                        aria-label={
-                                            showPassword
-                                                ? "Hide password"
-                                                : "Show password"
-                                        }
-                                    >
-
-                                        {showPassword ? (
-
-                                            <LuEyeOff
-                                                className="
-                                                    h-5
-                                                    w-5
-                                                "
-                                            />
-
-                                        ) : (
-
-                                            <LuEye
-                                                className="
-                                                    h-5
-                                                    w-5
-                                                "
-                                            />
-
-                                        )}
-
-                                    </button>
-
-                                </div>
-
-
-                                {/* =================================================
-                                    REMEMBER / FORGOT
-                                   ================================================= */}
-
-                                <div
-                                    className="
-                                        flex
-                                        items-center
-                                        justify-between
-                                        gap-4
-                                        pt-1
-                                        text-sm
-                                    "
-                                >
-
-                                    <label
-                                        className="
-                                            flex
+                                            mt-0.5
+                                            h-4
+                                            w-4
+                                            shrink-0
                                             cursor-pointer
-                                            items-center
-                                            gap-2.5
-                                            text-text-secondary
+                                            rounded
+                                            border-border
+                                            accent-primary
                                         "
-                                    >
+                                    />
 
-                                        <input
-                                            type="checkbox"
-                                            checked={rememberMe}
-                                            onChange={() =>
-                                                setRememberMe(
-                                                    (previous) =>
-                                                        !previous
-                                                )
-                                            }
-                                            className="
-                                                h-4
-                                                w-4
-                                                cursor-pointer
-                                                rounded
-                                                border-border
-                                                accent-primary
-                                            "
-                                        />
-
-                                        Remember me
-
-                                    </label>
-
-
-                                    <Link
-                                        to="/forgot-password"
+                                    <span
                                         className="
-                                            font-medium
+                                            text-[12px]
+                                            leading-5
                                             text-text-secondary
-                                            transition-colors
-                                            duration-300
-                                            hover:text-primary
                                         "
                                     >
-                                        Forgot Password?
-                                    </Link>
+                                        I agree to the{" "}
 
-                                </div>
+                                        <span
+                                            className="
+                                                font-semibold
+                                                text-primary
+                                            "
+                                        >
+                                            Terms of Service
+                                        </span>
+
+                                        {" "}and{" "}
+
+                                        <span
+                                            className="
+                                                font-semibold
+                                                text-primary
+                                            "
+                                        >
+                                            Privacy Policy
+                                        </span>
+                                        .
+                                    </span>
+
+                                </label>
 
 
                                 {/* =================================================
-                                    SUBMIT BUTTON
+                                    SUBMIT
                                    ================================================= */}
 
                                 <button
@@ -1362,7 +1808,7 @@ export default function Login() {
                                     className="
                                         group
                                         relative
-                                        mt-2
+                                        mt-1
                                         flex
                                         w-full
                                         items-center
@@ -1414,8 +1860,8 @@ export default function Login() {
                                         "
                                     >
                                         {submitting
-                                            ? "Signing In..."
-                                            : "Sign In"
+                                            ? "Creating Account..."
+                                            : "Create Account"
                                         }
                                     </span>
 
@@ -1440,21 +1886,22 @@ export default function Login() {
 
 
                                 {/* =================================================
-                                    SIGNUP
+                                    LOGIN
                                    ================================================= */}
 
                                 <p
                                     className="
-                                        pt-2
+                                        pt-1
                                         text-center
                                         text-sm
                                         text-text-secondary
                                     "
                                 >
-                                    Don't have an account?{" "}
+
+                                    Already have an account?{" "}
 
                                     <Link
-                                        to="/signup"
+                                        to="/login"
                                         className="
                                             font-semibold
                                             text-primary
@@ -1463,39 +1910,10 @@ export default function Login() {
                                             hover:text-primary-dark
                                         "
                                     >
-                                        Sign Up
+                                        Sign In
                                     </Link>
 
                                 </p>
-
-
-                                {/* =================================================
-                                    SUPPORT
-                                   ================================================= */}
-
-                                <div
-                                    className="
-                                        flex
-                                        items-center
-                                        justify-center
-                                        gap-1.5
-                                        pt-1
-                                        text-xs
-                                        text-text-muted
-                                    "
-                                >
-
-                                    <LuShieldCheck
-                                        className="
-                                            h-3.5
-                                            w-3.5
-                                        "
-                                    />
-
-                                    Your account and energy data
-                                    are protected.
-
-                                </div>
 
                             </form>
 
@@ -1521,11 +1939,11 @@ export default function Login() {
                                     text-text-secondary
                                 "
                             >
-                                Monitor your energy.
+                                Smarter energy.
                                 {" "}
 
                                 <span className="text-primary">
-                                    Make every unit count.
+                                    Better decisions.
                                 </span>
                             </p>
 
@@ -1540,4 +1958,5 @@ export default function Login() {
         </main>
 
     );
+
 }

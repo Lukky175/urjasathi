@@ -58,7 +58,7 @@ import Home from "./pages/Home/Home";
 import FAQ from "./pages/FAQ/FAQ";
 import Contact from "./pages/Contact/Contact";
 import Login from "./pages/Login/Login";
-
+import Signup from "./pages/Signup/Signup";
 
 /* ============================================================================
    DASHBOARD PAGES
@@ -173,6 +173,11 @@ function AppContent() {
                 <Route
                     path="/login"
                     element={<Login />}
+                />
+
+                <Route
+                    path="/Signup"
+                    element={<Signup />}
                 />
 
 
