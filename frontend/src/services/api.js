@@ -8,10 +8,14 @@ export class ApiError extends Error {
         this.status = status;
         this.payload = payload;
         this.code = code;
+        this.response = {
+            status,
+            data: payload,
+        };
     }
 }
 
-async function request(path, { method = "GET", params, body, signal, headers: customHeaders, timeout = DEFAULT_TIMEOUT_MS } = {}) {
+async function request(path, { method = "GET", params, body, signal, headers: customHeaders, credentials = "include", timeout = DEFAULT_TIMEOUT_MS } = {}) {
     const url = new URL(path, BASE_URL);
 
     if (params) {
@@ -38,13 +42,19 @@ async function request(path, { method = "GET", params, body, signal, headers: cu
         }
     }
 
+    const token = typeof window !== "undefined"
+        ? (localStorage.getItem("access_token") || sessionStorage.getItem("access_token"))
+        : null;
+
     const headers = {
         Accept: "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...customHeaders,
     };
     const init = {
         method,
         headers,
+        credentials,
         signal: controller.signal,
     };
 

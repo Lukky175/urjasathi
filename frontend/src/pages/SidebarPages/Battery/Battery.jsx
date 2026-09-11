@@ -616,7 +616,7 @@ export default function Battery() {
                                         text-text
                                     "
                                 >
-                                    7.8 / 10 kWh
+                                    180 / 200 kWh
                                 </span>
 
                             </div>
@@ -1020,10 +1020,9 @@ export default function Battery() {
                                                 transition-all
                                                 duration-500
                                                 sm:w-7
-                                                ${
-                                                    isCharging
-                                                        ? "bg-primary/75 hover:bg-primary"
-                                                        : "bg-emerald-500/70 hover:bg-emerald-500"
+                                                ${isCharging
+                                                    ? "bg-primary/75 hover:bg-primary"
+                                                    : "bg-emerald-500/70 hover:bg-emerald-500"
                                                 }
                                             `}
                                             style={{
