@@ -2,15 +2,16 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 const DEFAULT_TIMEOUT_MS = 25000;
 
 export class ApiError extends Error {
-    constructor(message, status, payload) {
+    constructor(message, status, payload, code = null) {
         super(message);
         this.name = "ApiError";
         this.status = status;
         this.payload = payload;
+        this.code = code;
     }
 }
 
-async function request(path, { method = "GET", params, signal, timeout = DEFAULT_TIMEOUT_MS } = {}) {
+async function request(path, { method = "GET", params, body, signal, headers: customHeaders, timeout = DEFAULT_TIMEOUT_MS } = {}) {
     const url = new URL(path, BASE_URL);
 
     if (params) {
@@ -22,49 +23,101 @@ async function request(path, { method = "GET", params, signal, timeout = DEFAULT
     }
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    let timeoutTriggered = false;
+    const timeoutId = setTimeout(() => {
+        timeoutTriggered = true;
+        controller.abort();
+    }, timeout);
 
+    const abortHandler = () => controller.abort();
     if (signal) {
-        signal.addEventListener("abort", () => controller.abort(), { once: true });
+        if (signal.aborted) {
+            controller.abort();
+        } else {
+            signal.addEventListener("abort", abortHandler, { once: true });
+        }
+    }
+
+    const headers = {
+        Accept: "application/json",
+        ...customHeaders,
+    };
+    const init = {
+        method,
+        headers,
+        signal: controller.signal,
+    };
+
+    if (body !== undefined) {
+        headers["Content-Type"] = customHeaders?.["Content-Type"] || "application/json";
+        init.body = typeof body === "string" ? body : JSON.stringify(body);
     }
 
     try {
-        const response = await fetch(url.toString(), {
-            method,
-            headers: { Accept: "application/json" },
-            signal: controller.signal,
-        });
+        const response = await fetch(url.toString(), init);
+
+        if (response.status === 204) {
+            return null;
+        }
+
+        let payload = null;
+        const raw = await response.text();
+        if (raw) {
+            try {
+                payload = JSON.parse(raw);
+            } catch {
+                if (response.ok) {
+                    throw new ApiError(
+                        `Request to ${path} returned invalid JSON`,
+                        response.status,
+                        raw,
+                        "MALFORMED"
+                    );
+                }
+            }
+        }
 
         if (!response.ok) {
-            let payload = null;
-            try {
-                payload = await response.json();
-            } catch {
-                // No JSON body on this error response - that's fine.
-            }
             throw new ApiError(
                 `Request to ${path} failed with status ${response.status}`,
                 response.status,
-                payload
+                payload,
+                "HTTP"
             );
         }
 
-        return await response.json();
+        if (payload === null) {
+            throw new ApiError(
+                `Request to ${path} returned an unexpected response`,
+                response.status,
+                payload,
+                "MALFORMED"
+            );
+        }
+
+        return payload;
     } catch (err) {
         if (err.name === "AbortError") {
-            throw new ApiError(`Request to ${path} timed out or was cancelled`, 0, null);
+            if (timeoutTriggered) {
+                throw new ApiError(`Request to ${path} timed out`, 0, null, "TIMEOUT");
+            }
+            throw new ApiError(`Request to ${path} was cancelled`, 0, null, "ABORTED");
         }
         if (err instanceof ApiError) {
             throw err;
         }
-        throw new ApiError(err.message || "Network error while calling the API", 0, null);
+        throw new ApiError(err.message || "Network error while calling the API", 0, null, "NETWORK");
     } finally {
         clearTimeout(timeoutId);
+        if (signal) {
+            signal.removeEventListener("abort", abortHandler);
+        }
     }
 }
 
 export const api = {
     get: (path, options) => request(path, { ...options, method: "GET" }),
+    post: (path, body, options) => request(path, { ...options, method: "POST", body }),
 };
 
 export default api;
