@@ -6,8 +6,8 @@ from dataclasses import asdict
 
 import pandas as pd
 
-from backend.app.core.config import PERCENT_SCALE
-from backend.app.services.schemas import MetricsComparison, OptimizationResult
+from app.core.config import PERCENT_SCALE
+from app.services.schemas import MetricsComparison, OptimizationResult
 
 
 def reduction_pct(baseline_value: float, optimized_value: float) -> float:
@@ -43,3 +43,4 @@ def compare_performance(
             _peak_grid_kw(baseline_result), _peak_grid_kw(opt_result)
         ),
     )
+

@@ -1,0 +1,58 @@
+{
+  "model1a_walk_forward_cv": {
+    "num_features": 44,
+    "mean_r2": 0.9369,
+    "std_r2": 0.0151,
+    "mean_mae_kw": 2.061,
+    "mean_rmse_kw": 3.374,
+    "mean_mape_pct": 6.73,
+    "mean_cv_rmse_pct": 11.11,
+    "fold_details": [
+      {
+        "fold": 1,
+        "test_hours": 3832,
+        "MAE_kW": 1.44,
+        "RMSE_kW": 2.267,
+        "MAPE_pct": 5.9,
+        "CV_RMSE_pct": 9.35,
+        "R2_score": 0.935
+      },
+      {
+        "fold": 2,
+        "test_hours": 3832,
+        "MAE_kW": 2.215,
+        "RMSE_kW": 3.576,
+        "MAPE_pct": 7.02,
+        "CV_RMSE_pct": 10.86,
+        "R2_score": 0.9387
+      },
+      {
+        "fold": 3,
+        "test_hours": 3832,
+        "MAE_kW": 1.646,
+        "RMSE_kW": 2.823,
+        "MAPE_pct": 5.58,
+        "CV_RMSE_pct": 9.83,
+        "R2_score": 0.9541
+      },
+      {
+        "fold": 4,
+        "test_hours": 3832,
+        "MAE_kW": 1.844,
+        "RMSE_kW": 3.063,
+        "MAPE_pct": 5.81,
+        "CV_RMSE_pct": 9.7,
+        "R2_score": 0.9436
+      },
+      {
+        "fold": 5,
+        "test_hours": 3832,
+        "MAE_kW": 3.161,
+        "RMSE_kW": 5.143,
+        "MAPE_pct": 9.34,
+        "CV_RMSE_pct": 15.81,
+        "R2_score": 0.9132
+      }
+    ]
+  }
+}

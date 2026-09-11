@@ -7,7 +7,7 @@ from typing import Sequence
 import numpy as np
 import pulp
 
-from backend.app.core.config import (
+from app.core.config import (
     BATTERY_DEFAULT_CAPACITY,
     BATTERY_EFFICIENCY,
     BATTERY_INITIAL_SOC,
@@ -21,13 +21,13 @@ from backend.app.core.config import (
     SOLVER_TIME_LIMIT_SECONDS,
     TIME_STEP_HOURS,
 )
-from backend.app.services.schemas import (
+from app.services.schemas import (
     HourlyEnergyFlow,
     OptimizationResult,
     build_optimization_result,
     values_for_horizon,
 )
-from backend.app.services.tariff import feed_in_rate_vector, tou_rate_vector
+from app.services.tariff import feed_in_rate_vector, tou_rate_vector
 
 
 def _non_negative_horizon(values: Sequence[float]) -> np.ndarray:
@@ -119,3 +119,4 @@ def run_pulp_optimization(
 
     total_cost_inr = float(np.sum((grid_kw * tariffs - export_kw * feed_in) * dt))
     return build_optimization_result(flows, total_cost_inr)
+

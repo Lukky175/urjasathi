@@ -52,9 +52,9 @@ class Settings(BaseModel):
     TARGET_PEAK_REDUCTION_PCT: float = 10.0
 
     # --- Model artifacts and site defaults ---
-    MODEL_1A_PATH: str = "backend/app/models/model1a_xgb.json"
-    MODEL_1B_PATH: str = "backend/app/models/model1b_xgb.json"
-    SOLAR_DATA_PATH: str = "backend/app/models/solar_delhi.csv"
+    MODEL_1A_PATH: str = "backend/models_saved/model1a_xgb.json"
+    MODEL_1B_PATH: str = "backend/models_saved/model1b_xgb.json"
+    SOLAR_DATA_PATH: str = "data/processed/model2_train.csv"
     DEFAULT_SITE: str = "delhi"
     DEFAULT_CAPACITY_SCALE: float = 1.0
     DEFAULT_PV_CAPACITY_KWP: float = 40.0

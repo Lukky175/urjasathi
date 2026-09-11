@@ -1,4 +1,4 @@
-﻿from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.services.auth import decode_access_token
 from app.db.mongo import users_collection
@@ -21,3 +21,4 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     if user_doc is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user_doc
+

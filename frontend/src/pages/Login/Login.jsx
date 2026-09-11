@@ -4,7 +4,7 @@
  * Project     : UrjaSathi
  *
  * Description:
- * Public authentication page for UrjaSathi.
+ * Premium public authentication page for UrjaSathi.
  *
  * Responsibilities:
  * - Collect user credentials
@@ -18,6 +18,7 @@
  */
 
 import { useEffect, useState } from "react";
+
 import {
     Link,
     useLocation,
@@ -29,11 +30,13 @@ import {
 } from "react-icons/md";
 
 import {
+    LuChartNoAxesCombined,
     LuEye,
     LuEyeOff,
-    LuZap,
+    LuLockKeyhole,
     LuShieldCheck,
-    LuChartNoAxesCombined,
+    LuSparkles,
+    LuZap,
 } from "react-icons/lu";
 
 import {
@@ -133,6 +136,7 @@ export default function Login() {
         setSubmitting(true);
         setError("");
 
+
         try {
 
             await login(
@@ -140,9 +144,11 @@ export default function Login() {
                 password
             );
 
+
             toast.success(
                 "Welcome back!"
             );
+
 
             navigate(from, {
                 replace: true,
@@ -185,9 +191,9 @@ export default function Login() {
             "
         >
 
-            {/* ================================================================
+            {/* =================================================================
                 BACKGROUND ATMOSPHERE
-               ================================================================ */}
+               ================================================================= */}
 
             <div
                 className="
@@ -203,30 +209,50 @@ export default function Login() {
                 <div
                     className="
                         absolute
-                        -left-56
-                        top-20
-                        h-[520px]
-                        w-[520px]
+                        -left-64
+                        -top-40
+                        h-[600px]
+                        w-[600px]
                         rounded-full
                         bg-primary/10
                         blur-[150px]
                     "
                 />
 
+
                 {/* Teal atmosphere */}
 
                 <div
                     className="
                         absolute
-                        -right-56
-                        bottom-0
-                        h-[520px]
-                        w-[520px]
+                        -right-64
+                        bottom-[-100px]
+                        h-[650px]
+                        w-[650px]
                         rounded-full
                         bg-secondary/10
-                        blur-[150px]
+                        blur-[160px]
                     "
                 />
+
+
+                {/* Central glow */}
+
+                <div
+                    className="
+                        absolute
+                        left-1/2
+                        top-1/2
+                        h-[450px]
+                        w-[450px]
+                        -translate-x-1/2
+                        -translate-y-1/2
+                        rounded-full
+                        bg-primary/5
+                        blur-[130px]
+                    "
+                />
+
 
                 {/* Subtle grid */}
 
@@ -243,9 +269,9 @@ export default function Login() {
             </div>
 
 
-            {/* ================================================================
+            {/* =================================================================
                 MAIN CONTENT
-               ================================================================ */}
+               ================================================================= */}
 
             <section
                 className="
@@ -256,9 +282,10 @@ export default function Login() {
                     items-center
                     justify-center
                     px-4
-                    py-24
+                    py-20
                     sm:px-6
                     lg:px-8
+                    lg:py-24
                 "
             >
 
@@ -272,13 +299,13 @@ export default function Login() {
                         items-center
                         gap-10
                         lg:grid-cols-[0.9fr_1.1fr]
-                        lg:gap-14
+                        lg:gap-16
                     "
                 >
 
-                    {/* ========================================================
-                        LEFT CONTENT
-                    ======================================================== */}
+                    {/* =========================================================
+                        LEFT — PRODUCT STORY
+                       ========================================================= */}
 
                     <div
                         className="
@@ -287,38 +314,55 @@ export default function Login() {
                         "
                     >
 
-                        {/* Icon */}
+                        {/* Brand icon */}
 
                         <div
                             className="
-                                group
+                                relative
                                 flex
-                                h-11
-                                w-11
+                                h-12
+                                w-12
                                 items-center
                                 justify-center
-                                rounded-xl
+                                rounded-2xl
                                 bg-primary/10
                                 text-primary
-                                transition-colors
-                                duration-300
-                                hover:bg-primary
-                                hover:text-white
                             "
                         >
-                            <LuZap className="h-5 w-5" />
+
+                            <LuZap
+                                className="
+                                    h-6
+                                    w-6
+                                "
+                            />
+
+
+                            {/* Animated ring */}
+
+                            <span
+                                className="
+                                    absolute
+                                    inset-0
+                                    rounded-2xl
+                                    border
+                                    border-primary/20
+                                    animate-ping
+                                "
+                            />
+
                         </div>
 
 
-                        {/* Label */}
+                        {/* Brand label */}
 
                         <p
                             className="
-                                mt-5
+                                mt-6
                                 text-[11px]
                                 font-semibold
                                 uppercase
-                                tracking-[0.2em]
+                                tracking-[0.22em]
                                 text-primary
                             "
                         >
@@ -326,21 +370,23 @@ export default function Login() {
                         </p>
 
 
-                        {/* Heading */}
+                        {/* Main heading */}
 
                         <h1
                             className="
                                 mt-3
-                                max-w-lg
+                                max-w-xl
                                 text-[3.5rem]
                                 font-semibold
-                                leading-[0.96]
-                                tracking-[-0.055em]
+                                leading-[0.95]
+                                tracking-[-0.06em]
                                 text-text
-                                xl:text-[4rem]
+                                xl:text-[4.25rem]
                             "
                         >
-                            Power your {" "}
+
+                            Power your
+                            <br />
 
                             <span className="text-primary">
                                 energy.
@@ -353,147 +399,440 @@ export default function Login() {
 
                         <p
                             className="
-                                mt-5
-                                max-w-[480px]
+                                mt-6
+                                max-w-[500px]
                                 text-base
                                 font-medium
                                 leading-7
                                 text-text-secondary
                             "
                         >
-                            Sign in to your UrjaSathi account and keep track of
-                            your energy consumption, generation, and renewable
-                            energy insights.
+                            Sign in to your UrjaSathi account and
+                            keep track of your energy consumption,
+                            generation, and renewable energy insights.
                         </p>
 
 
-                        {/* Feature list */}
+                        {/* =====================================================
+                            ENERGY VISUALIZATION
+                           ===================================================== */}
 
                         <div
                             className="
-                                mt-8
-                                space-y-4
+                                relative
+                                mt-10
+                                h-[205px]
+                                w-full
+                                max-w-[500px]
+                                overflow-hidden
+                                rounded-3xl
+                                border
+                                border-border
+                                bg-surface/70
+                                shadow-[0_20px_60px_rgba(108,29,95,0.08)]
+                                backdrop-blur-sm
                             "
                         >
 
-                            {/* ------------------------------------------------
-                                Monitor your energy
-                            ------------------------------------------------ */}
+                            {/* Decorative grid */}
 
                             <div
                                 className="
-                                    group
+                                    absolute
+                                    inset-0
+                                    opacity-[0.035]
+                                    [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)]
+                                    [background-size:36px_36px]
+                                "
+                            />
+
+
+                            {/* Outer orbit */}
+
+                            <div
+                                className="
+                                    absolute
+                                    left-1/2
+                                    top-1/2
+                                    h-36
+                                    w-36
+                                    -translate-x-1/2
+                                    -translate-y-1/2
+                                    rounded-full
+                                    border
+                                    border-primary/10
+                                    animate-[spin_18s_linear_infinite]
+                                "
+                            >
+
+                                <div
+                                    className="
+                                        absolute
+                                        -right-1
+                                        top-1/2
+                                        h-2.5
+                                        w-2.5
+                                        -translate-y-1/2
+                                        rounded-full
+                                        bg-primary
+                                        shadow-lg
+                                        shadow-primary/30
+                                    "
+                                />
+
+                            </div>
+
+
+                            {/* Inner orbit */}
+
+                            <div
+                                className="
+                                    absolute
+                                    left-1/2
+                                    top-1/2
+                                    h-24
+                                    w-24
+                                    -translate-x-1/2
+                                    -translate-y-1/2
+                                    rounded-full
+                                    border
+                                    border-secondary/20
+                                    animate-[spin_12s_linear_infinite_reverse]
+                                "
+                            >
+
+                                <div
+                                    className="
+                                        absolute
+                                        -left-1
+                                        top-1/2
+                                        h-2
+                                        w-2
+                                        -translate-y-1/2
+                                        rounded-full
+                                        bg-secondary
+                                    "
+                                />
+
+                            </div>
+
+
+                            {/* Energy center */}
+
+                            <div
+                                className="
+                                    absolute
+                                    left-1/2
+                                    top-1/2
                                     flex
+                                    h-14
+                                    w-14
+                                    -translate-x-1/2
+                                    -translate-y-1/2
                                     items-center
-                                    gap-3.5
+                                    justify-center
+                                    rounded-2xl
+                                    bg-primary
+                                    text-white
+                                    shadow-xl
+                                    shadow-primary/20
+                                "
+                            >
+
+                                <LuZap
+                                    className="
+                                        h-6
+                                        w-6
+                                    "
+                                />
+
+                            </div>
+
+
+                            {/* =================================================
+                                Floating card — Energy
+                               ================================================= */}
+
+                            <div
+                                className="
+                                    absolute
+                                    left-5
+                                    top-5
+                                    rounded-2xl
+                                    border
+                                    border-border
+                                    bg-surface/90
+                                    px-3.5
+                                    py-2.5
+                                    shadow-lg
+                                    backdrop-blur-sm
+                                    animate-bounce
+                                    [animation-duration:4s]
                                 "
                             >
 
                                 <div
                                     className="
                                         flex
-                                        h-10
-                                        w-10
-                                        shrink-0
                                         items-center
-                                        justify-center
-                                        rounded-xl
-                                        bg-primary/10
-                                        text-primary
-                                        transition-colors
-                                        duration-300
-                                        group-hover:bg-primary
-                                        group-hover:text-white
+                                        gap-2
                                     "
                                 >
-                                    <LuChartNoAxesCombined className="h-[18px] w-[18px]" />
-                                </div>
 
-                                <div>
-
-                                    <p
+                                    <div
                                         className="
-                                            text-sm
-                                            font-semibold
-                                            text-text
+                                            flex
+                                            h-7
+                                            w-7
+                                            items-center
+                                            justify-center
+                                            rounded-lg
+                                            bg-secondary/10
+                                            text-secondary
                                         "
                                     >
-                                        Monitor your energy
-                                    </p>
 
-                                    <p
-                                        className="
-                                            mt-0.5
-                                            text-[13px]
-                                            leading-5
-                                            text-text-secondary
-                                        "
-                                    >
-                                        Understand where your energy is being used.
-                                    </p>
+                                        <LuChartNoAxesCombined
+                                            className="
+                                                h-3.5
+                                                w-3.5
+                                            "
+                                        />
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <p
+                                            className="
+                                                text-[9px]
+                                                uppercase
+                                                tracking-wider
+                                                text-text-muted
+                                            "
+                                        >
+                                            Dashboard
+                                        </p>
+
+                                        <p
+                                            className="
+                                                text-xs
+                                                font-semibold
+                                                text-text
+                                            "
+                                        >
+                                            Energy insights
+                                        </p>
+
+                                    </div>
 
                                 </div>
 
                             </div>
 
 
-                            {/* ------------------------------------------------
-                                Secure access
-                            ------------------------------------------------ */}
+                            {/* =================================================
+                                Floating card — Security
+                               ================================================= */}
 
                             <div
                                 className="
-                                    group
-                                    flex
-                                    items-center
-                                    gap-3.5
+                                    absolute
+                                    bottom-5
+                                    right-5
+                                    rounded-2xl
+                                    border
+                                    border-border
+                                    bg-surface/90
+                                    px-3.5
+                                    py-2.5
+                                    shadow-lg
+                                    backdrop-blur-sm
+                                    animate-bounce
+                                    [animation-duration:5s]
+                                    [animation-delay:1s]
                                 "
                             >
 
                                 <div
                                     className="
                                         flex
-                                        h-10
-                                        w-10
-                                        shrink-0
                                         items-center
-                                        justify-center
-                                        rounded-xl
-                                        bg-primary/10
-                                        text-primary
-                                        transition-colors
-                                        duration-300
-                                        group-hover:bg-primary
-                                        group-hover:text-white
+                                        gap-2
                                     "
                                 >
-                                    <LuShieldCheck className="h-[18px] w-[18px]" />
-                                </div>
 
-                                <div>
-
-                                    <p
+                                    <div
                                         className="
-                                            text-sm
-                                            font-semibold
-                                            text-text
+                                            flex
+                                            h-7
+                                            w-7
+                                            items-center
+                                            justify-center
+                                            rounded-lg
+                                            bg-primary/10
+                                            text-primary
                                         "
                                     >
-                                        Secure access
-                                    </p>
 
-                                    <p
-                                        className="
-                                            mt-0.5
-                                            text-[13px]
-                                            leading-5
-                                            text-text-secondary
-                                        "
-                                    >
-                                        Your energy data stays protected.
-                                    </p>
+                                        <LuShieldCheck
+                                            className="
+                                                h-3.5
+                                                w-3.5
+                                            "
+                                        />
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <p
+                                            className="
+                                                text-[9px]
+                                                uppercase
+                                                tracking-wider
+                                                text-text-muted
+                                            "
+                                        >
+                                            Security
+                                        </p>
+
+                                        <p
+                                            className="
+                                                text-xs
+                                                font-semibold
+                                                text-text
+                                            "
+                                        >
+                                            Protected access
+                                        </p>
+
+                                    </div>
 
                                 </div>
+
+                            </div>
+
+                        </div>
+
+
+                        {/* =====================================================
+                            BENEFITS
+                           ===================================================== */}
+
+                        <div
+                            className="
+                                mt-8
+                                grid
+                                grid-cols-2
+                                gap-3
+                            "
+                        >
+
+                            {/* Monitor */}
+
+                            <div
+                                className="
+                                    rounded-2xl
+                                    border
+                                    border-border
+                                    bg-surface/60
+                                    p-4
+                                    backdrop-blur-sm
+                                    transition-all
+                                    duration-300
+                                    hover:-translate-y-1
+                                    hover:shadow-lg
+                                "
+                            >
+
+                                <LuChartNoAxesCombined
+                                    className="
+                                        h-5
+                                        w-5
+                                        text-primary
+                                    "
+                                />
+
+
+                                <p
+                                    className="
+                                        mt-3
+                                        text-sm
+                                        font-semibold
+                                        text-text
+                                    "
+                                >
+                                    Monitor smarter
+                                </p>
+
+
+                                <p
+                                    className="
+                                        mt-1
+                                        text-xs
+                                        leading-5
+                                        text-text-secondary
+                                    "
+                                >
+                                    Understand where your energy
+                                    is being used.
+                                </p>
+
+                            </div>
+
+
+                            {/* Insights */}
+
+                            <div
+                                className="
+                                    rounded-2xl
+                                    border
+                                    border-border
+                                    bg-surface/60
+                                    p-4
+                                    backdrop-blur-sm
+                                    transition-all
+                                    duration-300
+                                    hover:-translate-y-1
+                                    hover:shadow-lg
+                                "
+                            >
+
+                                <LuSparkles
+                                    className="
+                                        h-5
+                                        w-5
+                                        text-secondary
+                                    "
+                                />
+
+
+                                <p
+                                    className="
+                                        mt-3
+                                        text-sm
+                                        font-semibold
+                                        text-text
+                                    "
+                                >
+                                    Better decisions
+                                </p>
+
+
+                                <p
+                                    className="
+                                        mt-1
+                                        text-xs
+                                        leading-5
+                                        text-text-secondary
+                                    "
+                                >
+                                    Turn energy data into
+                                    useful insights.
+                                </p>
 
                             </div>
 
@@ -502,9 +841,9 @@ export default function Login() {
                     </div>
 
 
-                    {/* ========================================================
-                        LOGIN CARD
-                       ======================================================== */}
+                    {/* =========================================================
+                        RIGHT — LOGIN CARD
+                       ========================================================= */}
 
                     <div
                         className="
@@ -518,42 +857,129 @@ export default function Login() {
 
                         <div
                             className="
-                                rounded-3xl
+                                relative
+                                overflow-hidden
+                                rounded-[28px]
                                 border
                                 border-border
                                 bg-surface
-                                p-7
+                                p-6
                                 shadow-[0_25px_80px_rgba(0,0,0,0.08)]
-                                sm:p-10
-                                lg:p-11
+                                transition-shadow
+                                duration-500
+                                hover:shadow-[0_30px_90px_rgba(108,29,95,0.12)]
+                                sm:p-9
+                                lg:p-10
                             "
                         >
 
-                            {/* ------------------------------------------------
-                                Card heading
-                               ------------------------------------------------ */}
+                            {/* -------------------------------------------------
+                                Card decorative glow
+                               ------------------------------------------------- */}
 
-                            <div>
+                            <div
+                                className="
+                                    pointer-events-none
+                                    absolute
+                                    -right-20
+                                    -top-20
+                                    h-48
+                                    w-48
+                                    rounded-full
+                                    bg-secondary/10
+                                    blur-3xl
+                                "
+                            />
 
-                                <p
+
+                            <div
+                                className="
+                                    pointer-events-none
+                                    absolute
+                                    -bottom-24
+                                    -left-20
+                                    h-48
+                                    w-48
+                                    rounded-full
+                                    bg-primary/10
+                                    blur-3xl
+                                "
+                            />
+
+
+                            {/* -------------------------------------------------
+                                Header
+                               ------------------------------------------------- */}
+
+                            <div
+                                className="
+                                    relative
+                                "
+                            >
+
+                                <div
                                     className="
-                                        text-xs
-                                        font-semibold
-                                        uppercase
-                                        tracking-[0.2em]
-                                        text-primary
+                                        flex
+                                        items-center
+                                        justify-between
+                                        gap-4
                                     "
                                 >
-                                    WELCOME BACK
-                                </p>
+
+                                    <p
+                                        className="
+                                            text-[11px]
+                                            font-semibold
+                                            uppercase
+                                            tracking-[0.22em]
+                                            text-primary
+                                        "
+                                    >
+                                        WELCOME BACK
+                                    </p>
+
+
+                                    <div
+                                        className="
+                                            flex
+                                            items-center
+                                            gap-1.5
+                                            rounded-full
+                                            border
+                                            border-secondary/20
+                                            bg-secondary/5
+                                            px-2.5
+                                            py-1.5
+                                            text-[10px]
+                                            font-semibold
+                                            text-secondary
+                                        "
+                                    >
+
+                                        <span
+                                            className="
+                                                h-1.5
+                                                w-1.5
+                                                rounded-full
+                                                bg-secondary
+                                                animate-pulse
+                                            "
+                                        />
+
+                                        Secure login
+
+                                    </div>
+
+                                </div>
 
 
                                 <h2
                                     className="
                                         mt-3
-                                        text-4xl
+                                        text-[2.3rem]
                                         font-semibold
-                                        tracking-[-0.045em]
+                                        leading-tight
+                                        tracking-[-0.05em]
                                         text-text
                                         sm:text-[2.7rem]
                                     "
@@ -568,8 +994,9 @@ export default function Login() {
                                 <p
                                     className="
                                         mt-3
-                                        text-base
-                                        leading-7
+                                        max-w-lg
+                                        text-sm
+                                        leading-6
                                         text-text-secondary
                                     "
                                 >
@@ -581,14 +1008,16 @@ export default function Login() {
                             </div>
 
 
-                            {/* ------------------------------------------------
+                            {/* -------------------------------------------------
                                 Error message
-                               ------------------------------------------------ */}
+                               ------------------------------------------------- */}
 
                             {error && (
 
                                 <div
+                                    role="alert"
                                     className="
+                                        relative
                                         mt-6
                                         rounded-xl
                                         border
@@ -607,19 +1036,22 @@ export default function Login() {
                             )}
 
 
-                            {/* ------------------------------------------------
+                            {/* -------------------------------------------------
                                 Login form
-                               ------------------------------------------------ */}
+                               ------------------------------------------------- */}
 
                             <form
                                 onSubmit={handleSubmit}
                                 className="
+                                    relative
                                     mt-8
                                     space-y-5
                                 "
                             >
 
-                                {/* Email */}
+                                {/* =================================================
+                                    EMAIL
+                                   ================================================= */}
 
                                 <div
                                     className="
@@ -631,7 +1063,9 @@ export default function Login() {
                                         type="email"
                                         value={email}
                                         onChange={(e) =>
-                                            setEmail(e.target.value)
+                                            setEmail(
+                                                e.target.value
+                                            )
                                         }
                                         placeholder=" "
                                         required
@@ -646,15 +1080,19 @@ export default function Login() {
                                             bg-secondary/5
                                             px-4
                                             pr-12
+                                            text-sm
                                             text-text
                                             outline-none
                                             transition-all
                                             duration-300
+                                            hover:border-border-strong
                                             focus:border-primary
+                                            focus:bg-secondary/10
                                             focus:ring-4
                                             focus:ring-primary/10
                                         "
                                     />
+
 
                                     <label
                                         className="
@@ -662,14 +1100,15 @@ export default function Login() {
                                             absolute
                                             left-4
                                             top-4
-                                            px-1
+                                            z-10
                                             bg-secondary/2
+                                            px-1
                                             text-sm
                                             text-text-secondary
                                             transition-all
                                             duration-300
                                             peer-placeholder-shown:top-4
-                                            peer-placeholder-shown:text-base
+                                            peer-placeholder-shown:text-sm
                                             peer-focus:-top-2
                                             peer-focus:text-xs
                                             peer-focus:text-primary
@@ -680,21 +1119,27 @@ export default function Login() {
                                         Email Address
                                     </label>
 
+
                                     <MdAlternateEmail
                                         className="
                                             pointer-events-none
                                             absolute
                                             right-4
-                                            top-4
+                                            top-1/2
+                                            -translate-y-1/2
                                             text-xl
                                             text-text-secondary
+                                            transition-colors
+                                            duration-300
                                         "
                                     />
 
                                 </div>
 
 
-                                {/* Password */}
+                                {/* =================================================
+                                    PASSWORD
+                                   ================================================= */}
 
                                 <div
                                     className="
@@ -710,7 +1155,9 @@ export default function Login() {
                                         }
                                         value={password}
                                         onChange={(e) =>
-                                            setPassword(e.target.value)
+                                            setPassword(
+                                                e.target.value
+                                            )
                                         }
                                         placeholder=" "
                                         required
@@ -724,16 +1171,20 @@ export default function Login() {
                                             border-border
                                             bg-secondary/5
                                             px-4
-                                            pr-12
+                                            pr-24
+                                            text-sm
                                             text-text
                                             outline-none
                                             transition-all
                                             duration-300
+                                            hover:border-border-strong
                                             focus:border-primary
+                                            focus:bg-secondary/10
                                             focus:ring-4
                                             focus:ring-primary/10
                                         "
                                     />
+
 
                                     <label
                                         className="
@@ -741,6 +1192,7 @@ export default function Login() {
                                             absolute
                                             left-4
                                             top-4
+                                            z-10
                                             bg-secondary/2
                                             px-1
                                             text-sm
@@ -748,7 +1200,7 @@ export default function Login() {
                                             transition-all
                                             duration-300
                                             peer-placeholder-shown:top-4
-                                            peer-placeholder-shown:text-base
+                                            peer-placeholder-shown:text-sm
                                             peer-focus:-top-2
                                             peer-focus:text-xs
                                             peer-focus:text-primary
@@ -760,25 +1212,47 @@ export default function Login() {
                                     </label>
 
 
+                                    {/* Lock icon */}
+
+                                    <LuLockKeyhole
+                                        className="
+                                            pointer-events-none
+                                            absolute
+                                            right-[52px]
+                                            top-1/2
+                                            h-[18px]
+                                            w-[18px]
+                                            -translate-y-1/2
+                                            text-text-secondary
+                                        "
+                                    />
+
+
+                                    {/* Show / hide */}
+
                                     <button
                                         type="button"
                                         onClick={() =>
                                             setShowPassword(
-                                                (prev) => !prev
+                                                (previous) =>
+                                                    !previous
                                             )
                                         }
                                         className="
                                             absolute
-                                            right-3
-                                            top-2
+                                            right-2
+                                            top-1/2
                                             flex
                                             h-10
                                             w-10
+                                            -translate-y-1/2
                                             items-center
                                             justify-center
                                             rounded-full
                                             text-text-secondary
-                                            transition-colors
+                                            transition-all
+                                            duration-300
+                                            hover:bg-primary/10
                                             hover:text-primary
                                         "
                                         aria-label={
@@ -789,9 +1263,23 @@ export default function Login() {
                                     >
 
                                         {showPassword ? (
-                                            <LuEyeOff className="h-5 w-5" />
+
+                                            <LuEyeOff
+                                                className="
+                                                    h-5
+                                                    w-5
+                                                "
+                                            />
+
                                         ) : (
-                                            <LuEye className="h-5 w-5" />
+
+                                            <LuEye
+                                                className="
+                                                    h-5
+                                                    w-5
+                                                "
+                                            />
+
                                         )}
 
                                     </button>
@@ -799,7 +1287,9 @@ export default function Login() {
                                 </div>
 
 
-                                {/* Remember / Forgot */}
+                                {/* =================================================
+                                    REMEMBER / FORGOT
+                                   ================================================= */}
 
                                 <div
                                     className="
@@ -827,7 +1317,8 @@ export default function Login() {
                                             checked={rememberMe}
                                             onChange={() =>
                                                 setRememberMe(
-                                                    (prev) => !prev
+                                                    (previous) =>
+                                                        !previous
                                                 )
                                             }
                                             className="
@@ -861,19 +1352,23 @@ export default function Login() {
                                 </div>
 
 
-                                {/* Submit */}
+                                {/* =================================================
+                                    SUBMIT BUTTON
+                                   ================================================= */}
 
                                 <button
                                     type="submit"
                                     disabled={submitting}
                                     className="
                                         group
+                                        relative
                                         mt-2
                                         flex
                                         w-full
                                         items-center
                                         justify-center
                                         gap-2.5
+                                        overflow-hidden
                                         rounded-full
                                         bg-primary
                                         px-7
@@ -893,16 +1388,43 @@ export default function Login() {
                                     "
                                 >
 
-                                    <span className="!text-white">
+                                    {/* Button shine */}
+
+                                    <span
+                                        className="
+                                            pointer-events-none
+                                            absolute
+                                            inset-y-0
+                                            -left-10
+                                            w-8
+                                            rotate-12
+                                            bg-white/20
+                                            blur-md
+                                            transition-all
+                                            duration-700
+                                            group-hover:left-[110%]
+                                        "
+                                    />
+
+
+                                    <span
+                                        className="
+                                            relative
+                                            !text-white
+                                        "
+                                    >
                                         {submitting
                                             ? "Signing In..."
                                             : "Sign In"
                                         }
                                     </span>
 
+
                                     {!submitting && (
+
                                         <ArrowRight
                                             className="
+                                                relative
                                                 h-4
                                                 w-4
                                                 !text-white
@@ -911,12 +1433,15 @@ export default function Login() {
                                                 group-hover:translate-x-1
                                             "
                                         />
+
                                     )}
 
                                 </button>
 
 
-                                {/* Administrator help */}
+                                {/* =================================================
+                                    SIGNUP
+                                   ================================================= */}
 
                                 <p
                                     className="
@@ -926,10 +1451,10 @@ export default function Login() {
                                         text-text-secondary
                                     "
                                 >
-                                    Trouble signing in?{" "}
+                                    Don't have an account?{" "}
 
                                     <Link
-                                        to="/contact"
+                                        to="/signup"
                                         className="
                                             font-semibold
                                             text-primary
@@ -938,23 +1463,52 @@ export default function Login() {
                                             hover:text-primary-dark
                                         "
                                     >
-                                        Contact Us
+                                        Sign Up
                                     </Link>
 
                                 </p>
+
+
+                                {/* =================================================
+                                    SUPPORT
+                                   ================================================= */}
+
+                                <div
+                                    className="
+                                        flex
+                                        items-center
+                                        justify-center
+                                        gap-1.5
+                                        pt-1
+                                        text-xs
+                                        text-text-muted
+                                    "
+                                >
+
+                                    <LuShieldCheck
+                                        className="
+                                            h-3.5
+                                            w-3.5
+                                        "
+                                    />
+
+                                    Your account and energy data
+                                    are protected.
+
+                                </div>
 
                             </form>
 
                         </div>
 
 
-                        {/* ----------------------------------------------------
-                            Mobile branding
-                           ---------------------------------------------------- */}
+                        {/* --------------------------------------------------------
+                            Mobile footer
+                           -------------------------------------------------------- */}
 
                         <div
                             className="
-                                mt-8
+                                mt-6
                                 text-center
                                 lg:hidden
                             "
@@ -969,6 +1523,7 @@ export default function Login() {
                             >
                                 Monitor your energy.
                                 {" "}
+
                                 <span className="text-primary">
                                     Make every unit count.
                                 </span>
@@ -983,5 +1538,6 @@ export default function Login() {
             </section>
 
         </main>
+
     );
 }
