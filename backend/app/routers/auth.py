@@ -1,4 +1,4 @@
-﻿from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends
 import uuid
 from app.schemas.user import UserRegister, UserLogin, UserResponse, TokenResponse
 from app.services.auth import hash_password, verify_password, create_access_token
@@ -39,6 +39,7 @@ async def register(user: UserRegister):
     return TokenResponse(access_token=token, user=user_response)
 
 @router.post("/login", response_model=TokenResponse)
+@router.post("/token", response_model=TokenResponse)
 async def login(credentials: UserLogin):
     user_doc = await users_collection.find_one({"email": credentials.email})
     if not user_doc or not verify_password(credentials.password, user_doc["password"]):

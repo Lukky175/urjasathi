@@ -8,7 +8,7 @@ class Settings(BaseSettings):
         "http://localhost:5173",
         "http://127.0.0.1:5173",
     ]
-    mongo_url: str = "mongodb://localhost:27017"
+    mongo_url: str
     mongo_db_name: str = "urjasathi"
     jwt_secret_key: str = ""
     jwt_algorithm: str = "HS256"
