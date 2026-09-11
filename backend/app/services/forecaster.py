@@ -10,7 +10,7 @@ from typing import Any, Sequence
 import numpy as np
 import pandas as pd
 
-from backend.app.core.config import (
+from app.core.config import (
     DEFAULT_CAPACITY_SCALE,
     DEFAULT_PV_CAPACITY_KWP,
     DEFAULT_SITE,
@@ -33,7 +33,7 @@ from backend.app.core.config import (
     TIME_STEP_HOURS,
     WATTS_PER_KILOWATT,
 )
-from backend.app.services.schemas import (
+from app.services.schemas import (
     DemandForecastOutput,
     features_to_frame,
     values_for_horizon,
@@ -60,11 +60,13 @@ _SOLAR_KW_COLUMNS: tuple[str, ...] = (
     "p_ac_kw",
     "ac",
     "generation_kw",
+    "value_kw",
 )
 _SOLAR_W_COLUMNS: tuple[str, ...] = (
     "ac_w",
     "ac_system_output_w",
     "AC System Output (W)",
+    "ac_power_w",
 )
 _TIMESTAMP_COLUMNS: tuple[str, ...] = ("timestamp", "datetime", "time", "date")
 
@@ -463,3 +465,4 @@ def predict_solar(
                 start = pd.to_datetime(input_df[stamp_col], errors="coerce").dropna()
                 start = start.iloc[0] if not start.empty else None
     return predict_solar_kw(start, site=site, capacity_scale=capacity_scale)
+

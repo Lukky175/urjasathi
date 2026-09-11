@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-from backend.app.core.config import (
+from app.core.config import (
     BATTERY_DEFAULT_CAPACITY,
     BATTERY_EFFICIENCY,
     BATTERY_INITIAL_SOC,
@@ -78,3 +78,13 @@ class BatteryState:
 
 
 Battery = BatteryState
+# Module-level singleton so SOC persists across requests within the process.
+_battery_instance: BatteryState | None = None
+
+
+def get_battery() -> BatteryState:
+    global _battery_instance
+    if _battery_instance is None:
+        _battery_instance = BatteryState()
+    return _battery_instance
+

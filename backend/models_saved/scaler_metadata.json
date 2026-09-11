@@ -1,0 +1,142 @@
+{
+  "model1a": {
+    "features": [
+      "lag_1h",
+      "lag_24h",
+      "rolling_24h_mean",
+      "hour_of_day",
+      "day_of_week",
+      "month",
+      "is_weekend",
+      "temperature_c",
+      "humidity_pct"
+    ],
+    "target": "target_next_kw",
+    "hyperparameters": {
+      "n_estimators": 500,
+      "learning_rate": 0.03,
+      "max_depth": 5,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "objective": "reg:squarederror",
+      "random_state": 42,
+      "n_jobs": -1,
+      "early_stopping_rounds": 30,
+      "eval_metric": "rmse"
+    },
+    "metrics": {
+      "MAE_kW": 4.343,
+      "RMSE_kW": 7.838,
+      "MAPE_pct": 12.69,
+      "R2_score": 0.7389
+    },
+    "best_iteration": 494,
+    "n_train_samples": 26947,
+    "n_test_samples": 7700
+  },
+  "model1b": {
+    "features": [
+      "hour_of_day",
+      "day_of_week",
+      "is_weekend",
+      "month",
+      "temperature_c",
+      "humidity_pct"
+    ],
+    "targets": [
+      "share_z1_ac",
+      "share_z1_light",
+      "share_z1_plug",
+      "share_z2_ac",
+      "share_z2_light",
+      "share_z2_plug",
+      "share_z3_light",
+      "share_z3_plug",
+      "share_z4_ac",
+      "share_z4_light",
+      "share_z4_plug"
+    ],
+    "hyperparameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.03,
+      "max_depth": 4,
+      "subsample": 0.85,
+      "colsample_bytree": 0.85,
+      "objective": "reg:squarederror",
+      "random_state": 42,
+      "n_jobs": -1,
+      "early_stopping_rounds": 25,
+      "eval_metric": "mae"
+    },
+    "metrics": {
+      "MAE_overall": 0.0348,
+      "KL_Divergence": 0.2597,
+      "MAE_share_z1_ac": 0.1174,
+      "MAE_share_z1_light": 0.037,
+      "MAE_share_z1_plug": 0.0139,
+      "MAE_share_z2_ac": 0.149,
+      "MAE_share_z2_light": 0.0083,
+      "MAE_share_z2_plug": 0.0029,
+      "MAE_share_z3_light": 0.0168,
+      "MAE_share_z3_plug": 0.0093,
+      "MAE_share_z4_ac": 0.0154,
+      "MAE_share_z4_light": 0.0117,
+      "MAE_share_z4_plug": 0.0014
+    },
+    "n_train_samples": 6132,
+    "n_test_samples": 1753
+  },
+  "model1a_benchmark": {
+    "features": [
+      "lag_1h",
+      "lag_24h",
+      "rolling_24h_mean",
+      "hour_of_day",
+      "day_of_week",
+      "month",
+      "is_weekend",
+      "temperature_c",
+      "humidity_pct"
+    ],
+    "target": "target_next_kw",
+    "test_period": "2017-02-13 22:00:00 to 2017-12-31 17:00:00",
+    "dataset_rows": 38496,
+    "weights": {
+      "xgb": 0.5,
+      "lgb": 0.35,
+      "ridge": 0.15
+    },
+    "results": {
+      "xgb": {
+        "MAE_kW": 4.343,
+        "RMSE_kW": 7.838,
+        "MAPE_pct": 12.69,
+        "R2_score": 0.7389
+      },
+      "lgb": {
+        "MAE_kW": 4.344,
+        "RMSE_kW": 7.821,
+        "MAPE_pct": 12.76,
+        "R2_score": 0.74
+      },
+      "ridge": {
+        "MAE_kW": 5.158,
+        "RMSE_kW": 8.06,
+        "MAPE_pct": 16.29,
+        "R2_score": 0.7239
+      },
+      "blend": {
+        "MAE_kW": 4.254,
+        "RMSE_kW": 7.688,
+        "MAPE_pct": 12.37,
+        "R2_score": 0.7488
+      },
+      "primary": {
+        "MAE_kW": 4.254,
+        "RMSE_kW": 7.688,
+        "MAPE_pct": 12.37,
+        "R2_score": 0.7488
+      }
+    }
+  }
+}

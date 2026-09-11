@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import zscore
 
-from backend.app.core.config import (
+from app.core.config import (
     ANOMALY_AC_KW_THRESHOLD,
     ANOMALY_LIGHT_KW_THRESHOLD,
     ANOMALY_PLUG_KW_THRESHOLD,
@@ -87,3 +87,4 @@ def detect_category_anomalies(category_df: pd.DataFrame | None) -> list[dict[str
         flags.extend(detected.loc[flagged].to_dict(orient="records"))
 
     return flags
+
