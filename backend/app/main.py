@@ -1,7 +1,7 @@
-﻿from fastapi import FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.routers import status, forecast, energy_flow, battery, recommendations, metrics, simulate, auth
+from app.routers import status, forecast, energy_flow, battery, recommendations, metrics, simulate, auth, planner
 
 app = FastAPI(title=settings.app_name)
 
@@ -21,6 +21,7 @@ app.include_router(battery.router)
 app.include_router(recommendations.router)
 app.include_router(metrics.router)
 app.include_router(simulate.router)
+app.include_router(planner.router)
 
 @app.get("/health")
 def health_check():
