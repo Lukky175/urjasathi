@@ -1,3 +1,5 @@
+import threading
+import time
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -26,6 +28,13 @@ _bess_result = calculate_bess_capacity_equation(
 )
 _BESS_KWH = _bess_result["recommended_capacity_kwh"]
 
+# In-process cache so multiple routers (and duplicate/near-simultaneous
+# requests, e.g. from React StrictMode in dev) don't each re-run the full
+# 24-hour dispatch simulation independently. Keyed by (horizon, hour).
+_dispatch_cache = {}
+_dispatch_cache_lock = threading.Lock()
+_CACHE_TTL_SECONDS = 30.0
+
 
 def _build_optimizer():
     battery_config = BatteryConfig(
@@ -34,9 +43,7 @@ def _build_optimizer():
     return EnergyOptimizer(battery_config=battery_config)
 
 
-def get_hourly_dispatch(horizon: int = 24, start: datetime = None):
-    start = start or datetime.now()
-    ts0 = pd.Timestamp(start).floor("h")
+def _compute_hourly_dispatch(horizon: int, ts0: pd.Timestamp):
     optimizer = _build_optimizer()
     results = []
 
@@ -74,6 +81,24 @@ def get_hourly_dispatch(horizon: int = 24, start: datetime = None):
     return results
 
 
+def get_hourly_dispatch(horizon: int = 24, start: datetime = None):
+    start = start or datetime.now()
+    ts0 = pd.Timestamp(start).floor("h")
+    cache_key = (horizon, ts0.isoformat())
+
+    with _dispatch_cache_lock:
+        cached = _dispatch_cache.get(cache_key)
+        if cached is not None and (time.monotonic() - cached[0]) < _CACHE_TTL_SECONDS:
+            return cached[1]
+
+        # Held the lock the whole time we compute, so a second concurrent
+        # request for the SAME (horizon, hour) waits here instead of
+        # kicking off its own duplicate simulation.
+        results = _compute_hourly_dispatch(horizon, ts0)
+        _dispatch_cache[cache_key] = (time.monotonic(), results)
+        return results
+
+
 def derive_flows(d: dict) -> dict:
     demand = d["total_demand_kw"]
     solar = d["solar_generation_kw"]
@@ -96,4 +121,3 @@ def derive_flows(d: dict) -> dict:
             "solar_to_building": solar, "solar_to_battery": 0.0, "solar_to_grid": 0.0,
             "battery_to_building": battery_discharge, "grid_to_building": grid_to_building,
         }
-

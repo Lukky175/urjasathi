@@ -1,9 +1,25 @@
-﻿from fastapi import APIRouter
 from datetime import datetime, timedelta
+from fastapi import APIRouter
+from pydantic import BaseModel
+
 from app.schemas.metrics import MetricsComparisonResponse
 from app.services.dispatch import get_hourly_dispatch
 
 router = APIRouter(prefix="/metrics", tags=["Metrics"])
+
+
+class HourlyCostPoint(BaseModel):
+    timestamp: datetime
+    baseline_cost_inr: float
+    optimized_cost_inr: float
+    savings_inr: float
+
+
+class CostBreakdownResponse(BaseModel):
+    period_start: str
+    period_end: str
+    breakdown: list[HourlyCostPoint]
+
 
 @router.get("/comparison", response_model=MetricsComparisonResponse)
 def get_metrics_comparison(horizon: int = 24):
@@ -38,4 +54,30 @@ def get_metrics_comparison(horizon: int = 24):
         peak_grid_demand_reduction_kw=round(peak_baseline - peak_optimized, 2),
         baseline_cost=round(baseline_cost, 2),
         optimized_cost=round(optimized_cost, 2),
+    )
+
+
+@router.get("/cost-breakdown", response_model=CostBreakdownResponse)
+def get_cost_breakdown(horizon: int = 24):
+    now = datetime.now()
+    dispatch = get_hourly_dispatch(horizon, now)
+
+    breakdown = []
+    for i, d in enumerate(dispatch):
+        baseline_cost = d["import_rate_inr_kwh"] * max(0.0, d["total_demand_kw"] - d["solar_generation_kw"])
+        optimized_cost = (
+            d.get("grid_import_cost", {}).get("total_cost_inr", 0.0)
+            - d.get("grid_export_profit", {}).get("total_profit_earned_inr", 0.0)
+        )
+        breakdown.append(HourlyCostPoint(
+            timestamp=now + timedelta(hours=i),
+            baseline_cost_inr=round(baseline_cost, 2),
+            optimized_cost_inr=round(optimized_cost, 2),
+            savings_inr=round(baseline_cost - optimized_cost, 2),
+        ))
+
+    return CostBreakdownResponse(
+        period_start=now.strftime("%Y-%m-%d"),
+        period_end=(now + timedelta(hours=horizon)).strftime("%Y-%m-%d"),
+        breakdown=breakdown,
     )
