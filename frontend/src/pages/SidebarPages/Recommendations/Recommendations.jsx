@@ -50,76 +50,66 @@ export default function Recommendations() {
     const recommendations = [
         {
             id: 1,
-            title: "Shift high-power usage to solar hours",
+            title: "Pre-Cool Central Lecture Halls Before Peak Hours (11:30 AM – 1:00 PM)",
             description:
-                "Your highest electricity consumption occurs between 7 PM and 10 PM. Consider running high-power appliances between 11 AM and 3 PM when solar generation is strongest.",
+                "Building cooling demand peaks at 2:00 PM (128 kW). Pre-cooling computer labs and lecture halls between 11:30 AM and 1:00 PM uses free 34 kW rooftop solar, reducing expensive grid strain during the hottest afternoon hours.",
             category: "Consumption",
             priority: "High",
-            priorityClass:
-                "bg-action/10 text-action border-action/20",
+            priorityClass: "bg-action/10 text-action border-action/20",
             icon: Zap,
             iconClass: "text-action",
             iconBg: "bg-action/10",
-            savings: "₹420",
+            savings: "₹16,800",
             savingsLabel: "potential monthly savings",
-            impact: "12%",
-            impactLabel: "lower grid usage",
+            impact: "53.5%",
+            impactLabel: "afternoon peak shaved",
         },
         {
             id: 2,
-            title: "Optimize battery charging",
+            title: "Automate Overnight Off-Peak Battery Charging (12:00 AM – 4:00 AM)",
             description:
-                "Your battery reaches full charge earlier than necessary on several days. Adjusting the charging schedule can improve battery utilization and reduce unnecessary grid charging.",
+                "NPCL offers a 15% discounted tariff (₹7.31/kWh) during midnight hours. Pre-charging the 280 kWh battery to 55% overnight stores cheap grid power, which automatically discharges during the day to avoid peak ₹10.32/kWh rates.",
             category: "Battery",
-            priority: "Medium",
-            priorityClass:
-                "bg-secondary/10 text-secondary border-secondary/20",
+            priority: "High",
+            priorityClass: "bg-secondary/10 text-secondary border-secondary/20",
             icon: BatteryCharging,
             iconClass: "text-secondary",
             iconBg: "bg-secondary/10",
-            savings: "₹280",
+            savings: "₹14,500",
             savingsLabel: "potential monthly savings",
-            impact: "8%",
-            impactLabel: "better utilization",
+            impact: "35%",
+            impactLabel: "cheaper stored energy",
         },
         {
             id: 3,
-            title: "Increase daytime solar utilization",
+            title: "Enforce 20% Battery Reserve to Maximize Lifespan & Solar Intake",
             description:
-                "A portion of your solar generation is currently exported or unused. Running selected appliances during peak generation hours can increase your self-consumption.",
+                "Prioritize 40 kWp solar output for direct classroom power first, and maintain a strict 20% minimum battery safety floor. This prevents deep-discharge wear, extending battery life beyond 12+ years while ensuring 98% clean solar self-consumption.",
             category: "Solar",
             priority: "Medium",
-            priorityClass:
-                "bg-solar/10 text-solar border-solar/20",
+            priorityClass: "bg-solar/10 text-solar border-solar/20",
             icon: SunMedium,
             iconClass: "text-solar",
             iconBg: "bg-solar/10",
-            savings: "₹350",
+            savings: "₹10,340",
             savingsLabel: "potential monthly savings",
-            impact: "15%",
-            impactLabel: "higher self-consumption",
+            impact: "98%",
+            impactLabel: "solar self-consumption",
         },
     ];
-
-
-    /**
-     * =========================================================================
-     * QUICK OPTIMIZATION STATS
-     * =========================================================================
-     */
 
     const optimizationStats = [
         {
             label: "Potential Savings",
-            value: "₹1,050",
+            value: "₹41,640",
             suffix: "/month",
             icon: IndianRupee,
             iconClass: "text-success",
             iconBg: "bg-success/10",
         },
         {
-            label: "Energy Reduction",
-            value: "12.8",
+            label: "Peak Load Shaved",
+            value: "53.5",
             suffix: "%",
             icon: TrendingDown,
             iconClass: "text-secondary",
@@ -127,7 +117,7 @@ export default function Recommendations() {
         },
         {
             label: "CO₂ Reduction",
-            value: "38.4",
+            value: "3,530",
             suffix: " kg/month",
             icon: Leaf,
             iconClass: "text-success",
@@ -540,10 +530,9 @@ export default function Recommendations() {
                                     transition-all
                                     duration-200
 
-                                    ${
-                                        category.active
-                                            ? "bg-primary text-white shadow-sm"
-                                            : "text-text-secondary hover:bg-surface-soft hover:text-primary"
+                                    ${category.active
+                                        ? "bg-primary text-white shadow-sm"
+                                        : "text-text-secondary hover:bg-surface-soft hover:text-primary"
                                     }
                                 `}
                             >
@@ -556,10 +545,9 @@ export default function Recommendations() {
                                         px-1.5
                                         py-0.5
                                         text-[10px]
-                                        ${
-                                            category.active
-                                                ? "bg-white/20 text-white"
-                                                : "bg-surface-soft text-text-muted"
+                                        ${category.active
+                                            ? "bg-white/20 text-white"
+                                            : "bg-surface-soft text-text-muted"
                                         }
                                     `}
                                 >
@@ -1010,7 +998,7 @@ export default function Recommendations() {
                             "
                         >
                             Following your recommendations could save
-                            approximately ₹12,600 annually while reducing
+                            approximately ₹360000 annually while reducing
                             your household's carbon footprint.
                         </p>
 
