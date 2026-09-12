@@ -1,5 +1,16 @@
-//Comment for Pipeline
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
+
+function buildApiUrl(path) {
+    const cleanBase = BASE_URL.replace(/\/+$/, "");
+    const cleanPath = `/${String(path).replace(/^\/+/, "")}`;
+
+    if (cleanBase.startsWith("/")) {
+        return `${window.location.origin}${cleanBase}${cleanPath}`;
+    }
+
+    return new URL(cleanPath, `${cleanBase}/`).toString();
+}
+
 const DEFAULT_TIMEOUT_MS = 25000;
 
 export class ApiError extends Error {
@@ -17,7 +28,7 @@ export class ApiError extends Error {
 }
 
 async function request(path, { method = "GET", params, body, signal, headers: customHeaders, credentials = "include", timeout = DEFAULT_TIMEOUT_MS } = {}) {
-    const url = new URL(path, BASE_URL);
+    const url = new URL(buildApiUrl(path));
 
     if (params) {
         Object.entries(params).forEach(([key, value]) => {
