@@ -15,7 +15,7 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ]
-    mongo_url: str = "mongodb://localhost:27017"
+    mongo_url: str
     mongo_db_name: str = "urjasathi"
     jwt_secret_key: str = "urjasathi_secret_key_2026_super_secure_jwt"
     jwt_algorithm: str = "HS256"
