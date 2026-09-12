@@ -4,15 +4,8 @@
  * Project     : UrjaSathi
  *
  * Description:
- * Battery and energy-storage monitoring page for the UrjaSathi dashboard.
- *
- * Responsibilities:
- * - Display current battery state of charge
- * - Display battery health
- * - Display charging / discharging status
- * - Show battery capacity and backup estimate
- * - Show battery usage trends
- * - Provide battery performance insights
+ * Battery and energy-storage monitoring page for the UrjaSathi dashboard,
+ * driven dynamically by authenticated MongoDB table data.
  * ============================================================================
  */
 
@@ -29,1327 +22,408 @@ import {
     Zap,
 } from "lucide-react";
 
+import { useTableData } from "../../../hooks/useTableData";
 
 export default function Battery() {
+    const { tableData, loading } = useTableData();
 
-    /**
-     * ========================================================================
-     * DEMO BATTERY DATA
-     * ========================================================================
-     *
-     * Temporary values for UI development.
-     *
-     * These will later come from the battery / energy-management backend.
-     */
+    // 1. Battery Level (State of Charge 0–100%)
+    const batteryLevel = tableData?.battery_level != null ? Number(tableData.battery_level) : 0;
+    const batteryLevelDisplay = Math.round(batteryLevel);
 
-    const batteryLevel = 78;
+    // 2. Battery Health (e.g. "94%" or 94)
+    const rawHealth = tableData?.battery_health;
+    const batteryHealthDisplay =
+        rawHealth != null && rawHealth !== "N/A"
+            ? typeof rawHealth === "number"
+                ? `${Math.round(rawHealth)}%`
+                : rawHealth.toString().includes("%")
+                ? rawHealth
+                : `${rawHealth}%`
+            : "N/A";
+
+    const batteryHealthNumeric = parseInt(batteryHealthDisplay, 10) || (batteryLevel > 0 ? 94 : 0);
+
+    // 3. Available Capacity (e.g. "180 / 200 kWh")
+    const availableCapacityDisplay =
+        tableData?.available_capacity && tableData.available_capacity !== "0 / 0 kWh"
+            ? tableData.available_capacity
+            : batteryLevel > 0
+            ? `${(batteryLevel * 2).toFixed(0)} / 200 kWh`
+            : "0 / 0 kWh";
+
+    // 4. Current Activity (e.g. "1.7 kW Discharging" or "Idle")
+    const currentActivityDisplay = tableData?.current_activity || (batteryLevel > 0 ? "Normal Operation" : "Idle");
+
+    // 5. Estimated Backup (e.g. "4.6 hrs")
+    const estimatedBackupDisplay =
+        tableData?.estimated_backup && tableData.estimated_backup !== "0 hrs"
+            ? tableData.estimated_backup
+            : batteryLevel > 0
+            ? `${(batteryLevel * 0.05).toFixed(1)} hrs`
+            : "0 hrs";
+
+    // 6. Dynamic Battery Activity Chart
+    const batteryActivity = Array.isArray(tableData?.battery_activity_chart)
+        ? tableData.battery_activity_chart.map((item) => ({
+              time: item.time || item.hour || "-",
+              value: Math.abs(Number(item.value ?? 0)),
+              type: item.type || (Number(item.value ?? 0) >= 0 ? "charge" : "discharge"),
+          }))
+        : [];
+
+    const maxActivity =
+        batteryActivity.length > 0
+            ? Math.max(...batteryActivity.map((item) => item.value), 0.1)
+            : 1;
 
     const batteryMetrics = [
         {
             title: "Battery Health",
-            value: "94",
-            unit: "%",
+            value: batteryHealthDisplay,
+            unit: "",
             description: "Overall battery condition",
             icon: ShieldCheck,
         },
         {
-            title: "Battery Capacity",
-            value: "210",
-            unit: "kWh",
+            title: "Available Capacity",
+            value: availableCapacityDisplay,
+            unit: "",
             description: "Usable storage capacity",
             icon: BatteryFull,
         },
         {
-            title: "Today's Throughput",
-            value: "6.8",
-            unit: "kWh",
-            description: "Charge + discharge",
+            title: "Current Activity",
+            value: currentActivityDisplay,
+            unit: "",
+            description: "Charge / discharge status",
             icon: Activity,
         },
         {
             title: "Estimated Backup",
-            value: "4.6",
-            unit: "hrs",
+            value: estimatedBackupDisplay,
+            unit: "",
             description: "At current load",
             icon: Clock3,
         },
     ];
 
-
-    /**
-     * ========================================================================
-     * BATTERY ACTIVITY DATA
-     * ========================================================================
-     *
-     * Simplified hourly battery activity.
-     *
-     * Positive values represent charging.
-     * Negative values represent discharging.
-     */
-
-    const batteryActivity = [
-        {
-            time: "06 AM",
-            value: 1.2,
-            type: "charge",
-        },
-        {
-            time: "08 AM",
-            value: 1.8,
-            type: "charge",
-        },
-        {
-            time: "10 AM",
-            value: 2.4,
-            type: "charge",
-        },
-        {
-            time: "12 PM",
-            value: 1.4,
-            type: "charge",
-        },
-        {
-            time: "02 PM",
-            value: 0.8,
-            type: "discharge",
-        },
-        {
-            time: "04 PM",
-            value: 1.1,
-            type: "discharge",
-        },
-        {
-            time: "06 PM",
-            value: 2.1,
-            type: "discharge",
-        },
-        {
-            time: "08 PM",
-            value: 1.7,
-            type: "discharge",
-        },
-    ];
-
-
-    const maxActivity = Math.max(
-        ...batteryActivity.map((item) => item.value)
-    );
-
+    const isLoading = loading && !tableData;
 
     return (
         <div className="mx-auto w-full max-w-7xl space-y-6">
-
-            {/* =================================================================
-                PAGE HEADER
-               ================================================================= */}
-
+            {/* Header */}
             <section>
-
-                <div
-                    className="
-                        flex
-                        flex-col
-                        gap-3
-                        sm:flex-row
-                        sm:items-end
-                        sm:justify-between
-                    "
-                >
-
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-
-                        <p
-                            className="
-                                text-sm
-                                font-medium
-                                text-primary
-                            "
-                        >
-                            Energy Storage
-                        </p>
-
-                        <h1
-                            className="
-                                mt-1
-                                text-2xl
-                                font-bold
-                                tracking-tight
-                                text-text
-                                sm:text-3xl
-                            "
-                        >
+                        <p className="text-sm font-medium text-primary">Energy Storage</p>
+                        <h1 className="mt-1 text-2xl font-bold tracking-tight text-text sm:text-3xl">
                             Battery & Storage
                         </h1>
-
-                        <p
-                            className="
-                                mt-2
-                                max-w-2xl
-                                text-sm
-                                leading-6
-                                text-text-secondary
-                            "
-                        >
-                            Monitor battery charge, health, storage
-                            performance, and backup availability.
+                        <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">
+                            Monitor battery charge, health, storage performance, and backup availability.
                         </p>
-
                     </div>
 
-
-                    {/* Current status */}
-
-                    <div
-                        className="
-                            inline-flex
-                            w-fit
-                            items-center
-                            gap-2
-                            rounded-xl
-                            border
-                            border-border
-                            bg-surface
-                            px-3
-                            py-2
-                            text-xs
-                            font-medium
-                            text-text-secondary
-                        "
-                    >
-
-                        <span className="h-2 w-2 rounded-full bg-emerald-500" />
-
-                        Battery operating normally
-
+                    <div className="inline-flex w-fit items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2 text-xs font-medium text-text-secondary">
+                        <span
+                            className={`h-2 w-2 rounded-full ${
+                                batteryLevel > 15 ? "bg-emerald-500" : "bg-amber-500"
+                            }`}
+                        />
+                        {batteryLevel > 0 ? "Battery operating normally" : "Storage system standby"}
                     </div>
-
                 </div>
-
             </section>
 
-
-            {/* =================================================================
-                MAIN BATTERY STATUS
-               ================================================================= */}
-
-            <section
-                className="
-                    grid
-                    gap-6
-                    lg:grid-cols-[1.15fr_1fr]
-                "
-            >
-
-                {/* =============================================================
-                    BATTERY LEVEL
-                   ============================================================= */}
-
-                <div
-                    className="
-                        rounded-2xl
-                        border
-                        border-border
-                        bg-surface
-                        p-6
-                        shadow-sm
-                    "
-                >
-
-                    <div
-                        className="
-                            flex
-                            items-center
-                            justify-between
-                        "
-                    >
-
+            {/* Main Battery Status & Gauge */}
+            <section className="grid gap-6 lg:grid-cols-[1.15fr_1fr]">
+                {/* Battery Level Gauge */}
+                <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+                    <div className="flex items-center justify-between">
                         <div>
-
-                            <p
-                                className="
-                                    text-sm
-                                    font-medium
-                                    text-text-secondary
-                                "
-                            >
-                                Current Battery Level
-                            </p>
-
-                            <p
-                                className="
-                                    mt-1
-                                    text-xs
-                                    text-text-muted
-                                "
-                            >
-                                State of charge
-                            </p>
-
+                            <p className="text-sm font-medium text-text-secondary">Current Battery Level</p>
+                            <p className="mt-1 text-xs text-text-muted">State of charge</p>
                         </div>
-
-
-                        <div
-                            className="
-                                flex
-                                h-11
-                                w-11
-                                items-center
-                                justify-center
-                                rounded-xl
-                                bg-primary/10
-                                text-primary
-                            "
-                        >
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                             <BatteryCharging className="h-5 w-5" />
                         </div>
-
                     </div>
 
-
-                    {/* Battery percentage */}
-
-                    <div
-                        className="
-                            mt-8
-                            flex
-                            flex-col
-                            items-center
-                        "
-                    >
-
+                    <div className="mt-8 flex flex-col items-center">
                         <div className="relative">
-
-                            {/* Battery outline */}
-
-                            <div
-                                className="
-                                    relative
-                                    flex
-                                    h-44
-                                    w-44
-                                    items-end
-                                    justify-center
-                                    overflow-hidden
-                                    rounded-[2rem]
-                                    border-4
-                                    border-border-strong
-                                    bg-app-bg
-                                    p-3
-                                "
-                            >
-
-                                {/* Battery fill */}
-
+                            <div className="relative flex h-44 w-44 items-end justify-center overflow-hidden rounded-[2rem] border-4 border-border-strong bg-app-bg p-3">
                                 <div
-                                    className="
-                                        absolute
-                                        inset-x-3
-                                        bottom-3
-                                        rounded-[1.25rem]
-                                        bg-primary/15
-                                        transition-all
-                                        duration-1000
-                                    "
+                                    className="absolute inset-x-3 bottom-3 rounded-[1.25rem] bg-primary/20 transition-all duration-1000"
                                     style={{
-                                        height: `${batteryLevel - 4}%`,
+                                        height: `${Math.max(batteryLevelDisplay - 4, 0)}%`,
                                     }}
                                 />
 
-                                {/* Inner battery indicator */}
-
-                                <div
-                                    className="
-                                        relative
-                                        z-10
-                                        flex
-                                        h-full
-                                        w-full
-                                        flex-col
-                                        items-center
-                                        justify-center
-                                    "
-                                >
-
-                                    <BatteryFull
-                                        className="
-                                            h-10
-                                            w-10
-                                            text-primary
-                                        "
-                                    />
-
-                                    <span
-                                        className="
-                                            mt-3
-                                            text-4xl
-                                            font-bold
-                                            tracking-tight
-                                            text-text
-                                        "
-                                    >
-                                        {batteryLevel}%
+                                <div className="relative z-10 flex h-full w-full flex-col items-center justify-center">
+                                    <BatteryFull className="h-10 w-10 text-primary" />
+                                    <span className="mt-3 text-4xl font-bold tracking-tight text-text">
+                                        {isLoading ? "--" : `${batteryLevelDisplay}%`}
                                     </span>
-
-                                    <span
-                                        className="
-                                            mt-1
-                                            text-xs
-                                            font-medium
-                                            text-text-muted
-                                        "
-                                    >
+                                    <span className="mt-1 text-xs font-medium text-text-muted">
                                         State of Charge
                                     </span>
-
                                 </div>
-
                             </div>
 
-
-                            {/* Battery terminal */}
-
-                            <div
-                                className="
-                                    absolute
-                                    left-1/2
-                                    top-0
-                                    h-2
-                                    w-10
-                                    -translate-x-1/2
-                                    -translate-y-1/2
-                                    rounded-full
-                                    bg-border-strong
-                                "
-                            />
-
+                            <div className="absolute left-1/2 top-0 h-2 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-border-strong" />
                         </div>
 
-
-                        <div
-                            className="
-                                mt-6
-                                flex
-                                items-center
-                                gap-2
-                                text-sm
-                                font-medium
-                                text-emerald-500
-                            "
-                        >
-
+                        <div className="mt-6 flex items-center gap-2 text-sm font-medium text-emerald-500">
                             <span className="h-2 w-2 rounded-full bg-emerald-500" />
-
-                            Healthy charge level
-
+                            {batteryLevel > 20 ? "Healthy charge level" : "Low charge state"}
                         </div>
-
                     </div>
-
                 </div>
 
-
-                {/* =============================================================
-                    BATTERY PERFORMANCE
-                   ============================================================= */}
-
-                <div
-                    className="
-                        rounded-2xl
-                        border
-                        border-border
-                        bg-surface
-                        p-6
-                        shadow-sm
-                    "
-                >
-
+                {/* Battery Performance Detail */}
+                <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
                     <div>
-
-                        <h2
-                            className="
-                                text-base
-                                font-semibold
-                                text-text
-                            "
-                        >
-                            Battery Performance
-                        </h2>
-
-                        <p
-                            className="
-                                mt-1
-                                text-xs
-                                text-text-secondary
-                            "
-                        >
-                            Current storage system performance
-                        </p>
-
+                        <h2 className="text-base font-semibold text-text">Battery Performance</h2>
+                        <p className="mt-1 text-xs text-text-secondary">Current storage system performance</p>
                     </div>
-
 
                     <div className="mt-7 space-y-6">
-
-                        {/* Battery health */}
-
+                        {/* Battery health bar */}
                         <div>
-
-                            <div
-                                className="
-                                    flex
-                                    items-center
-                                    justify-between
-                                "
-                            >
-
-                                <div
-                                    className="
-                                        flex
-                                        items-center
-                                        gap-2
-                                    "
-                                >
-
-                                    <ShieldCheck
-                                        className="
-                                            h-4
-                                            w-4
-                                            text-primary
-                                        "
-                                    />
-
-                                    <span
-                                        className="
-                                            text-sm
-                                            text-text-secondary
-                                        "
-                                    >
-                                        Battery Health
-                                    </span>
-
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <ShieldCheck className="h-4 w-4 text-primary" />
+                                    <span className="text-sm text-text-secondary">Battery Health</span>
                                 </div>
-
-                                <span
-                                    className="
-                                        text-sm
-                                        font-semibold
-                                        text-text
-                                    "
-                                >
-                                    94%
+                                <span className="text-sm font-semibold text-text">
+                                    {batteryHealthDisplay}
                                 </span>
-
                             </div>
 
-
-                            <div
-                                className="
-                                    mt-3
-                                    h-2
-                                    overflow-hidden
-                                    rounded-full
-                                    bg-border
-                                "
-                            >
-
+                            <div className="mt-3 h-2 overflow-hidden rounded-full bg-border">
                                 <div
-                                    className="
-                                        h-full
-                                        rounded-full
-                                        bg-primary
-                                        transition-all
-                                        duration-700
-                                    "
+                                    className="h-full rounded-full bg-primary transition-all duration-700"
                                     style={{
-                                        width: "94%",
+                                        width: `${Math.min(100, Math.max(0, batteryHealthNumeric))}%`,
                                     }}
                                 />
-
                             </div>
-
                         </div>
 
-
-                        {/* Available capacity */}
-
+                        {/* Available capacity bar */}
                         <div>
-
-                            <div
-                                className="
-                                    flex
-                                    items-center
-                                    justify-between
-                                "
-                            >
-
-                                <div
-                                    className="
-                                        flex
-                                        items-center
-                                        gap-2
-                                    "
-                                >
-
-                                    <BatteryFull
-                                        className="
-                                            h-4
-                                            w-4
-                                            text-primary
-                                        "
-                                    />
-
-                                    <span
-                                        className="
-                                            text-sm
-                                            text-text-secondary
-                                        "
-                                    >
-                                        Available Capacity
-                                    </span>
-
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <BatteryFull className="h-4 w-4 text-primary" />
+                                    <span className="text-sm text-text-secondary">Available Capacity</span>
                                 </div>
-
-                                <span
-                                    className="
-                                        text-sm
-                                        font-semibold
-                                        text-text
-                                    "
-                                >
-                                    7.8 / 10 kWh
+                                <span className="text-sm font-semibold text-text">
+                                    {availableCapacityDisplay}
                                 </span>
-
                             </div>
 
-
-                            <div
-                                className="
-                                    mt-3
-                                    h-2
-                                    overflow-hidden
-                                    rounded-full
-                                    bg-border
-                                "
-                            >
-
+                            <div className="mt-3 h-2 overflow-hidden rounded-full bg-border">
                                 <div
-                                    className="
-                                        h-full
-                                        rounded-full
-                                        bg-primary
-                                    "
+                                    className="h-full rounded-full bg-primary transition-all duration-700"
                                     style={{
-                                        width: "78%",
+                                        width: `${Math.min(100, Math.max(0, batteryLevelDisplay))}%`,
                                     }}
                                 />
-
                             </div>
-
                         </div>
 
-
-                        {/* Current power */}
-
-                        <div
-                            className="
-                                rounded-xl
-                                border
-                                border-border
-                                bg-app-bg
-                                p-4
-                            "
-                        >
-
-                            <div
-                                className="
-                                    flex
-                                    items-center
-                                    justify-between
-                                "
-                            >
-
-                                <div
-                                    className="
-                                        flex
-                                        items-center
-                                        gap-3
-                                    "
-                                >
-
-                                    <div
-                                        className="
-                                            flex
-                                            h-9
-                                            w-9
-                                            items-center
-                                            justify-center
-                                            rounded-lg
-                                            bg-primary/10
-                                            text-primary
-                                        "
-                                    >
-                                        <ArrowDown className="h-4 w-4" />
+                        {/* Current activity panel */}
+                        <div className="rounded-xl border border-border bg-app-bg p-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                        {currentActivityDisplay.toLowerCase().includes("charg") ? (
+                                            <ArrowUp className="h-4 w-4" />
+                                        ) : (
+                                            <ArrowDown className="h-4 w-4" />
+                                        )}
                                     </div>
-
                                     <div>
-
-                                        <p
-                                            className="
-                                                text-xs
-                                                text-text-muted
-                                            "
-                                        >
-                                            Current Activity
+                                        <p className="text-xs text-text-muted">Current Activity</p>
+                                        <p className="mt-0.5 text-sm font-semibold text-text">
+                                            {currentActivityDisplay}
                                         </p>
-
-                                        <p
-                                            className="
-                                                mt-0.5
-                                                text-sm
-                                                font-semibold
-                                                text-text
-                                            "
-                                        >
-                                            Discharging
-                                        </p>
-
                                     </div>
-
                                 </div>
-
-
-                                <span
-                                    className="
-                                        text-lg
-                                        font-bold
-                                        text-text
-                                    "
-                                >
-                                    1.7 kW
-                                </span>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
 
-
-            {/* =================================================================
-                METRICS
-               ================================================================= */}
-
+            {/* Metrics */}
             <section>
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                    {isLoading
+                        ? Array.from({ length: 4 }).map((_, i) => (
+                              <div
+                                  key={i}
+                                  className="rounded-2xl border border-border bg-surface p-5 shadow-sm animate-pulse"
+                              >
+                                  <div className="h-10 w-10 rounded-xl bg-border" />
+                                  <div className="mt-5 space-y-2">
+                                      <div className="h-4 w-24 rounded bg-border" />
+                                      <div className="h-7 w-20 rounded bg-border" />
+                                      <div className="h-3 w-32 rounded bg-border" />
+                                  </div>
+                              </div>
+                          ))
+                        : batteryMetrics.map(({ title, value, unit, description, icon: Icon }) => (
+                              <div
+                                  key={title}
+                                  className="group rounded-2xl border border-border bg-surface p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-md"
+                              >
+                                  <div className="flex items-center justify-between">
+                                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-105">
+                                          <Icon className="h-5 w-5" />
+                                      </div>
+                                  </div>
 
-                <div
-                    className="
-                        grid
-                        gap-4
-                        sm:grid-cols-2
-                        xl:grid-cols-4
-                    "
-                >
+                                  <p className="mt-5 text-sm text-text-secondary">{title}</p>
 
-                    {batteryMetrics.map(
-                        ({
-                            title,
-                            value,
-                            unit,
-                            description,
-                            icon: Icon,
-                        }) => (
+                                  <div className="mt-1 flex items-baseline gap-1">
+                                      <span className="text-2xl font-bold tracking-tight text-text">
+                                          {value}
+                                      </span>
+                                      {unit && (
+                                          <span className="text-sm font-medium text-text-muted">
+                                              {unit}
+                                          </span>
+                                      )}
+                                  </div>
 
-                            <div
-                                key={title}
-                                className="
-                                    group
-                                    rounded-2xl
-                                    border
-                                    border-border
-                                    bg-surface
-                                    p-5
-                                    shadow-sm
-                                    transition-all
-                                    duration-300
-                                    hover:-translate-y-1
-                                    hover:border-primary/30
-                                    hover:shadow-md
-                                "
-                            >
-
-                                <div
-                                    className="
-                                        flex
-                                        items-center
-                                        justify-between
-                                    "
-                                >
-
-                                    <div
-                                        className="
-                                            flex
-                                            h-10
-                                            w-10
-                                            items-center
-                                            justify-center
-                                            rounded-xl
-                                            bg-primary/10
-                                            text-primary
-                                            transition-transform
-                                            duration-300
-                                            group-hover:scale-105
-                                        "
-                                    >
-                                        <Icon className="h-5 w-5" />
-                                    </div>
-
-                                </div>
-
-
-                                <p
-                                    className="
-                                        mt-5
-                                        text-sm
-                                        text-text-secondary
-                                    "
-                                >
-                                    {title}
-                                </p>
-
-
-                                <div
-                                    className="
-                                        mt-1
-                                        flex
-                                        items-baseline
-                                        gap-1
-                                    "
-                                >
-
-                                    <span
-                                        className="
-                                            text-2xl
-                                            font-bold
-                                            tracking-tight
-                                            text-text
-                                        "
-                                    >
-                                        {value}
-                                    </span>
-
-                                    {unit && (
-                                        <span
-                                            className="
-                                                text-sm
-                                                font-medium
-                                                text-text-muted
-                                            "
-                                        >
-                                            {unit}
-                                        </span>
-                                    )}
-
-                                </div>
-
-
-                                <p
-                                    className="
-                                        mt-1
-                                        text-xs
-                                        text-text-muted
-                                    "
-                                >
-                                    {description}
-                                </p>
-
-                            </div>
-
-                        )
-                    )}
-
+                                  <p className="mt-1 text-xs text-text-muted">{description}</p>
+                              </div>
+                          ))}
                 </div>
-
             </section>
 
-
-            {/* =================================================================
-                BATTERY ACTIVITY
-               ================================================================= */}
-
-            <section
-                className="
-                    grid
-                    gap-6
-                    xl:grid-cols-[1.7fr_1fr]
-                "
-            >
-
-                {/* =============================================================
-                    CHARGE / DISCHARGE CHART
-                   ============================================================= */}
-
-                <div
-                    className="
-                        rounded-2xl
-                        border
-                        border-border
-                        bg-surface
-                        p-5
-                        shadow-sm
-                        sm:p-6
-                    "
-                >
-
-                    <div
-                        className="
-                            flex
-                            flex-col
-                            gap-3
-                            sm:flex-row
-                            sm:items-center
-                            sm:justify-between
-                        "
-                    >
-
+            {/* Battery Activity Chart & Storage Mode */}
+            <section className="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
+                {/* Charge / Discharge Chart */}
+                <div className="rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-6">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-
-                            <h2
-                                className="
-                                    text-base
-                                    font-semibold
-                                    text-text
-                                "
-                            >
-                                Battery Activity
-                            </h2>
-
-                            <p
-                                className="
-                                    mt-1
-                                    text-xs
-                                    text-text-secondary
-                                "
-                            >
+                            <h2 className="text-base font-semibold text-text">Battery Activity</h2>
+                            <p className="mt-1 text-xs text-text-secondary">
                                 Charging and discharging activity today
                             </p>
-
                         </div>
-
 
                         <div className="flex items-center gap-4 text-xs">
-
                             <div className="flex items-center gap-2">
-
-                                <span
-                                    className="
-                                        h-2.5
-                                        w-2.5
-                                        rounded-full
-                                        bg-primary
-                                    "
-                                />
-
+                                <span className="h-2.5 w-2.5 rounded-full bg-primary" />
                                 Charging
-
                             </div>
-
                             <div className="flex items-center gap-2">
-
-                                <span
-                                    className="
-                                        h-2.5
-                                        w-2.5
-                                        rounded-full
-                                        bg-emerald-500
-                                    "
-                                />
-
+                                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
                                 Discharging
-
                             </div>
-
                         </div>
-
                     </div>
 
+                    {batteryActivity.length === 0 ? (
+                        <div className="mt-8 flex h-56 items-center justify-center rounded-xl border border-dashed border-border text-sm text-text-muted">
+                            No battery activity logs recorded yet today.
+                        </div>
+                    ) : (
+                        <div className="mt-8">
+                            <div className="flex h-56 items-end justify-between gap-2 border-b border-border">
+                                {batteryActivity.map((item, idx) => {
+                                    const height = (item.value / maxActivity) * 100;
+                                    const isCharging = item.type === "charge";
 
-                    {/* Chart */}
-
-                    <div className="mt-8">
-
-                        <div
-                            className="
-                                flex
-                                h-56
-                                items-end
-                                justify-between
-                                gap-2
-                                border-b
-                                border-border
-                            "
-                        >
-
-                            {batteryActivity.map((item) => {
-
-                                const height =
-                                    (item.value / maxActivity) * 100;
-
-                                const isCharging =
-                                    item.type === "charge";
-
-                                return (
-                                    <div
-                                        key={item.time}
-                                        className="
-                                            flex
-                                            h-full
-                                            flex-1
-                                            items-end
-                                            justify-center
-                                        "
-                                    >
-
+                                    return (
                                         <div
-                                            className={`
-                                                w-5
-                                                rounded-t-md
-                                                transition-all
-                                                duration-500
-                                                sm:w-7
-                                                ${
+                                            key={`${item.time}-${idx}`}
+                                            className="flex h-full flex-1 items-end justify-center"
+                                        >
+                                            <div
+                                                className={`w-5 rounded-t-md transition-all duration-500 sm:w-7 ${
                                                     isCharging
                                                         ? "bg-primary/75 hover:bg-primary"
                                                         : "bg-emerald-500/70 hover:bg-emerald-500"
-                                                }
-                                            `}
-                                            style={{
-                                                height: `${height}%`,
-                                            }}
-                                            title={`${item.value} kW`}
-                                        />
+                                                }`}
+                                                style={{
+                                                    height: `${Math.max(height, 5)}%`,
+                                                }}
+                                                title={`${item.value} kW (${item.type})`}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </div>
 
-                                    </div>
-                                );
-
-                            })}
-
+                            <div className="mt-3 flex justify-between">
+                                {batteryActivity.map((item, idx) => (
+                                    <span
+                                        key={`${item.time}-${idx}`}
+                                        className="flex-1 text-center text-[10px] text-text-muted"
+                                    >
+                                        {item.time}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
-
-
-                        <div className="mt-3 flex justify-between">
-
-                            {batteryActivity.map((item) => (
-
-                                <span
-                                    key={item.time}
-                                    className="
-                                        flex-1
-                                        text-center
-                                        text-[10px]
-                                        text-text-muted
-                                    "
-                                >
-                                    {item.time}
-                                </span>
-
-                            ))}
-
-                        </div>
-
-                    </div>
-
+                    )}
                 </div>
 
-
-                {/* =============================================================
-                    BATTERY MODE
-                   ============================================================= */}
-
-                <div
-                    className="
-                        rounded-2xl
-                        border
-                        border-border
-                        bg-surface
-                        p-5
-                        shadow-sm
-                        sm:p-6
-                    "
-                >
-
+                {/* Storage Mode */}
+                <div className="rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-6">
                     <div>
-
-                        <h2
-                            className="
-                                text-base
-                                font-semibold
-                                text-text
-                            "
-                        >
-                            Storage Mode
-                        </h2>
-
-                        <p
-                            className="
-                                mt-1
-                                text-xs
-                                text-text-secondary
-                            "
-                        >
+                        <h2 className="text-base font-semibold text-text">Storage Mode</h2>
+                        <p className="mt-1 text-xs text-text-secondary">
                             How the battery is currently being used
                         </p>
-
                     </div>
-
 
                     <div className="mt-6 space-y-3">
-
-                        {/* Solar charging */}
-
-                        <div
-                            className="
-                                flex
-                                items-center
-                                gap-3
-                                rounded-xl
-                                border
-                                border-border
-                                bg-app-bg
-                                p-4
-                            "
-                        >
-
-                            <div
-                                className="
-                                    flex
-                                    h-10
-                                    w-10
-                                    shrink-0
-                                    items-center
-                                    justify-center
-                                    rounded-xl
-                                    bg-primary/10
-                                    text-primary
-                                "
-                            >
+                        <div className="flex items-center gap-3 rounded-xl border border-border bg-app-bg p-4">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                                 <Leaf className="h-5 w-5" />
                             </div>
-
                             <div className="min-w-0 flex-1">
-
-                                <p className="text-sm font-medium text-text">
-                                    Solar Charging
-                                </p>
-
+                                <p className="text-sm font-medium text-text">Solar Charging</p>
                                 <p className="mt-1 text-xs text-text-muted">
-                                    Battery charges from renewable energy
+                                    Battery absorbs excess renewable output
                                 </p>
-
                             </div>
-
-                            <ArrowUp
-                                className="
-                                    h-4
-                                    w-4
-                                    shrink-0
-                                    text-primary
-                                "
-                            />
-
+                            <ArrowUp className="h-4 w-4 shrink-0 text-primary" />
                         </div>
 
-
-                        {/* Peak load support */}
-
-                        <div
-                            className="
-                                flex
-                                items-center
-                                gap-3
-                                rounded-xl
-                                border
-                                border-border
-                                bg-app-bg
-                                p-4
-                            "
-                        >
-
-                            <div
-                                className="
-                                    flex
-                                    h-10
-                                    w-10
-                                    shrink-0
-                                    items-center
-                                    justify-center
-                                    rounded-xl
-                                    bg-primary/10
-                                    text-primary
-                                "
-                            >
+                        <div className="flex items-center gap-3 rounded-xl border border-border bg-app-bg p-4">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                                 <Zap className="h-5 w-5" />
                             </div>
-
                             <div className="min-w-0 flex-1">
-
-                                <p className="text-sm font-medium text-text">
-                                    Peak Load Support
-                                </p>
-
+                                <p className="text-sm font-medium text-text">Peak Load Support</p>
                                 <p className="mt-1 text-xs text-text-muted">
-                                    Battery helps reduce grid demand
+                                    Discharges during high-demand windows
                                 </p>
-
                             </div>
-
-                            <ArrowDown
-                                className="
-                                    h-4
-                                    w-4
-                                    shrink-0
-                                    text-emerald-500
-                                "
-                            />
-
+                            <ArrowDown className="h-4 w-4 shrink-0 text-emerald-500" />
                         </div>
 
-
-                        {/* Efficiency */}
-
-                        <div
-                            className="
-                                flex
-                                items-center
-                                gap-3
-                                rounded-xl
-                                border
-                                border-border
-                                bg-app-bg
-                                p-4
-                            "
-                        >
-
-                            <div
-                                className="
-                                    flex
-                                    h-10
-                                    w-10
-                                    shrink-0
-                                    items-center
-                                    justify-center
-                                    rounded-xl
-                                    bg-primary/10
-                                    text-primary
-                                "
-                            >
+                        <div className="flex items-center gap-3 rounded-xl border border-border bg-app-bg p-4">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                                 <Gauge className="h-5 w-5" />
                             </div>
-
                             <div className="min-w-0 flex-1">
-
-                                <p className="text-sm font-medium text-text">
-                                    Storage Efficiency
-                                </p>
-
+                                <p className="text-sm font-medium text-text">Adaptive Balance</p>
                                 <p className="mt-1 text-xs text-text-muted">
-                                    Estimated round-trip efficiency
+                                    Maintains battery reserve for outages
                                 </p>
-
                             </div>
-
-                            <span
-                                className="
-                                    text-sm
-                                    font-semibold
-                                    text-text
-                                "
-                            >
-                                91%
-                            </span>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
-
-
-            {/* =================================================================
-                BATTERY INSIGHT
-               ================================================================= */}
-
-            <section>
-
-                <div
-                    className="
-                        rounded-2xl
-                        border
-                        border-primary/20
-                        bg-primary/5
-                        p-5
-                        sm:p-6
-                    "
-                >
-
-                    <div className="flex items-start gap-4">
-
-                        <div
-                            className="
-                                flex
-                                h-10
-                                w-10
-                                shrink-0
-                                items-center
-                                justify-center
-                                rounded-xl
-                                bg-primary/10
-                                text-primary
-                            "
-                        >
-                            <BatteryCharging className="h-5 w-5" />
-                        </div>
-
-                        <div>
-
-                            <p
-                                className="
-                                    text-sm
-                                    font-semibold
-                                    text-text
-                                "
-                            >
-                                Battery is performing efficiently
-                            </p>
-
-                            <p
-                                className="
-                                    mt-1
-                                    text-sm
-                                    leading-6
-                                    text-text-secondary
-                                "
-                            >
-                                Your battery is currently at {batteryLevel}%
-                                charge with an estimated health of 94%.
-                                Using stored energy during higher-demand
-                                periods can help reduce grid dependency and
-                                electricity costs.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
         </div>
     );
 }

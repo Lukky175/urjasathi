@@ -19,10 +19,15 @@ from .common_schema import add_calendar_features
 
 def _locate_solar_file(filename: str) -> Path:
     """Find solar file across possible directories (data/raw/, root, data/)."""
+    root_dir = Path(__file__).resolve().parents[3]
     candidates = [
         Path("data/raw") / filename,
         Path(filename),
         Path("data") / filename,
+        root_dir / "data/raw" / filename,
+        root_dir / "data" / filename,
+        root_dir / "data/processed/model2_train.csv",
+        Path("data/processed/model2_train.csv"),
     ]
     for p in candidates:
         if p.exists():

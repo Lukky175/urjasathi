@@ -33,7 +33,7 @@ except ImportError:
     from sklearn.preprocessing import StandardScaler  # type: ignore
     from sklearn.pipeline import make_pipeline  # type: ignore
     import xgboost as xgb  # type: ignore
-    import lightgbm as lgb  # type: ignore
+    lgb = None
 
 from src.config.energy_config import XGB_PARAMS_1A, DATA_PATHS
 

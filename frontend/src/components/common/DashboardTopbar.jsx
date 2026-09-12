@@ -18,15 +18,19 @@ import {
     Menu,
     Bell,
     ChevronDown,
+    Moon,
+    Sun,
 } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 
 
 export default function DashboardTopbar({
     onMenuClick = () => {},
 }) {
     const { user } = useAuth();
+    const { theme, toggle } = useTheme();
 
 
     /**
@@ -145,6 +149,44 @@ export default function DashboardTopbar({
                ========================================================= */}
 
             <div className="flex items-center gap-2 sm:gap-4">
+
+
+                {/* Theme Toggle */}
+
+                <button
+                    type="button"
+                    onClick={toggle}
+                    aria-label={
+                        theme === "light"
+                            ? "Switch to dark mode"
+                            : "Switch to light mode"
+                    }
+                    title={
+                        theme === "light"
+                            ? "Switch to dark mode"
+                            : "Switch to light mode"
+                    }
+                    className="
+                        flex
+                        h-10
+                        w-10
+                        items-center
+                        justify-center
+                        rounded-full
+                        text-text-secondary
+                        transition-all
+                        duration-200
+                        hover:bg-primary/10
+                        hover:text-primary
+                    "
+                >
+                    {theme === "light" ? (
+                        <Moon className="h-[19px] w-[19px]" />
+                    ) : (
+                        <Sun className="h-[19px] w-[19px]" />
+                    )}
+                </button>
+
 
                 {/* Notification */}
 

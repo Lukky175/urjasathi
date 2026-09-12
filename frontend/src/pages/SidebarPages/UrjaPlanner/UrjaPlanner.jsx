@@ -7,17 +7,16 @@
  * Personalized energy planning and scenario analysis page.
  *
  * Urja Planner allows users to enter their own energy scenario and explore
- * potential outcomes using the UrjaSathi analysis model.
+ * potential outcomes using the existing /api/urja-planner analysis endpoint.
  *
  * IMPORTANT:
  * - Data entered here is ONLY for this scenario.
  * - It does not modify dashboard data.
  * - It does not affect Consumption, Generation, Cost & Savings, etc.
- * - The Analyze button will later connect to the ML/model API.
  * ============================================================================
  */
 
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
     MapPin,
@@ -30,7 +29,11 @@ import {
     IndianRupee,
     BatteryCharging,
     Activity,
+    Leaf,
 } from "lucide-react";
+
+import LineChart from "../../../components/charts/LineChart";
+import api, { ApiError } from "../../../services/api";
 
 
 /**
@@ -38,14 +41,135 @@ import {
  * SUPPORTED LOCATIONS
  * ============================================================================
  *
- * Currently supported by the model.
+ * Currently supported by the planner.
  *
- * More cities can be added later when the model supports them.
+ * More cities can be added later when the planner supports them.
  */
 const SUPPORTED_CITIES = [
     "Delhi",
     "Greater Noida",
+    "Noida",
+    "Gurugram",
+    "Mumbai",
+    "Pune",
+    "Bengaluru",
+    "Hyderabad",
+    "Chennai",
+    "Kolkata",
+    "Ahmedabad",
+    "Jaipur",
+    "Lucknow",
+    "Chandigarh",
+    "Bhopal",
 ];
+
+const PLANNER_RESULT_FIELDS = [
+    "city",
+    "daily_solar_kwh",
+    "daily_consumption_kwh",
+    "monthly_savings_inr",
+    "savings_pct",
+    "grid_reduction_pct",
+    "peak_demand_shaved_kw",
+    "co2_abated_kg_daily",
+    "co2_abated_tonnes_monthly",
+    "battery_buffer_kwh",
+    "hourly_profile",
+];
+
+
+function parseRequiredNumber(value) {
+    if (value === "" || value === null || value === undefined) {
+        return null;
+    }
+
+    const parsed = Number(value);
+
+    if (!Number.isFinite(parsed) || parsed < 0) {
+        return null;
+    }
+
+    return parsed;
+}
+
+
+function isPlannerResult(payload) {
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+        return false;
+    }
+
+    const hasFields = PLANNER_RESULT_FIELDS.every((field) => field in payload);
+
+    return hasFields && Array.isArray(payload.hourly_profile);
+}
+
+
+function formatMetric(value, digits = 1) {
+    const numeric = Number(value);
+
+    if (!Number.isFinite(numeric)) {
+        return "—";
+    }
+
+    return numeric.toLocaleString("en-IN", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
+    });
+}
+
+
+function formatHourLabel(hour) {
+    const numeric = Number(hour);
+
+    if (!Number.isFinite(numeric)) {
+        return "";
+    }
+
+    return `${String(Math.trunc(numeric)).padStart(2, "0")}:00`;
+}
+
+
+function plannerErrorMessage(error) {
+    if (!(error instanceof ApiError)) {
+        return "Something went wrong while analyzing this scenario. Please try again.";
+    }
+
+    if (error.code === "ABORTED") {
+        return null;
+    }
+
+    if (error.code === "TIMEOUT") {
+        return "The analysis request timed out. Please try again.";
+    }
+
+    if (error.code === "MALFORMED") {
+        return "The analysis service returned an unexpected response. Please try again.";
+    }
+
+    if (error.status === 0 || error.code === "NETWORK") {
+        return "Could not reach the analysis service. Check your connection and try again.";
+    }
+
+    const detail = error.payload?.detail;
+
+    if (typeof detail === "string" && detail.trim()) {
+        return detail;
+    }
+
+    if (Array.isArray(detail) && detail[0]?.msg) {
+        return detail[0].msg;
+    }
+
+    if (error.status >= 500) {
+        return "The analysis service ran into a problem. Please try again later.";
+    }
+
+    if (error.status >= 400) {
+        return "The scenario could not be analyzed. Please check your inputs and try again.";
+    }
+
+    return "Something went wrong while analyzing this scenario. Please try again.";
+}
 
 
 /**
@@ -80,53 +204,101 @@ export default function UrjaPlanner() {
 
     const [hasAnalyzed, setHasAnalyzed] = useState(false);
 
+    const [analysisResult, setAnalysisResult] = useState(null);
+
+    const [error, setError] = useState(null);
+
+    const abortRef = useRef(null);
+
+    const requestIdRef = useRef(0);
+
+
+    useEffect(() => {
+        return () => {
+            abortRef.current?.abort();
+        };
+    }, []);
+
 
     /**
      * =========================================================================
      * HANDLE SUBMIT
      * =========================================================================
      *
-     * For now this only simulates the analysis process.
-     *
-     * Later:
-     *
      * form data
      *      ↓
-     * API
+     * api.post("/api/urja-planner")
      *      ↓
-     * ML model
+     * FastAPI planner calculations
      *      ↓
      * analysis results
      */
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
 
         event.preventDefault();
 
-        if (!solarGeneration || !energyConsumption) {
+        const solarValue = parseRequiredNumber(solarGeneration);
+        const consumptionValue = parseRequiredNumber(energyConsumption);
+
+        if (solarValue === null || consumptionValue === null) {
+            setError("Enter valid numeric values for solar generation and energy consumption.");
+            setHasAnalyzed(false);
             return;
         }
 
+        abortRef.current?.abort();
+
+        const controller = new AbortController();
+        abortRef.current = controller;
+
+        const requestId = ++requestIdRef.current;
+
+        setError(null);
         setIsAnalyzing(true);
 
-        /*
-         * Temporary simulated model delay.
-         *
-         * This will later be replaced with an API call such as:
-         *
-         * const response = await fetch("/api/urja-planner", {
-         *     method: "POST",
-         *     body: JSON.stringify({
-         *         city,
-         *         solarGeneration,
-         *         energyConsumption,
-         *     }),
-         * });
-         */
+        try {
+            const result = await api.post(
+                "/api/urja-planner",
+                {
+                    city,
+                    solar_generation: solarValue,
+                    energy_consumption: consumptionValue,
+                },
+                { signal: controller.signal }
+            );
 
-        setTimeout(() => {
-            setIsAnalyzing(false);
+            if (requestId !== requestIdRef.current) {
+                return;
+            }
+
+            if (!isPlannerResult(result)) {
+                setAnalysisResult(null);
+                setHasAnalyzed(false);
+                setError("The analysis service returned an unexpected response. Please try again.");
+                return;
+            }
+
+            setAnalysisResult(result);
             setHasAnalyzed(true);
-        }, 1200);
+        } catch (err) {
+            if (requestId !== requestIdRef.current) {
+                return;
+            }
+
+            const message = plannerErrorMessage(err);
+
+            if (!message) {
+                return;
+            }
+
+            setAnalysisResult(null);
+            setHasAnalyzed(false);
+            setError(message);
+        } finally {
+            if (requestId === requestIdRef.current) {
+                setIsAnalyzing(false);
+            }
+        }
     };
 
 
@@ -138,6 +310,9 @@ export default function UrjaPlanner() {
 
     const handleReset = () => {
 
+        abortRef.current?.abort();
+        requestIdRef.current += 1;
+
         setCity("Delhi");
 
         setSolarGeneration("");
@@ -147,7 +322,114 @@ export default function UrjaPlanner() {
         setHasAnalyzed(false);
 
         setIsAnalyzing(false);
+
+        setAnalysisResult(null);
+
+        setError(null);
     };
+
+
+    const hourlyProfile = analysisResult?.hourly_profile ?? [];
+
+    const hourlyChartSeries = useMemo(() => {
+        if (!hourlyProfile.length) {
+            return [];
+        }
+
+        const toSeries = (name, color, key) => ({
+            name,
+            color,
+            data: hourlyProfile.map((point) => ({
+                label: formatHourLabel(point.hour),
+                value: Number(point[key]) || 0,
+            })),
+        });
+
+        return [
+            toSeries("Demand", "#7c3aed", "demand_kw"),
+            toSeries("Solar", "#f59e0b", "solar_kw"),
+            toSeries("Battery discharge", "#0ea5e9", "battery_discharge_kw"),
+            toSeries("Grid import", "#64748b", "grid_import_kw"),
+        ];
+    }, [hourlyProfile]);
+
+    const batterySocSeries = useMemo(() => {
+        if (!hourlyProfile.length) {
+            return [];
+        }
+
+        return [
+            {
+                name: "Battery SOC",
+                color: "#10b981",
+                data: hourlyProfile.map((point) => ({
+                    label: formatHourLabel(point.hour),
+                    value: Number(point.battery_soc_pct) || 0,
+                })),
+            },
+        ];
+    }, [hourlyProfile]);
+
+    const resultCards = analysisResult
+        ? [
+            {
+                label: "Daily Solar",
+                value: `${formatMetric(analysisResult.daily_solar_kwh)} kWh`,
+                description: "Average daily generation",
+                icon: SunMedium,
+                iconClass: "text-[var(--solar)]",
+            },
+            {
+                label: "Daily Consumption",
+                value: `${formatMetric(analysisResult.daily_consumption_kwh)} kWh`,
+                description: "Average daily demand",
+                icon: Zap,
+                iconClass: "text-[var(--consumption)]",
+            },
+            {
+                label: "Monthly Savings",
+                value: `₹${formatMetric(analysisResult.monthly_savings_inr, 0)}`,
+                description: `${formatMetric(analysisResult.savings_pct, 1)}% vs baseline`,
+                icon: IndianRupee,
+                iconClass: "text-secondary",
+            },
+            {
+                label: "Grid Reduction",
+                value: `${formatMetric(analysisResult.grid_reduction_pct, 1)}%`,
+                description: "Less energy imported from the grid",
+                icon: TrendingUp,
+                iconClass: "text-primary",
+            },
+            {
+                label: "Peak Demand Shaved",
+                value: `${formatMetric(analysisResult.peak_demand_shaved_kw)} kW`,
+                description: "Peak load reduced in this scenario",
+                icon: Activity,
+                iconClass: "text-secondary",
+            },
+            {
+                label: "Daily CO₂ Reduction",
+                value: `${formatMetric(analysisResult.co2_abated_kg_daily)} kg`,
+                description: `${formatMetric(analysisResult.co2_abated_tonnes_monthly, 2)} t monthly`,
+                icon: Leaf,
+                iconClass: "text-secondary",
+            },
+            {
+                label: "Battery Buffer",
+                value: `${formatMetric(analysisResult.battery_buffer_kwh)} kWh`,
+                description: `${formatMetric(analysisResult.battery_soc_min_pct, 0)}–${formatMetric(analysisResult.battery_soc_max_pct, 0)}% SOC window`,
+                icon: BatteryCharging,
+                iconClass: "text-primary",
+            },
+            {
+                label: "Location",
+                value: analysisResult.city || city,
+                description: "Planner scenario city",
+                icon: MapPin,
+                iconClass: "text-primary",
+            },
+        ]
+        : [];
 
 
     /**
@@ -399,6 +681,7 @@ export default function UrjaPlanner() {
                                         onChange={(event) =>
                                             setCity(event.target.value)
                                         }
+                                        disabled={isAnalyzing}
                                         className="
                                             w-full
                                             appearance-none
@@ -455,8 +738,7 @@ export default function UrjaPlanner() {
                                         text-text-muted
                                     "
                                 >
-                                    Currently supported locations:
-                                    Delhi and Greater Noida.
+                                    Select from 15 popular Indian cities for location-aware analysis.
                                 </p>
 
                             </div>
@@ -515,6 +797,7 @@ export default function UrjaPlanner() {
                                                 )
                                             }
                                             placeholder="e.g. 8.5"
+                                            disabled={isAnalyzing}
                                             className="
                                                 w-full
                                                 rounded-xl
@@ -616,6 +899,7 @@ export default function UrjaPlanner() {
                                                 )
                                             }
                                             placeholder="e.g. 12.4"
+                                            disabled={isAnalyzing}
                                             className="
                                                 w-full
                                                 rounded-xl
@@ -671,6 +955,25 @@ export default function UrjaPlanner() {
                                 </div>
 
                             </div>
+
+
+                            {error && (
+                                <div
+                                    role="alert"
+                                    className="
+                                        rounded-xl
+                                        border
+                                        border-red-500/30
+                                        bg-red-500/10
+                                        px-4
+                                        py-3
+                                        text-sm
+                                        text-red-500
+                                    "
+                                >
+                                    {error}
+                                </div>
+                            )}
 
 
                             {/* =================================================
@@ -992,10 +1295,9 @@ export default function UrjaPlanner() {
                             <span className="font-semibold text-text-secondary">
                                 Note:
                             </span>{" "}
-                            Results will be generated using the UrjaSathi
-                            energy analysis model. The available insights
-                            may vary depending on the selected location
-                            and model capabilities.
+                            Results are generated from UrjaSathi planner
+                            calculations for this scenario. Insights vary
+                            with the selected location and the values you enter.
                         </p>
 
                     </div>
@@ -1006,17 +1308,10 @@ export default function UrjaPlanner() {
 
 
             {/* =================================================================
-                RESULTS PLACEHOLDER
-               =================================================================
-               
-               This section intentionally remains on the same page.
-               
-               When the ML model is connected, this area will display the
-               returned metrics and charts without changing the rest of
-               the dashboard.
+                RESULTS
                ================================================================= */}
 
-            {hasAnalyzed && (
+            {hasAnalyzed && analysisResult && (
 
                 <section className="mt-6">
 
@@ -1079,7 +1374,7 @@ export default function UrjaPlanner() {
                                             text-text-muted
                                         "
                                     >
-                                        Personalized analysis for {city}
+                                        Personalized analysis for {analysisResult.city || city}
                                     </p>
 
                                 </div>
@@ -1089,342 +1384,158 @@ export default function UrjaPlanner() {
                         </div>
 
 
-                        {/* Temporary result cards */}
-
                         <div className="p-5 sm:p-7">
 
                             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
+                                {resultCards.map((card) => {
+                                    const Icon = card.icon;
 
-                                {/* =================================================
-                                    GENERATION
-                                   ================================================= */}
-
-                                <div
-                                    className="
-                                        rounded-xl
-                                        border
-                                        border-border
-                                        bg-surface-soft
-                                        p-4
-                                    "
-                                >
-
-                                    <div
-                                        className="
-                                            flex
-                                            items-center
-                                            justify-between
-                                        "
-                                    >
-
-                                        <span
+                                    return (
+                                        <div
+                                            key={card.label}
                                             className="
-                                                text-xs
-                                                font-medium
-                                                text-text-muted
+                                                rounded-xl
+                                                border
+                                                border-border
+                                                bg-surface-soft
+                                                p-4
                                             "
                                         >
-                                            Solar Generation
-                                        </span>
 
-                                        <SunMedium
-                                            className="
-                                                h-4
-                                                w-4
-                                                text-[var(--solar)]
-                                            "
-                                        />
+                                            <div
+                                                className="
+                                                    flex
+                                                    items-center
+                                                    justify-between
+                                                "
+                                            >
 
-                                    </div>
+                                                <span
+                                                    className="
+                                                        text-xs
+                                                        font-medium
+                                                        text-text-muted
+                                                    "
+                                                >
+                                                    {card.label}
+                                                </span>
 
-                                    <p
-                                        className="
-                                            mt-3
-                                            text-2xl
-                                            font-bold
-                                            text-text
-                                        "
-                                    >
-                                        —
-                                    </p>
+                                                <Icon
+                                                    className={`h-4 w-4 ${card.iconClass}`}
+                                                />
 
-                                    <p
-                                        className="
-                                            mt-1
-                                            text-xs
-                                            text-text-muted
-                                        "
-                                    >
-                                        Model output
-                                    </p>
+                                            </div>
 
-                                </div>
+                                            <p
+                                                className="
+                                                    mt-3
+                                                    text-2xl
+                                                    font-bold
+                                                    text-text
+                                                "
+                                            >
+                                                {card.value}
+                                            </p>
+
+                                            <p
+                                                className="
+                                                    mt-1
+                                                    text-xs
+                                                    text-text-muted
+                                                "
+                                            >
+                                                {card.description}
+                                            </p>
+
+                                        </div>
+                                    );
+                                })}
+
+                            </div>
 
 
-                                {/* =================================================
-                                    SAVINGS
-                                   ================================================= */}
+                            <div
+                                className="
+                                    mt-6
+                                    rounded-xl
+                                    border
+                                    border-border
+                                    bg-surface-soft
+                                    p-4
+                                    sm:p-5
+                                "
+                            >
 
-                                <div
+                                <h3
                                     className="
-                                        rounded-xl
-                                        border
-                                        border-border
-                                        bg-surface-soft
-                                        p-4
+                                        text-sm
+                                        font-semibold
+                                        text-text
                                     "
                                 >
+                                    Hourly energy profile
+                                </h3>
 
-                                    <div
-                                        className="
-                                            flex
-                                            items-center
-                                            justify-between
-                                        "
-                                    >
-
-                                        <span
-                                            className="
-                                                text-xs
-                                                font-medium
-                                                text-text-muted
-                                            "
-                                        >
-                                            Cost Savings
-                                        </span>
-
-                                        <IndianRupee
-                                            className="
-                                                h-4
-                                                w-4
-                                                text-secondary
-                                            "
-                                        />
-
-                                    </div>
-
-                                    <p
-                                        className="
-                                            mt-3
-                                            text-2xl
-                                            font-bold
-                                            text-text
-                                        "
-                                    >
-                                        —
-                                    </p>
-
-                                    <p
-                                        className="
-                                            mt-1
-                                            text-xs
-                                            text-text-muted
-                                        "
-                                    >
-                                        Model output
-                                    </p>
-
-                                </div>
-
-
-                                {/* =================================================
-                                    GRID DEPENDENCY
-                                   ================================================= */}
-
-                                <div
+                                <p
                                     className="
-                                        rounded-xl
-                                        border
-                                        border-border
-                                        bg-surface-soft
-                                        p-4
+                                        mt-1
+                                        text-xs
+                                        text-text-muted
                                     "
                                 >
+                                    Demand, solar, battery discharge, and grid import from this scenario.
+                                </p>
 
-                                    <div
-                                        className="
-                                            flex
-                                            items-center
-                                            justify-between
-                                        "
-                                    >
-
-                                        <span
-                                            className="
-                                                text-xs
-                                                font-medium
-                                                text-text-muted
-                                            "
-                                        >
-                                            Grid Dependency
-                                        </span>
-
-                                        <Zap
-                                            className="
-                                                h-4
-                                                w-4
-                                                text-primary
-                                            "
-                                        />
-
-                                    </div>
-
-                                    <p
-                                        className="
-                                            mt-3
-                                            text-2xl
-                                            font-bold
-                                            text-text
-                                        "
-                                    >
-                                        —
-                                    </p>
-
-                                    <p
-                                        className="
-                                            mt-1
-                                            text-xs
-                                            text-text-muted
-                                        "
-                                    >
-                                        Model output
-                                    </p>
-
-                                </div>
-
-
-                                {/* =================================================
-                                    ENERGY IMPACT
-                                   ================================================= */}
-
-                                <div
-                                    className="
-                                        rounded-xl
-                                        border
-                                        border-border
-                                        bg-surface-soft
-                                        p-4
-                                    "
-                                >
-
-                                    <div
-                                        className="
-                                            flex
-                                            items-center
-                                            justify-between
-                                        "
-                                    >
-
-                                        <span
-                                            className="
-                                                text-xs
-                                                font-medium
-                                                text-text-muted
-                                            "
-                                        >
-                                            Energy Impact
-                                        </span>
-
-                                        <Activity
-                                            className="
-                                                h-4
-                                                w-4
-                                                text-secondary
-                                            "
-                                        />
-
-                                    </div>
-
-                                    <p
-                                        className="
-                                            mt-3
-                                            text-2xl
-                                            font-bold
-                                            text-text
-                                        "
-                                    >
-                                        —
-                                    </p>
-
-                                    <p
-                                        className="
-                                            mt-1
-                                            text-xs
-                                            text-text-muted
-                                        "
-                                    >
-                                        Model output
-                                    </p>
-
+                                <div className="mt-4">
+                                    <LineChart
+                                        series={hourlyChartSeries}
+                                        unit=" kW"
+                                        height={260}
+                                    />
                                 </div>
 
                             </div>
 
 
-                            {/* =====================================================
-                                CHART PLACEHOLDER
-                               ===================================================== */}
-
                             <div
                                 className="
-                                    mt-6
-                                    flex
-                                    min-h-[280px]
-                                    items-center
-                                    justify-center
+                                    mt-4
                                     rounded-xl
                                     border
-                                    border-dashed
-                                    border-border-strong
+                                    border-border
                                     bg-surface-soft
+                                    p-4
+                                    sm:p-5
                                 "
                             >
 
-                                <div className="text-center">
+                                <h3
+                                    className="
+                                        text-sm
+                                        font-semibold
+                                        text-text
+                                    "
+                                >
+                                    Battery state of charge
+                                </h3>
 
-                                    <div
-                                        className="
-                                            mx-auto
-                                            flex
-                                            h-12
-                                            w-12
-                                            items-center
-                                            justify-center
-                                            rounded-xl
-                                            bg-primary/10
-                                            text-primary
-                                        "
-                                    >
-                                        <TrendingUp className="h-6 w-6" />
-                                    </div>
+                                <p
+                                    className="
+                                        mt-1
+                                        text-xs
+                                        text-text-muted
+                                    "
+                                >
+                                    Hourly battery SOC for the planned dispatch window.
+                                </p>
 
-                                    <h3
-                                        className="
-                                            mt-4
-                                            text-sm
-                                            font-semibold
-                                            text-text
-                                        "
-                                    >
-                                        Analysis Visualization
-                                    </h3>
-
-                                    <p
-                                        className="
-                                            mx-auto
-                                            mt-1
-                                            max-w-md
-                                            text-xs
-                                            leading-5
-                                            text-text-muted
-                                        "
-                                    >
-                                        Model-generated charts and detailed
-                                        energy insights will appear here once
-                                        the UrjaSathi analysis API is connected.
-                                    </p>
-
+                                <div className="mt-4">
+                                    <LineChart
+                                        series={batterySocSeries}
+                                        unit="%"
+                                        height={200}
+                                    />
                                 </div>
 
                             </div>

@@ -32,11 +32,13 @@ import {
 
 import {
     LuAtSign,
+    LuBuilding,
     LuChartNoAxesCombined,
     LuCheck,
     LuEye,
     LuEyeOff,
     LuLockKeyhole,
+    LuMapPin,
     LuShieldCheck,
     LuSparkles,
     LuUserRound,
@@ -150,6 +152,91 @@ function FloatingField({
 
         </div>
 
+    );
+}
+
+
+/**
+ * ============================================================================
+ * FLOATING SELECT FIELD
+ * ============================================================================
+ */
+
+function FloatingSelect({
+    label,
+    value,
+    onChange,
+    options = [],
+    icon,
+}) {
+    return (
+        <div className="relative">
+            <select
+                value={value}
+                onChange={onChange}
+                className="
+                    peer
+                    h-[54px]
+                    w-full
+                    appearance-none
+                    rounded-xl
+                    border
+                    border-border
+                    bg-secondary/5
+                    px-4
+                    pr-12
+                    text-sm
+                    text-text
+                    outline-none
+                    transition-all
+                    duration-300
+                    hover:border-border-strong
+                    focus:border-primary
+                    focus:bg-secondary/10
+                    focus:ring-4
+                    focus:ring-primary/10
+                "
+            >
+                {options.map((opt) => (
+                    <option key={opt} value={opt} className="bg-app-bg text-text">
+                        {opt}
+                    </option>
+                ))}
+            </select>
+
+            <label
+                className="
+                    pointer-events-none
+                    absolute
+                    left-4
+                    -top-2
+                    z-10
+                    bg-secondary/2
+                    px-1
+                    text-xs
+                    text-primary
+                "
+            >
+                {label}
+            </label>
+
+            <div
+                className="
+                    pointer-events-none
+                    absolute
+                    right-4
+                    top-1/2
+                    flex
+                    -translate-y-1/2
+                    items-center
+                    justify-center
+                    text-lg
+                    text-text-secondary
+                "
+            >
+                {icon}
+            </div>
+        </div>
     );
 }
 
@@ -405,6 +492,12 @@ export default function Signup() {
     const [email, setEmail] =
         useState("");
 
+    const [location, setLocation] =
+        useState("Delhi");
+
+    const [address, setAddress] =
+        useState("");
+
     const [password, setPassword] =
         useState("");
 
@@ -457,122 +550,89 @@ export default function Signup() {
        ------------------------------------------------------------------------ */
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-
         setError("");
 
-
         /* Password validation */
-
         if (password.length < 8) {
-
-            const message =
-                "Password must be at least 8 characters.";
-
+            const message = "Password must be at least 8 characters.";
             setError(message);
             toast.error(message);
-
             return;
-
         }
-
 
         /* Password confirmation */
-
         if (password !== confirmPassword) {
-
-            const message =
-                "Passwords do not match.";
-
+            const message = "Passwords do not match.";
             setError(message);
             toast.error(message);
-
             return;
-
         }
-
 
         /* Terms */
-
         if (!acceptTerms) {
-
-            const message =
-                "Please accept the Terms and Privacy Policy.";
-
+            const message = "Please accept the Terms and Privacy Policy.";
             setError(message);
             toast.error(message);
-
             return;
-
         }
 
-
-        /* Mobile validation */
-
-        const cleanMobile =
-            mobile.replace(/\D/g, "");
-
-        if (cleanMobile.length < 10) {
-
-            const message =
-                "Please enter a valid mobile number.";
-
+        /* Address validation */
+        if (!address.trim()) {
+            const message = "Please enter your address.";
             setError(message);
             toast.error(message);
-
             return;
-
         }
-
 
         setSubmitting(true);
 
-
         try {
-
-            /*
-             * Keeping the same positional signature
-             * as your current AuthContext.
-             */
-
-            await signup(
-                name.trim(),
-                username.trim(),
-                cleanMobile,
-                email.trim(),
-                password
-            );
-
+            await signup({
+                full_name: name.trim(),
+                email: email.trim(),
+                password,
+                location,
+                address: address.trim(),
+                mobile: mobile.replace(/\D/g, ""),
+                username: username.trim(),
+            });
 
             toast.success(
-                "Account created successfully!"
+                "Account created successfully! Please sign in."
             );
 
-
-            navigate(
-                "/dashboard",
-                {
-                    replace: true,
-                }
-            );
+            navigate("/login", { replace: true });
 
         } catch (err) {
+            const status = err?.status || err?.response?.status;
+            let message = "Unable to create your account.";
 
-            const message =
-                err?.message ||
-                "Unable to create your account.";
+            if (status === 400 || status === 409) {
+                const detail = err?.response?.data?.detail || err?.payload?.detail;
+                if (typeof detail === "string" && /already\s*(registered|exists)/i.test(detail)) {
+                    message = "An account with this email already exists.";
+                } else if (typeof detail === "string") {
+                    message = detail;
+                } else {
+                    message = "An account with this email already exists.";
+                }
+            } else if (err?.response?.data?.detail) {
+                const detail = err.response.data.detail;
+                message = typeof detail === "string" ? detail : (Array.isArray(detail) ? detail.map(d => d.msg).join(". ") : JSON.stringify(detail));
+            } else if (err?.payload?.detail) {
+                const detail = err.payload.detail;
+                message = typeof detail === "string" ? detail : (Array.isArray(detail) ? detail.map(d => d.msg).join(". ") : JSON.stringify(detail));
+            } else if (err?.message) {
+                message = err.message;
+            }
 
             setError(message);
-
             toast.error(message);
 
         } finally {
-
             setSubmitting(false);
-
         }
-
     };
 
 
@@ -1371,26 +1431,29 @@ export default function Signup() {
                                ------------------------------------------------- */}
 
                             {error && (
-
                                 <div
                                     role="alert"
                                     className="
                                         relative
                                         mt-5
+                                        flex
+                                        items-center
+                                        gap-3
                                         rounded-xl
                                         border
-                                        border-red-200
-                                        bg-red-50
+                                        border-red-500/30
+                                        bg-red-500/10
                                         px-4
                                         py-3
                                         text-sm
                                         font-medium
-                                        text-red-600
+                                        text-red-500
+                                        backdrop-blur-sm
                                     "
                                 >
-                                    {error}
-                                </div>
-
+                                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-xs font-bold text-red-500">!</span>
+                                    <span>{error}</span>
+                                 </div>
                             )}
 
 
@@ -1498,6 +1561,52 @@ export default function Signup() {
                                         autoComplete="email"
                                         icon={
                                             <MdAlternateEmail />
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* =================================================
+                                    LOCATION + ADDRESS
+                                   ================================================= */}
+
+                                <div
+                                    className="
+                                        grid
+                                        grid-cols-1
+                                        gap-4
+                                        sm:grid-cols-2
+                                    "
+                                >
+
+                                    <FloatingSelect
+                                        label="City / Location"
+                                        value={location}
+                                        onChange={(e) =>
+                                            setLocation(e.target.value)
+                                        }
+                                        options={[
+                                            "Greater Noida",
+                                            "Delhi",
+                                            "Mumbai",
+                                            "Bangalore",
+                                            "Pune",
+                                        ]}
+                                        icon={
+                                            <LuMapPin className="h-5 w-5" />
+                                        }
+                                    />
+
+                                    <FloatingField
+                                        label="Address / Area"
+                                        value={address}
+                                        onChange={(e) =>
+                                            setAddress(e.target.value)
+                                        }
+                                        autoComplete="street-address"
+                                        icon={
+                                            <LuBuilding className="h-5 w-5" />
                                         }
                                     />
 

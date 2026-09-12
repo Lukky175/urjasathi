@@ -18,6 +18,7 @@
  * ============================================================================
  */
 
+import { useState } from "react";
 import {
     Lightbulb,
     SunMedium,
@@ -34,7 +35,6 @@ import {
     ChevronRight,
 } from "lucide-react";
 
-
 export default function Recommendations() {
 
     /**
@@ -50,76 +50,66 @@ export default function Recommendations() {
     const recommendations = [
         {
             id: 1,
-            title: "Shift high-power usage to solar hours",
+            title: "Pre-Cool Central Lecture Halls Before Peak Hours (11:30 AM – 1:00 PM)",
             description:
-                "Your highest electricity consumption occurs between 7 PM and 10 PM. Consider running high-power appliances between 11 AM and 3 PM when solar generation is strongest.",
+                "Building cooling demand peaks at 2:00 PM (128 kW). Pre-cooling computer labs and lecture halls between 11:30 AM and 1:00 PM uses free 34 kW rooftop solar, reducing expensive grid strain during the hottest afternoon hours.",
             category: "Consumption",
             priority: "High",
-            priorityClass:
-                "bg-action/10 text-action border-action/20",
+            priorityClass: "bg-action/10 text-action border-action/20",
             icon: Zap,
             iconClass: "text-action",
             iconBg: "bg-action/10",
-            savings: "₹420",
+            savings: "₹16,800",
             savingsLabel: "potential monthly savings",
-            impact: "12%",
-            impactLabel: "lower grid usage",
+            impact: "53.5%",
+            impactLabel: "afternoon peak shaved",
         },
         {
             id: 2,
-            title: "Optimize battery charging",
+            title: "Automate Overnight Off-Peak Battery Charging (12:00 AM – 4:00 AM)",
             description:
-                "Your battery reaches full charge earlier than necessary on several days. Adjusting the charging schedule can improve battery utilization and reduce unnecessary grid charging.",
+                "NPCL offers a 15% discounted tariff (₹7.31/kWh) during midnight hours. Pre-charging the 280 kWh battery to 55% overnight stores cheap grid power, which automatically discharges during the day to avoid peak ₹10.32/kWh rates.",
             category: "Battery",
-            priority: "Medium",
-            priorityClass:
-                "bg-secondary/10 text-secondary border-secondary/20",
+            priority: "High",
+            priorityClass: "bg-secondary/10 text-secondary border-secondary/20",
             icon: BatteryCharging,
             iconClass: "text-secondary",
             iconBg: "bg-secondary/10",
-            savings: "₹280",
+            savings: "₹14,500",
             savingsLabel: "potential monthly savings",
-            impact: "8%",
-            impactLabel: "better utilization",
+            impact: "35%",
+            impactLabel: "cheaper stored energy",
         },
         {
             id: 3,
-            title: "Increase daytime solar utilization",
+            title: "Enforce 20% Battery Reserve to Maximize Lifespan & Solar Intake",
             description:
-                "A portion of your solar generation is currently exported or unused. Running selected appliances during peak generation hours can increase your self-consumption.",
+                "Prioritize 40 kWp solar output for direct classroom power first, and maintain a strict 20% minimum battery safety floor. This prevents deep-discharge wear, extending battery life beyond 12+ years while ensuring 98% clean solar self-consumption.",
             category: "Solar",
             priority: "Medium",
-            priorityClass:
-                "bg-solar/10 text-solar border-solar/20",
+            priorityClass: "bg-solar/10 text-solar border-solar/20",
             icon: SunMedium,
             iconClass: "text-solar",
             iconBg: "bg-solar/10",
-            savings: "₹350",
+            savings: "₹10,340",
             savingsLabel: "potential monthly savings",
-            impact: "15%",
-            impactLabel: "higher self-consumption",
+            impact: "98%",
+            impactLabel: "solar self-consumption",
         },
     ];
-
-
-    /**
-     * =========================================================================
-     * QUICK OPTIMIZATION STATS
-     * =========================================================================
-     */
 
     const optimizationStats = [
         {
             label: "Potential Savings",
-            value: "₹1,050",
+            value: "₹41,640",
             suffix: "/month",
             icon: IndianRupee,
             iconClass: "text-success",
             iconBg: "bg-success/10",
         },
         {
-            label: "Energy Reduction",
-            value: "12.8",
+            label: "Peak Load Shaved",
+            value: "53.5",
             suffix: "%",
             icon: TrendingDown,
             iconClass: "text-secondary",
@@ -127,7 +117,7 @@ export default function Recommendations() {
         },
         {
             label: "CO₂ Reduction",
-            value: "38.4",
+            value: "3,530",
             suffix: " kg/month",
             icon: Leaf,
             iconClass: "text-success",
@@ -136,29 +126,32 @@ export default function Recommendations() {
     ];
 
 
-    /**
-     * =========================================================================
-     * CATEGORIES
-     * =========================================================================
-     */
+    const [activeCategory, setActiveCategory] = useState("All");
+    const [completedIds, setCompletedIds] = useState([]);
+    const [dismissedIds, setDismissedIds] = useState([]);
+
+    const visibleRecommendations = recommendations.filter((rec) => {
+        if (dismissedIds.includes(rec.id)) return false;
+        if (activeCategory === "All") return true;
+        return rec.category.toLowerCase() === activeCategory.toLowerCase();
+    });
 
     const categories = [
         {
             label: "All",
-            count: 3,
-            active: true,
+            count: recommendations.filter((r) => !dismissedIds.includes(r.id)).length,
         },
         {
             label: "Consumption",
-            count: 1,
+            count: recommendations.filter((r) => !dismissedIds.includes(r.id) && r.category === "Consumption").length,
         },
         {
             label: "Solar",
-            count: 1,
+            count: recommendations.filter((r) => !dismissedIds.includes(r.id) && r.category === "Solar").length,
         },
         {
             label: "Battery",
-            count: 1,
+            count: recommendations.filter((r) => !dismissedIds.includes(r.id) && r.category === "Battery").length,
         },
     ];
 
@@ -521,54 +514,53 @@ export default function Recommendations() {
                             sm:w-fit
                         "
                     >
+                        {categories.map((category) => {
+                            const isActive = activeCategory === category.label;
+                            return (
+                                <button
+                                    key={category.label}
+                                    type="button"
+                                    onClick={() => setActiveCategory(category.label)}
+                                    className={`
+                                        flex
+                                        shrink-0
+                                        items-center
+                                        gap-1.5
+                                        rounded-lg
+                                        px-3
+                                        py-2
+                                        text-xs
+                                        font-medium
+                                        transition-all
+                                        duration-200
 
-                        {categories.map((category) => (
-
-                            <button
-                                key={category.label}
-                                type="button"
-                                className={`
-                                    flex
-                                    shrink-0
-                                    items-center
-                                    gap-1.5
-                                    rounded-lg
-                                    px-3
-                                    py-2
-                                    text-xs
-                                    font-medium
-                                    transition-all
-                                    duration-200
-
-                                    ${
-                                        category.active
+                                        ${isActive
                                             ? "bg-primary text-white shadow-sm"
                                             : "text-text-secondary hover:bg-surface-soft hover:text-primary"
-                                    }
-                                `}
-                            >
-
-                                {category.label}
-
-                                <span
-                                    className={`
-                                        rounded-full
-                                        px-1.5
-                                        py-0.5
-                                        text-[10px]
-                                        ${
-                                            category.active
-                                                ? "bg-white/20 text-white"
-                                                : "bg-surface-soft text-text-muted"
                                         }
                                     `}
                                 >
-                                    {category.count}
-                                </span>
 
-                            </button>
+                                    {category.label}
 
-                        ))}
+                                    <span
+                                        className={`
+                                            rounded-full
+                                            px-1.5
+                                            py-0.5
+                                            text-[10px]
+                                            ${isActive
+                                                ? "bg-white/20 text-white"
+                                                : "bg-surface-soft text-text-muted"
+                                            }
+                                        `}
+                                    >
+                                        {category.count}
+                                    </span>
+
+                                </button>
+                            );
+                        })}
 
                     </div>
 
@@ -581,311 +573,283 @@ export default function Recommendations() {
 
                 <div className="mt-5 space-y-4">
 
-                    {recommendations.map((recommendation) => {
+                    {visibleRecommendations.length === 0 ? (
+                        <div className="rounded-2xl border border-border bg-surface p-8 text-center text-sm text-text-muted">
+                            No recommendations found in this category.
+                        </div>
+                    ) : (
+                        visibleRecommendations.map((recommendation) => {
+                            const Icon = recommendation.icon;
+                            const isCompleted = completedIds.includes(recommendation.id);
 
-                        const Icon = recommendation.icon;
+                            return (
+                                <div
+                                    key={recommendation.id}
+                                    className={`
+                                        overflow-hidden
+                                        rounded-2xl
+                                        border
+                                        bg-surface
+                                        shadow-[var(--shadow-card-value)]
+                                        transition-all
+                                        duration-300
+                                        hover:-translate-y-0.5
+                                        hover:shadow-[var(--shadow-hover-value)]
+                                        ${isCompleted ? "border-emerald-500/40 bg-emerald-500/5" : "border-border"}
+                                    `}
+                                >
 
-                        return (
-                            <div
-                                key={recommendation.id}
-                                className="
-                                    overflow-hidden
-                                    rounded-2xl
-                                    border
-                                    border-border
-                                    bg-surface
-                                    shadow-[var(--shadow-card-value)]
-                                    transition-all
-                                    duration-300
-                                    hover:-translate-y-0.5
-                                    hover:shadow-[var(--shadow-hover-value)]
-                                "
-                            >
+                                    <div className="p-5 sm:p-6">
 
-                                <div className="p-5 sm:p-6">
+                                        {/* Top */}
 
-                                    {/* Top */}
+                                        <div
+                                            className="
+                                                flex
+                                                flex-col
+                                                gap-4
+                                                sm:flex-row
+                                                sm:items-start
+                                                sm:justify-between
+                                            "
+                                        >
 
-                                    <div
-                                        className="
-                                            flex
-                                            flex-col
-                                            gap-4
-                                            sm:flex-row
-                                            sm:items-start
-                                            sm:justify-between
-                                        "
-                                    >
+                                            <div className="flex items-start gap-3">
 
-                                        <div className="flex items-start gap-3">
+                                                <div
+                                                    className={`
+                                                        flex
+                                                        h-11
+                                                        w-11
+                                                        shrink-0
+                                                        items-center
+                                                        justify-center
+                                                        rounded-xl
+                                                        ${recommendation.iconBg}
+                                                        ${recommendation.iconClass}
+                                                    `}
+                                                >
+                                                    <Icon className="h-5 w-5" />
+                                                </div>
 
-                                            <div
-                                                className={`
-                                                    flex
-                                                    h-11
-                                                    w-11
-                                                    shrink-0
-                                                    items-center
-                                                    justify-center
-                                                    rounded-xl
-                                                    ${recommendation.iconBg}
-                                                    ${recommendation.iconClass}
-                                                `}
-                                            >
-                                                <Icon className="h-5 w-5" />
+
+                                                <div>
+
+                                                    <div
+                                                        className="
+                                                            flex
+                                                            flex-wrap
+                                                            items-center
+                                                            gap-2
+                                                        "
+                                                    >
+
+                                                        <h3
+                                                            className="
+                                                                text-base
+                                                                font-semibold
+                                                                text-text
+                                                                sm:text-lg
+                                                            "
+                                                        >
+                                                            {recommendation.title}
+                                                        </h3>
+
+                                                        <span
+                                                            className={`
+                                                                rounded-full
+                                                                border
+                                                                px-2
+                                                                py-0.5
+                                                                text-[10px]
+                                                                font-semibold
+                                                                ${recommendation.priorityClass}
+                                                            `}
+                                                        >
+                                                            {recommendation.priority}
+                                                        </span>
+
+                                                        {isCompleted && (
+                                                            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-600">
+                                                                <Check className="h-3 w-3" />
+                                                                Completed
+                                                            </span>
+                                                        )}
+
+                                                    </div>
+
+
+                                                    <p
+                                                        className="
+                                                            mt-2
+                                                            max-w-3xl
+                                                            text-sm
+                                                            leading-6
+                                                            text-text-secondary
+                                                        "
+                                                    >
+                                                        {recommendation.description}
+                                                    </p>
+
+                                                </div>
+
                                             </div>
 
 
-                                            <div>
+                                            {/* Category */}
+
+                                            <span
+                                                className="
+                                                    w-fit
+                                                    shrink-0
+                                                    rounded-lg
+                                                    bg-surface-soft
+                                                    px-2.5
+                                                    py-1.5
+                                                    text-xs
+                                                    font-medium
+                                                    text-text-muted
+                                                "
+                                            >
+                                                {recommendation.category}
+                                            </span>
+
+                                        </div>
+
+
+                                        {/* Metrics */}
+
+                                        <div
+                                            className="
+                                                mt-5
+                                                grid
+                                                gap-3
+                                                sm:grid-cols-2
+                                            "
+                                        >
+
+                                            <div
+                                                className="
+                                                    flex
+                                                    items-center
+                                                    gap-3
+                                                    rounded-xl
+                                                    bg-surface-soft
+                                                    p-3
+                                                "
+                                            >
 
                                                 <div
                                                     className="
                                                         flex
-                                                        flex-wrap
+                                                        h-8
+                                                        w-8
                                                         items-center
-                                                        gap-2
+                                                        justify-center
+                                                        rounded-lg
+                                                        bg-success/10
+                                                        text-success
                                                     "
                                                 >
+                                                    <IndianRupee className="h-4 w-4" />
+                                                </div>
 
-                                                    <h3
+                                                <div>
+
+                                                    <p
                                                         className="
-                                                            text-base
-                                                            font-semibold
-                                                            text-text
-                                                            sm:text-lg
+                                                            text-xs
+                                                            text-text-muted
                                                         "
                                                     >
-                                                        {recommendation.title}
-                                                    </h3>
+                                                        {recommendation.savingsLabel}
+                                                    </p>
 
-                                                    <span
-                                                        className={`
-                                                            rounded-full
-                                                            border
-                                                            px-2
-                                                            py-0.5
-                                                            text-[10px]
+                                                    <p
+                                                        className="
+                                                            mt-0.5
+                                                            text-sm
                                                             font-semibold
-                                                            ${recommendation.priorityClass}
-                                                        `}
+                                                            text-text
+                                                        "
                                                     >
-                                                        {recommendation.priority}
-                                                    </span>
+                                                        {recommendation.savings}
+                                                    </p>
 
                                                 </div>
 
-
-                                                <p
-                                                    className="
-                                                        mt-2
-                                                        max-w-3xl
-                                                        text-sm
-                                                        leading-6
-                                                        text-text-secondary
-                                                    "
-                                                >
-                                                    {recommendation.description}
-                                                </p>
-
                                             </div>
 
-                                        </div>
-
-
-                                        {/* Category */}
-
-                                        <span
-                                            className="
-                                                w-fit
-                                                shrink-0
-                                                rounded-lg
-                                                bg-surface-soft
-                                                px-2.5
-                                                py-1.5
-                                                text-xs
-                                                font-medium
-                                                text-text-muted
-                                            "
-                                        >
-                                            {recommendation.category}
-                                        </span>
-
-                                    </div>
-
-
-                                    {/* Metrics */}
-
-                                    <div
-                                        className="
-                                            mt-5
-                                            grid
-                                            gap-3
-                                            sm:grid-cols-2
-                                        "
-                                    >
-
-                                        <div
-                                            className="
-                                                flex
-                                                items-center
-                                                gap-3
-                                                rounded-xl
-                                                bg-surface-soft
-                                                p-3
-                                            "
-                                        >
 
                                             <div
                                                 className="
                                                     flex
-                                                    h-8
-                                                    w-8
                                                     items-center
-                                                    justify-center
-                                                    rounded-lg
-                                                    bg-success/10
-                                                    text-success
+                                                    gap-3
+                                                    rounded-xl
+                                                    bg-surface-soft
+                                                    p-3
                                                 "
                                             >
-                                                <IndianRupee className="h-4 w-4" />
-                                            </div>
 
-                                            <div>
-
-                                                <p
+                                                <div
                                                     className="
-                                                        text-xs
-                                                        text-text-muted
+                                                        flex
+                                                        h-8
+                                                        w-8
+                                                        items-center
+                                                        justify-center
+                                                        rounded-lg
+                                                        bg-secondary/10
+                                                        text-secondary
                                                     "
                                                 >
-                                                    {recommendation.savingsLabel}
-                                                </p>
+                                                    <TrendingDown className="h-4 w-4" />
+                                                </div>
 
-                                                <p
-                                                    className="
-                                                        mt-0.5
-                                                        text-sm
-                                                        font-semibold
-                                                        text-text
-                                                    "
-                                                >
-                                                    {recommendation.savings}
-                                                </p>
+                                                <div>
+
+                                                    <p
+                                                        className="
+                                                            text-xs
+                                                            text-text-muted
+                                                        "
+                                                    >
+                                                        {recommendation.impactLabel}
+                                                    </p>
+
+                                                    <p
+                                                        className="
+                                                            mt-0.5
+                                                            text-sm
+                                                            font-semibold
+                                                            text-text
+                                                        "
+                                                    >
+                                                        {recommendation.impact}
+                                                    </p>
+
+                                                </div>
 
                                             </div>
 
                                         </div>
 
+
+                                        {/* Actions */}
 
                                         <div
                                             className="
+                                                mt-5
                                                 flex
-                                                items-center
-                                                gap-3
-                                                rounded-xl
-                                                bg-surface-soft
-                                                p-3
-                                            "
-                                        >
-
-                                            <div
-                                                className="
-                                                    flex
-                                                    h-8
-                                                    w-8
-                                                    items-center
-                                                    justify-center
-                                                    rounded-lg
-                                                    bg-secondary/10
-                                                    text-secondary
-                                                "
-                                            >
-                                                <TrendingDown className="h-4 w-4" />
-                                            </div>
-
-                                            <div>
-
-                                                <p
-                                                    className="
-                                                        text-xs
-                                                        text-text-muted
-                                                    "
-                                                >
-                                                    {recommendation.impactLabel}
-                                                </p>
-
-                                                <p
-                                                    className="
-                                                        mt-0.5
-                                                        text-sm
-                                                        font-semibold
-                                                        text-text
-                                                    "
-                                                >
-                                                    {recommendation.impact}
-                                                </p>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    {/* Actions */}
-
-                                    <div
-                                        className="
-                                            mt-5
-                                            flex
-                                            flex-col
-                                            gap-2
-                                            border-t
-                                            border-border
-                                            pt-4
-                                            sm:flex-row
-                                            sm:items-center
-                                            sm:justify-between
-                                        "
-                                    >
-
-                                        <button
-                                            type="button"
-                                            className="
-                                                inline-flex
-                                                items-center
-                                                justify-center
+                                                flex-col
                                                 gap-2
-                                                rounded-xl
-                                                bg-primary
-                                                px-4
-                                                py-2.5
-                                                text-sm
-                                                font-semibold
-                                                text-white
-                                                shadow-sm
-                                                transition-all
-                                                duration-200
-                                                hover:-translate-y-0.5
-                                                hover:bg-primary-dark
-                                                hover:shadow-md
-                                                focus-visible:outline-2
-                                                focus-visible:outline-offset-2
-                                                focus-visible:outline-focus
-                                            "
-                                        >
-                                            Apply recommendation
-
-                                            <ArrowRight className="h-4 w-4" />
-
-                                        </button>
-
-
-                                        <div
-                                            className="
-                                                flex
-                                                items-center
-                                                gap-1
+                                                border-t
+                                                border-border
+                                                pt-4
+                                                sm:flex-row
+                                                sm:items-center
+                                                sm:justify-between
                                             "
                                         >
 
@@ -894,54 +858,102 @@ export default function Recommendations() {
                                                 className="
                                                     inline-flex
                                                     items-center
-                                                    gap-1.5
-                                                    rounded-lg
-                                                    px-3
-                                                    py-2
-                                                    text-xs
-                                                    font-medium
-                                                    text-text-muted
-                                                    transition-colors
-                                                    hover:bg-surface-soft
-                                                    hover:text-text
+                                                    justify-center
+                                                    gap-2
+                                                    rounded-xl
+                                                    bg-primary
+                                                    px-4
+                                                    py-2.5
+                                                    text-sm
+                                                    font-semibold
+                                                    text-white
+                                                    shadow-sm
+                                                    transition-all
+                                                    duration-200
+                                                    hover:-translate-y-0.5
+                                                    hover:bg-primary-dark
+                                                    hover:shadow-md
+                                                    focus-visible:outline-2
+                                                    focus-visible:outline-offset-2
+                                                    focus-visible:outline-focus
                                                 "
                                             >
-                                                <Check className="h-3.5 w-3.5" />
-                                                Done
+                                                Apply recommendation
+
+                                                <ArrowRight className="h-4 w-4" />
+
                                             </button>
 
 
-                                            <button
-                                                type="button"
+                                            <div
                                                 className="
-                                                    inline-flex
+                                                    flex
                                                     items-center
-                                                    gap-1.5
-                                                    rounded-lg
-                                                    px-3
-                                                    py-2
-                                                    text-xs
-                                                    font-medium
-                                                    text-text-muted
-                                                    transition-colors
-                                                    hover:bg-surface-soft
-                                                    hover:text-text
+                                                    gap-1
                                                 "
                                             >
-                                                <X className="h-3.5 w-3.5" />
-                                                Dismiss
-                                            </button>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        if (!isCompleted) {
+                                                            setCompletedIds((prev) => [...prev, recommendation.id]);
+                                                        }
+                                                    }}
+                                                    disabled={isCompleted}
+                                                    className={`
+                                                        inline-flex
+                                                        items-center
+                                                        gap-1.5
+                                                        rounded-lg
+                                                        px-3
+                                                        py-2
+                                                        text-xs
+                                                        font-medium
+                                                        transition-colors
+                                                        ${isCompleted
+                                                            ? "bg-emerald-500/15 text-emerald-600 border border-emerald-500/30 font-semibold cursor-not-allowed"
+                                                            : "text-text-muted hover:bg-surface-soft hover:text-text"
+                                                        }
+                                                    `}
+                                                >
+                                                    <Check className="h-3.5 w-3.5" />
+                                                    {isCompleted ? "Completed" : "Done"}
+                                                </button>
+
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setDismissedIds((prev) => [...prev, recommendation.id])}
+                                                    className="
+                                                        inline-flex
+                                                        items-center
+                                                        gap-1.5
+                                                        rounded-lg
+                                                        px-3
+                                                        py-2
+                                                        text-xs
+                                                        font-medium
+                                                        text-text-muted
+                                                        transition-colors
+                                                        hover:bg-surface-soft
+                                                        hover:text-text
+                                                    "
+                                                >
+                                                    <X className="h-3.5 w-3.5" />
+                                                    Dismiss
+                                                </button>
+
+                                            </div>
 
                                         </div>
 
                                     </div>
 
                                 </div>
-
-                            </div>
-                        );
-
-                    })}
+                            );
+                        })
+                    )}
 
                 </div>
 
@@ -1010,7 +1022,7 @@ export default function Recommendations() {
                             "
                         >
                             Following your recommendations could save
-                            approximately ₹12,600 annually while reducing
+                            approximately ₹360000 annually while reducing
                             your household's carbon footprint.
                         </p>
 
