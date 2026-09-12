@@ -79,8 +79,10 @@ export default function DashboardLayout({ children }) {
         <div
             className="
                 min-h-screen
-                bg-white
+                bg-app-bg
                 text-text
+                transition-colors
+                duration-300
             "
         >
 

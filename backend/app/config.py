@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     ]
     mongo_url: str
     mongo_db_name: str = "urjasathi"
-    jwt_secret_key: str = ""
+    jwt_secret_key: str = "urjasathi_secret_key_2026_super_secure_jwt"
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 1440
 

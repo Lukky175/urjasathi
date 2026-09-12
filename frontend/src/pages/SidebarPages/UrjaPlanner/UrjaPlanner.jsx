@@ -48,6 +48,19 @@ import api, { ApiError } from "../../../services/api";
 const SUPPORTED_CITIES = [
     "Delhi",
     "Greater Noida",
+    "Noida",
+    "Gurugram",
+    "Mumbai",
+    "Pune",
+    "Bengaluru",
+    "Hyderabad",
+    "Chennai",
+    "Kolkata",
+    "Ahmedabad",
+    "Jaipur",
+    "Lucknow",
+    "Chandigarh",
+    "Bhopal",
 ];
 
 const PLANNER_RESULT_FIELDS = [
@@ -725,8 +738,7 @@ export default function UrjaPlanner() {
                                         text-text-muted
                                     "
                                 >
-                                    Currently supported locations:
-                                    Delhi and Greater Noida.
+                                    Select from 15 popular Indian cities for location-aware analysis.
                                 </p>
 
                             </div>

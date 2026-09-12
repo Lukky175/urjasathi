@@ -1,21 +1,5 @@
-const BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "/api";
-
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 const DEFAULT_TIMEOUT_MS = 25000;
-
-function buildUrl(path) {
-    if (BASE_URL.startsWith("http://") || BASE_URL.startsWith("https://")) {
-        return new URL(path, BASE_URL);
-    }
-
-    const normalizedBase = BASE_URL.replace(/\/$/, "");
-    const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-
-    return new URL(
-        `${normalizedBase}${normalizedPath}`,
-        window.location.origin,
-    );
-}
 
 export class ApiError extends Error {
     constructor(message, status, payload, code = null) {
@@ -31,8 +15,8 @@ export class ApiError extends Error {
     }
 }
 
-async function request(path, { method = "GET", params, signal, timeout = DEFAULT_TIMEOUT_MS } = {}) {
-    const url = buildUrl(path);
+async function request(path, { method = "GET", params, body, signal, headers: customHeaders, credentials = "include", timeout = DEFAULT_TIMEOUT_MS } = {}) {
+    const url = new URL(path, BASE_URL);
 
     if (params) {
         Object.entries(params).forEach(([key, value]) => {

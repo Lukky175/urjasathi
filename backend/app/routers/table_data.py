@@ -96,15 +96,39 @@ def _pick(doc: dict, *keys):
 @router.get("", response_model=DashboardTableDataResponse)
 async def get_dashboard_table_data(current_user: dict = Depends(get_current_user)):
     customer_id = current_user.get("customer_id", "N/A")
-    doc = await dashboard_collection.find_one(
-        {"customer_id": customer_id},
-        sort=[("_id", -1)],
-    )
+    user_email = current_user.get("email", "")
+    is_bennett = user_email == "admin@bennett.edu.in"
 
     defaults = get_default_dashboard_payload(customer_id)
 
+    try:
+        doc = await dashboard_collection.find_one(
+            {"customer_id": customer_id},
+            sort=[("_id", -1)],
+        )
+    except Exception:
+        doc = None
+
     if doc is None:
-        # Never raise 404 for valid authenticated users with no data yet
+        if is_bennett:
+            try:
+                from seed_dashboard_data import get_mock_dashboard_document
+                bennett_doc = get_mock_dashboard_document(customer_id, email=user_email)
+                payload = {}
+                for field, aliases in _FIELD_ALIASES.items():
+                    val = _pick(bennett_doc, *aliases)
+                    payload[field] = val if val is not None else defaults.get(field)
+                return DashboardTableDataResponse(
+                    customer_id=customer_id,
+                    **payload,
+                )
+            except Exception:
+                return DashboardTableDataResponse(**defaults)
+        else:
+            # Never return Bennett data for normal users without data
+            return DashboardTableDataResponse(**defaults)
+
+    if not is_bennett and doc.get("email") == "admin@bennett.edu.in":
         return DashboardTableDataResponse(**defaults)
 
     # Build payload merging document values with safe default fallbacks
@@ -117,3 +141,4 @@ async def get_dashboard_table_data(current_user: dict = Depends(get_current_user
         customer_id=doc.get("customer_id", customer_id),
         **payload,
     )
+

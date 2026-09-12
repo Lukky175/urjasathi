@@ -15,6 +15,25 @@ OFF_PEAK_TARIFF = 7.31
 FEED_IN_APPC = 4.25
 CEA_CARBON_FACTOR = 0.716  # CEA v19 CO2 factor: 0.716 kg CO2e / kWh
 
+# Deterministic City-Aware Solar, Climate & Tariff Adjustments for Indian Cities
+CITY_SOLAR_CONFIG = {
+    "delhi": {"solar_scale": 1.00, "peak_shift": 0, "temp_factor": 1.00},
+    "greater_noida": {"solar_scale": 1.00, "peak_shift": 0, "temp_factor": 1.00},
+    "noida": {"solar_scale": 1.00, "peak_shift": 0, "temp_factor": 1.00},
+    "gurugram": {"solar_scale": 1.02, "peak_shift": 0, "temp_factor": 1.01},
+    "mumbai": {"solar_scale": 0.94, "peak_shift": 0, "temp_factor": 0.98},
+    "pune": {"solar_scale": 0.98, "peak_shift": 0, "temp_factor": 0.99},
+    "bengaluru": {"solar_scale": 1.03, "peak_shift": 0, "temp_factor": 0.96},
+    "hyderabad": {"solar_scale": 1.04, "peak_shift": 0, "temp_factor": 1.02},
+    "chennai": {"solar_scale": 1.01, "peak_shift": 0, "temp_factor": 1.03},
+    "kolkata": {"solar_scale": 0.92, "peak_shift": -1, "temp_factor": 0.97},
+    "ahmedabad": {"solar_scale": 1.07, "peak_shift": 1, "temp_factor": 1.04},
+    "jaipur": {"solar_scale": 1.08, "peak_shift": 1, "temp_factor": 1.04},
+    "lucknow": {"solar_scale": 0.97, "peak_shift": 0, "temp_factor": 1.00},
+    "chandigarh": {"solar_scale": 0.98, "peak_shift": 0, "temp_factor": 0.97},
+    "bhopal": {"solar_scale": 1.02, "peak_shift": 0, "temp_factor": 1.01},
+}
+
 
 @router.post("/api/urja-planner", response_model=PlannerScenarioResponse)
 @router.post("/planner/analyze", response_model=PlannerScenarioResponse)
@@ -27,25 +46,32 @@ def analyze_scenario(request: PlannerScenarioRequest):
     - Financial ToD arbitrage savings & CEA v19 carbon abatement
     """
     city_normalized = request.city.strip().lower().replace(" ", "_")
-    site_key = "greater_noida" if "noida" in city_normalized or "bennett" in city_normalized else "delhi"
+    config = CITY_SOLAR_CONFIG.get(
+        city_normalized,
+        {"solar_scale": 1.00, "peak_shift": 0, "temp_factor": 1.00}
+    )
+    site_key = "greater_noida" if ("noida" in city_normalized or "bennett" in city_normalized) else "delhi"
     
-    daily_demand = max(0.1, float(request.energy_consumption))
-    daily_solar = max(0.1, float(request.solar_generation))
+    daily_demand = max(0.1, float(request.energy_consumption)) * config["temp_factor"]
+    daily_solar = max(0.1, float(request.solar_generation)) * config["solar_scale"]
     
-    # 24-Hour Diurnal Demand Shape (normalized institutional profile)
-    hour_weights = np.array([
+    # 24-Hour Diurnal Demand Shape (normalized institutional profile with city climate adaptation)
+    base_hour_weights = np.array([
         0.02, 0.02, 0.02, 0.02, 0.025, 0.03,  # 00:00 - 05:00
         0.04, 0.055, 0.07, 0.08, 0.085, 0.09, # 06:00 - 11:00
         0.085, 0.08, 0.075, 0.07, 0.065, 0.055, # 12:00 - 17:00
         0.045, 0.035, 0.025, 0.02, 0.02, 0.02  # 18:00 - 23:00
     ])
+    hour_weights = base_hour_weights * config["temp_factor"]
     hour_weights = hour_weights / hour_weights.sum()
     hourly_demand = daily_demand * hour_weights
     
     # 24-Hour Solar Physics Shape
     try:
         raw_solar_series = predict_solar_kw(site=site_key, capacity_scale=1.0)
-        solar_array = np.array(raw_solar_series[:24])
+        solar_array = np.array(raw_solar_series[:24]) * config["solar_scale"]
+        if config["peak_shift"] != 0:
+            solar_array = np.roll(solar_array, config["peak_shift"])
         solar_sum = solar_array.sum()
         if solar_sum > 0:
             solar_shape = solar_array / solar_sum
@@ -54,7 +80,7 @@ def analyze_scenario(request: PlannerScenarioRequest):
     except Exception:
         # Astronomical bell curve fallback
         hours = np.arange(24)
-        solar_shape = np.maximum(0, np.sin(np.pi * np.clip((hours - 6) / 12, 0, 1)))
+        solar_shape = np.maximum(0, np.sin(np.pi * np.clip((hours - 6 + config["peak_shift"]) / 12, 0, 1)))
         solar_shape = solar_shape / max(1e-5, solar_shape.sum())
         
     hourly_solar = daily_solar * solar_shape
@@ -138,3 +164,4 @@ def analyze_scenario(request: PlannerScenarioRequest):
         battery_soc_max_pct=80.0,
         hourly_profile=hourly_profile
     )
+

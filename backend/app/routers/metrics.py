@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from app.schemas.metrics import MetricsComparisonResponse
 from app.services.dispatch import get_hourly_dispatch
+from app.services.dependencies import get_current_user
 
 router = APIRouter(prefix="/metrics", tags=["Metrics"])
 
@@ -22,8 +23,21 @@ class CostBreakdownResponse(BaseModel):
 
 
 @router.get("/comparison", response_model=MetricsComparisonResponse)
-def get_metrics_comparison(horizon: int = 24):
+def get_metrics_comparison(horizon: int = 24, current_user: dict = Depends(get_current_user)):
     now = datetime.now()
+    is_bennett = current_user.get("email") == "admin@bennett.edu.in"
+    if not is_bennett:
+        return MetricsComparisonResponse(
+            period_start=now.strftime("%Y-%m-%d"),
+            period_end=(now + timedelta(hours=horizon)).strftime("%Y-%m-%d"),
+            grid_reduction_pct=0.0,
+            cost_reduction_pct=0.0,
+            solar_utilization_pct=0.0,
+            peak_grid_demand_reduction_kw=0.0,
+            baseline_cost=0.0,
+            optimized_cost=0.0,
+        )
+
     dispatch = get_hourly_dispatch(horizon, now)
 
     optimized_cost = sum(
@@ -58,8 +72,24 @@ def get_metrics_comparison(horizon: int = 24):
 
 
 @router.get("/cost-breakdown", response_model=CostBreakdownResponse)
-def get_cost_breakdown(horizon: int = 24):
+def get_cost_breakdown(horizon: int = 24, current_user: dict = Depends(get_current_user)):
     now = datetime.now()
+    is_bennett = current_user.get("email") == "admin@bennett.edu.in"
+    if not is_bennett:
+        breakdown = [
+            HourlyCostPoint(
+                timestamp=now + timedelta(hours=i),
+                baseline_cost_inr=0.0,
+                optimized_cost_inr=0.0,
+                savings_inr=0.0,
+            ) for i in range(horizon)
+        ]
+        return CostBreakdownResponse(
+            period_start=now.strftime("%Y-%m-%d"),
+            period_end=(now + timedelta(hours=horizon)).strftime("%Y-%m-%d"),
+            breakdown=breakdown,
+        )
+
     dispatch = get_hourly_dispatch(horizon, now)
 
     breakdown = []
