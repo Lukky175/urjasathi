@@ -1,0 +1,30 @@
+services:
+
+  backend:
+
+    image: ${DOCKERHUB_USERNAME}/urjasathi-backend:${IMAGE_TAG}
+
+    container_name: urjasathi-backend
+
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    expose:
+      - "8000"
+
+
+  frontend:
+
+    image: ${DOCKERHUB_USERNAME}/urjasathi-frontend:${IMAGE_TAG}
+
+    container_name: urjasathi-frontend
+
+    restart: unless-stopped
+
+    depends_on:
+      - backend
+
+    ports:
+      - "80:80"

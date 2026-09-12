@@ -86,9 +86,9 @@ export default function Battery() {
             icon: ShieldCheck,
         },
         {
-            title: "Available Capacity",
-            value: availableCapacityDisplay,
-            unit: "",
+            title: "Battery Capacity",
+            value: "210",
+            unit: "kWh",
             description: "Usable storage capacity",
             icon: BatteryFull,
         },
