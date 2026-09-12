@@ -27,109 +27,82 @@ import {
     Zap,
 } from "lucide-react";
 
+import { useTableData } from "../../../hooks/useTableData";
+
 
 export default function Overview() {
 
-    /**
-     * ========================================================================
-     * DEMO DATA
-     * ========================================================================
-     *
-     * Temporary values for UI development.
-     *
-     * These will later be replaced with real values coming from:
-     * - Smart meter data
-     * - Solar generation data
-     * - Battery data
-     * - Tariff information
-     * - Energy optimization calculations
-     */
+    const { tableData, loading, error, notFound } = useTableData();
+
+    /* =========================================================================
+       LIVE METRICS — sourced from GET /table-data
+       ========================================================================= */
 
     const summaryMetrics = [
         {
-            title: "Total Consumption",
-            value: "428",
-            unit: "kWh",
-            change: "8.4%",
-            description: "vs. previous period",
-            trend: "down",
+            title: "Current Consumption",
+            value: tableData?.current_consumption != null
+                ? Number(tableData.current_consumption).toFixed(1)
+                : "0.0",
+            unit: "kW",
+            change: null,
+            description: "Real-time power draw",
+            trend: null,
             icon: Zap,
         },
         {
-            title: "Renewable Generation",
-            value: "286",
-            unit: "kWh",
-            change: "14.2%",
-            description: "vs. previous period",
+            title: "Solar Generation",
+            value: tableData?.solar_generation != null
+                ? Number(tableData.solar_generation).toFixed(1)
+                : "0.0",
+            unit: "kW",
+            change: null,
+            description: "Renewable output now",
             trend: "up",
             icon: SunMedium,
         },
         {
             title: "Renewable Contribution",
-            value: "66.8",
+            value: tableData?.renewable_implant != null
+                ? Number(tableData.renewable_implant).toFixed(1)
+                : "0.0",
             unit: "%",
-            change: "5.6%",
-            description: "increase this period",
+            change: null,
+            description: "Clean-energy share today",
             trend: "up",
             icon: Leaf,
         },
         {
-            title: "Energy Cost",
-            value: "₹3,842",
+            title: "Today's Savings",
+            value: tableData?.today_saving != null
+                ? `₹${Math.round(Number(tableData.today_saving)).toLocaleString("en-IN")}`
+                : "₹0",
             unit: "",
-            change: "6.2%",
-            description: "estimated reduction",
+            change: null,
+            description: "Estimated cost reduction",
             trend: "down",
             icon: CircleDollarSign,
         },
     ];
 
+    const renewablePct = tableData?.renewable_implant != null ? Math.min(100, Math.max(0, Number(tableData.renewable_implant))) : 0;
+    const gridPct = (100 - renewablePct).toFixed(1);
+
+
 
     /**
-     * Weekly energy performance.
-     *
-     * Temporary values.
-     *
-     * Later this can become a chart using Recharts or another
-     * visualization library.
+     * Weekly energy performance — kept as illustrative chart data.
+     * Will be replaced with real historical data when that endpoint is available.
      */
 
     const weeklyData = [
-        {
-            day: "Mon",
-            consumption: 62,
-            generation: 48,
-        },
-        {
-            day: "Tue",
-            consumption: 71,
-            generation: 55,
-        },
-        {
-            day: "Wed",
-            consumption: 58,
-            generation: 61,
-        },
-        {
-            day: "Thu",
-            consumption: 69,
-            generation: 52,
-        },
-        {
-            day: "Fri",
-            consumption: 74,
-            generation: 64,
-        },
-        {
-            day: "Sat",
-            consumption: 51,
-            generation: 59,
-        },
-        {
-            day: "Sun",
-            consumption: 43,
-            generation: 47,
-        },
+        { day: "Mon", consumption: 62, generation: 48 },
+        { day: "Tue", consumption: 71, generation: 55 },
+        { day: "Wed", consumption: 58, generation: 61 },
+        { day: "Thu", consumption: 69, generation: 52 },
+        { day: "Fri", consumption: 74, generation: 64 },
+        { day: "Sat", consumption: 51, generation: 59 },
+        { day: "Sun", consumption: 43, generation: 47 },
     ];
 
 
@@ -229,6 +202,25 @@ export default function Overview() {
 
 
             {/* =================================================================
+                STATUS BANNERS
+               ================================================================= */}
+
+            {error && (
+                <div className="mt-0 mb-4 flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-xs font-bold">!</span>
+                    <span>Live energy data could not be loaded. Please refresh or check your connection.</span>
+                </div>
+            )}
+
+            {notFound && !loading && (
+                <div className="mt-0 mb-4 rounded-xl border border-primary/20 bg-primary/5 px-4 py-4 text-sm">
+                    <p className="font-semibold text-text">No energy snapshot yet</p>
+                    <p className="mt-1 text-text-secondary">No energy data has been recorded for your account. Metrics will appear here once your smart meter begins reporting.</p>
+                </div>
+            )}
+
+
+            {/* =================================================================
                 SUMMARY METRICS
                ================================================================= */}
 
@@ -243,7 +235,24 @@ export default function Overview() {
                     "
                 >
 
-                    {summaryMetrics.map(
+                    {loading
+                        ? Array.from({ length: 4 }).map((_, i) => (
+                              <div
+                                  key={i}
+                                  className="group rounded-2xl border border-border bg-surface p-5 shadow-sm animate-pulse"
+                              >
+                                  <div className="flex items-start justify-between">
+                                      <div className="h-10 w-10 rounded-xl bg-border" />
+                                      <div className="h-4 w-12 rounded bg-border" />
+                                  </div>
+                                  <div className="mt-5 space-y-2">
+                                      <div className="h-3 w-28 rounded bg-border" />
+                                      <div className="h-7 w-20 rounded bg-border" />
+                                      <div className="h-3 w-16 rounded bg-border" />
+                                  </div>
+                              </div>
+                          ))
+                        : summaryMetrics.map(
                         ({
                             title,
                             value,
@@ -611,18 +620,20 @@ export default function Overview() {
 
                     <div className="mt-7 flex justify-center">
 
-                        <div
-                            className="
-                                relative
-                                flex
-                                h-40
-                                w-40
-                                items-center
-                                justify-center
-                                rounded-full
-                                bg-[conic-gradient(var(--color-primary)_0_66.8%,var(--color-border)_66.8%_100%)]
-                            "
-                        >
+                            <div
+                                className="
+                                    relative
+                                    flex
+                                    h-40
+                                    w-40
+                                    items-center
+                                    justify-center
+                                    rounded-full
+                                "
+                                style={{
+                                    background: `conic-gradient(var(--color-primary) 0% ${renewablePct}%, var(--color-border) ${renewablePct}% 100%)`,
+                                }}
+                            >
 
                             <div
                                 className="
@@ -644,7 +655,7 @@ export default function Overview() {
                                         text-text
                                     "
                                 >
-                                    66.8%
+                                    {renewablePct > 0 ? `${renewablePct.toFixed(1)}%` : "0.0%"}
                                 </span>
 
                                 <span
@@ -681,7 +692,7 @@ export default function Overview() {
                             </div>
 
                             <span className="text-sm font-semibold text-text">
-                                66.8%
+                                {renewablePct > 0 ? `${renewablePct.toFixed(1)}%` : "0.0%"}
                             </span>
 
                         </div>
@@ -700,7 +711,7 @@ export default function Overview() {
                             </div>
 
                             <span className="text-sm font-semibold text-text">
-                                33.2%
+                                {renewablePct > 0 ? `${gridPct}%` : "100.0%"}
                             </span>
 
                         </div>

@@ -4,8 +4,8 @@
  * Project     : UrjaSathi
  *
  * Description:
- * Detailed energy-consumption monitoring page, driven by the live
- * 24-hour demand forecast from the backend.
+ * Detailed energy-consumption monitoring page, driven dynamically by
+ * per-user MongoDB table data and live 24-hour demand forecasts.
  * ============================================================================
  */
 
@@ -21,6 +21,7 @@ import {
 
 import BarChart from "../../../components/charts/BarChart";
 import { useDashboardData } from "../../../hooks/useDashboardData";
+import { useTableData } from "../../../hooks/useTableData";
 
 const NOMINAL_MAX_LOAD_KW = 300;
 
@@ -33,50 +34,84 @@ function formatHourLabel(isoString) {
 }
 
 export default function Consumption() {
-    const { data, loading, error } = useDashboardData({ horizon: 24 });
+    const { data, loading: forecastLoading, error } = useDashboardData({ horizon: 24 });
+    const { tableData, loading: tableLoading } = useTableData();
 
     const forecast = data.demand?.forecast ?? [];
 
-    const totalKwh = forecast.reduce((sum, p) => sum + p.value_kw, 0);
-    const averageKw = forecast.length > 0 ? totalKwh / forecast.length : 0;
+    const totalKwhFromForecast = forecast.reduce((sum, p) => sum + p.value_kw, 0);
+    const averageKwFromForecast = forecast.length > 0 ? totalKwhFromForecast / forecast.length : 0;
 
-    const peakPoint = forecast.reduce(
+    const peakPointFromForecast = forecast.reduce(
         (highest, p) => (p.value_kw > (highest?.value_kw ?? -Infinity) ? p : highest),
         null
     );
 
-    const currentKw = forecast[0]?.value_kw ?? null;
+    // Primary source: tableData fields from MongoDB
+    const currentKw =
+        tableData?.current_consumption != null
+            ? Number(tableData.current_consumption)
+            : forecast[0]?.value_kw ?? 0.0;
+
+    const totalKwh =
+        tableData?.forecasted_total_24h != null && Number(tableData.forecasted_total_24h) > 0
+            ? Number(tableData.forecasted_total_24h)
+            : totalKwhFromForecast;
+
+    const averageKw =
+        tableData?.average_load != null && Number(tableData.average_load) > 0
+            ? Number(tableData.average_load)
+            : averageKwFromForecast;
+
+    const peakDemandKw =
+        tableData?.peak_demand != null && Number(tableData.peak_demand) > 0
+            ? Number(tableData.peak_demand)
+            : peakPointFromForecast?.value_kw ?? 0.0;
+
+    const peakHourText =
+        tableData?.peak_hour && tableData.peak_hour !== "N/A"
+            ? tableData.peak_hour
+            : peakPointFromForecast
+            ? formatHourLabel(peakPointFromForecast.timestamp)
+            : "N/A";
+
     const nextKw = forecast[1]?.value_kw ?? null;
     const currentVsAveragePct =
-        averageKw > 0 && currentKw !== null ? ((currentKw - averageKw) / averageKw) * 100 : null;
+        averageKw > 0 ? ((currentKw - averageKw) / averageKw) * 100 : 0;
 
-    const range = forecast.length > 0
-        ? Math.max(...forecast.map((p) => p.value_kw)) - Math.min(...forecast.map((p) => p.value_kw))
-        : 0;
-    const variabilityPct = averageKw > 0 ? (range / averageKw) * 100 : 0;
+    // Dynamic Chart Data from tableData or forecast
+    let chartData = [];
+    if (Array.isArray(tableData?.hourly_consumption_chart) && tableData.hourly_consumption_chart.length > 0) {
+        chartData = tableData.hourly_consumption_chart.map((p, idx) => ({
+            label: typeof p === "object" ? (p.hour || p.time || p.label || `${idx}:00`) : `${idx}:00`,
+            value: typeof p === "object" ? Number(p.value ?? p.consumption ?? p.load ?? 0) : Number(p || 0),
+        }));
+    } else if (forecast.length > 0) {
+        chartData = forecast.map((p) => ({
+            label: formatHourLabel(p.timestamp),
+            value: p.value_kw,
+        }));
+    }
 
-    const chartData = forecast.map((p) => ({
-        label: formatHourLabel(p.timestamp),
-        value: p.value_kw,
-    }));
+    const isLoading = tableLoading && !tableData;
 
     const stats = [
         {
             label: "Current Load",
-            value: currentKw !== null ? currentKw.toFixed(1) : "-",
+            value: `${Number(currentKw).toFixed(1)}`,
             unit: "kW",
-            description: nextKw !== null ? "Forecasted this hour" : "-",
+            description: nextKw !== null ? "Measured power load" : "Live draw",
             icon: Zap,
-            trend: currentVsAveragePct !== null && currentVsAveragePct < 0 ? "down" : "up",
-            positive: currentVsAveragePct !== null ? currentVsAveragePct < 0 : true,
+            trend: currentVsAveragePct < 0 ? "down" : "up",
+            positive: currentVsAveragePct < 0,
             trendText:
-                currentVsAveragePct !== null
-                    ? `${currentVsAveragePct >= 0 ? "+" : ""}${currentVsAveragePct.toFixed(0)}% vs. today's average`
+                averageKw > 0
+                    ? `${currentVsAveragePct >= 0 ? "+" : ""}${currentVsAveragePct.toFixed(0)}% vs. average`
                     : null,
         },
         {
             label: "24h Forecasted Total",
-            value: totalKwh > 0 ? totalKwh.toFixed(0) : "-",
+            value: `${Number(totalKwh).toFixed(0)}`,
             unit: "kWh",
             description: "Sum of next 24 hours",
             icon: Activity,
@@ -86,7 +121,7 @@ export default function Consumption() {
         },
         {
             label: "Average Load",
-            value: averageKw > 0 ? averageKw.toFixed(1) : "-",
+            value: `${Number(averageKw).toFixed(1)}`,
             unit: "kW",
             description: "Across the next 24 hours",
             icon: Gauge,
@@ -96,9 +131,9 @@ export default function Consumption() {
         },
         {
             label: "Peak Demand",
-            value: peakPoint ? peakPoint.value_kw.toFixed(1) : "-",
+            value: `${Number(peakDemandKw).toFixed(1)}`,
             unit: "kW",
-            description: peakPoint ? `Forecasted at ${formatHourLabel(peakPoint.timestamp)}` : "-",
+            description: peakHourText !== "N/A" ? `Peak hour: ${peakHourText}` : "Projected peak",
             icon: Clock3,
             trend: "up",
             positive: false,
@@ -128,54 +163,70 @@ export default function Consumption() {
 
             {error && (
                 <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-500">
-                    Some live data could not be loaded. Showing partial results.
+                    Some live forecast data could not be loaded. Showing recorded snapshot results.
                 </div>
             )}
 
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                {stats.map((stat) => {
-                    const Icon = stat.icon;
-                    return (
-                        <div
-                            key={stat.label}
-                            className="rounded-2xl border border-border bg-surface p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-                        >
-                            <div className="flex items-start justify-between">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                                    <Icon className="h-5 w-5" />
-                                </div>
+                {isLoading
+                    ? Array.from({ length: 4 }).map((_, i) => (
+                          <div
+                              key={i}
+                              className="rounded-2xl border border-border bg-surface p-5 shadow-sm animate-pulse"
+                          >
+                              <div className="flex items-start justify-between">
+                                  <div className="h-10 w-10 rounded-xl bg-border" />
+                              </div>
+                              <div className="mt-5 space-y-2">
+                                  <div className="h-4 w-24 rounded bg-border" />
+                                  <div className="h-7 w-20 rounded bg-border" />
+                                  <div className="h-3 w-32 rounded bg-border" />
+                              </div>
+                          </div>
+                      ))
+                    : stats.map((stat) => {
+                          const Icon = stat.icon;
+                          return (
+                              <div
+                                  key={stat.label}
+                                  className="rounded-2xl border border-border bg-surface p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                              >
+                                  <div className="flex items-start justify-between">
+                                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                          <Icon className="h-5 w-5" />
+                                      </div>
 
-                                {stat.trendText && (
-                                    <div
-                                        className={`flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${
-                                            stat.positive
-                                                ? "bg-emerald-500/10 text-emerald-600"
-                                                : "bg-amber-500/10 text-amber-600"
-                                        }`}
-                                    >
-                                        {stat.trend === "down" ? (
-                                            <ArrowDownRight className="h-3.5 w-3.5" />
-                                        ) : (
-                                            <ArrowUpRight className="h-3.5 w-3.5" />
-                                        )}
-                                        {stat.trendText}
-                                    </div>
-                                )}
-                            </div>
+                                      {stat.trendText && (
+                                          <div
+                                              className={`flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${
+                                                  stat.positive
+                                                      ? "bg-emerald-500/10 text-emerald-600"
+                                                      : "bg-amber-500/10 text-amber-600"
+                                              }`}
+                                          >
+                                              {stat.trend === "down" ? (
+                                                  <ArrowDownRight className="h-3.5 w-3.5" />
+                                              ) : (
+                                                  <ArrowUpRight className="h-3.5 w-3.5" />
+                                              )}
+                                              {stat.trendText}
+                                          </div>
+                                      )}
+                                  </div>
 
-                            <p className="mt-5 text-sm font-medium text-text-secondary">{stat.label}</p>
+                                  <p className="mt-5 text-sm font-medium text-text-secondary">{stat.label}</p>
 
-                            <div className="mt-1 flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-text">
-                                    {loading ? "..." : stat.value}
-                                </span>
-                                <span className="text-sm text-text-muted">{stat.unit}</span>
-                            </div>
+                                  <div className="mt-1 flex items-baseline gap-1">
+                                      <span className="text-2xl font-bold text-text">
+                                          {stat.value}
+                                      </span>
+                                      <span className="text-sm text-text-muted">{stat.unit}</span>
+                                  </div>
 
-                            <p className="mt-2 text-xs text-text-muted">{stat.description}</p>
-                        </div>
-                    );
-                })}
+                                  <p className="mt-2 text-xs text-text-muted">{stat.description}</p>
+                              </div>
+                          );
+                      })}
             </div>
 
             <div className="mt-6 grid gap-6 xl:grid-cols-[1.7fr_1fr]">
@@ -183,18 +234,24 @@ export default function Consumption() {
                     <div className="flex items-start justify-between">
                         <div>
                             <h2 className="text-lg font-semibold text-text">Consumption Forecast</h2>
-                            <p className="mt-1 text-sm text-text-secondary">Next 24 hours, hourly load</p>
+                            <p className="mt-1 text-sm text-text-secondary">Hourly load profile</p>
                         </div>
                         <div className="text-right">
                             <p className="text-2xl font-bold text-text">
-                                {totalKwh > 0 ? totalKwh.toFixed(0) : "-"}
+                                {`${Number(totalKwh).toFixed(0)}`}
                                 <span className="ml-1 text-sm font-medium text-text-muted">kWh</span>
                             </p>
-                            <p className="text-xs text-text-muted">Next 24 hours</p>
+                            <p className="text-xs text-text-muted">24-hour total</p>
                         </div>
                     </div>
 
-                    <BarChart data={chartData} unit=" kW" />
+                    {chartData.length === 0 ? (
+                        <div className="flex h-64 items-center justify-center text-sm text-text-muted">
+                            No hourly consumption data recorded yet.
+                        </div>
+                    ) : (
+                        <BarChart data={chartData} unit=" kW" />
+                    )}
                 </section>
 
                 <section className="rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-6">
@@ -211,7 +268,7 @@ export default function Consumption() {
                             <div>
                                 <p className="text-sm text-text-secondary">Peak hour</p>
                                 <p className="text-xl font-bold text-text">
-                                    {peakPoint ? formatHourLabel(peakPoint.timestamp) : "-"}
+                                    {peakHourText}
                                 </p>
                             </div>
                         </div>
@@ -220,7 +277,7 @@ export default function Consumption() {
                             <div className="flex items-end justify-between">
                                 <span className="text-sm text-text-secondary">Peak demand</span>
                                 <span className="font-semibold text-text">
-                                    {peakPoint ? `${peakPoint.value_kw.toFixed(1)} kW` : "-"}
+                                    {`${Number(peakDemandKw).toFixed(1)} kW`}
                                 </span>
                             </div>
 
@@ -228,11 +285,10 @@ export default function Consumption() {
                                 <div
                                     className="h-full rounded-full bg-primary"
                                     style={{
-                                        width: `${
-                                            peakPoint
-                                                ? Math.min(100, (peakPoint.value_kw / NOMINAL_MAX_LOAD_KW) * 100)
-                                                : 0
-                                        }%`,
+                                        width: `${Math.min(
+                                            100,
+                                            Math.max(0, (peakDemandKw / NOMINAL_MAX_LOAD_KW) * 100)
+                                        )}%`,
                                     }}
                                 />
                             </div>
@@ -253,68 +309,38 @@ export default function Consumption() {
                 <div>
                     <h2 className="text-lg font-semibold text-text">Consumption Insights</h2>
                     <p className="mt-1 text-sm text-text-secondary">
-                        Observations based on the current forecast
+                        Observations based on current and recorded profile
                     </p>
                 </div>
 
                 <div className="mt-6 grid gap-4 md:grid-cols-3">
-                    <div className="rounded-xl border border-border p-4 transition-all duration-200 hover:border-primary/40">
-                        <div className="flex items-center gap-3">
-                            <div
-                                className={`rounded-lg p-2 ${
-                                    currentVsAveragePct !== null && currentVsAveragePct < 0
-                                        ? "bg-emerald-500/10 text-emerald-600"
-                                        : "bg-amber-500/10 text-amber-600"
-                                }`}
-                            >
-                                {currentVsAveragePct !== null && currentVsAveragePct < 0 ? (
-                                    <ArrowDownRight className="h-4 w-4" />
-                                ) : (
-                                    <ArrowUpRight className="h-4 w-4" />
-                                )}
-                            </div>
-                            <p className="text-sm font-semibold text-text">
-                                {currentVsAveragePct !== null && currentVsAveragePct < 0
-                                    ? "Below average right now"
-                                    : "Above average right now"}
-                            </p>
-                        </div>
-                        <p className="mt-3 text-xs leading-5 text-text-secondary">
-                            Current hour load is{" "}
-                            {currentVsAveragePct !== null
-                                ? `${Math.abs(currentVsAveragePct).toFixed(0)}%`
-                                : "-"}{" "}
-                            {currentVsAveragePct !== null && currentVsAveragePct < 0 ? "below" : "above"}{" "}
-                            the next-24-hour average.
+                    <div className="rounded-xl border border-border bg-app-bg p-4">
+                        <p className="text-xs font-medium text-text-muted">Load Status</p>
+                        <p className="mt-1 text-sm font-semibold text-text">
+                            {currentKw > averageKw ? "Above Daily Average" : "Within Normal Range"}
+                        </p>
+                        <p className="mt-1 text-xs text-text-secondary">
+                            Current load is {Number(currentKw).toFixed(1)} kW compared to average of {Number(averageKw).toFixed(1)} kW.
                         </p>
                     </div>
 
-                    <div className="rounded-xl border border-border p-4 transition-all duration-200 hover:border-primary/40">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-amber-500/10 p-2 text-amber-600">
-                                <Clock3 className="h-4 w-4" />
-                            </div>
-                            <p className="text-sm font-semibold text-text">Peak window</p>
-                        </div>
-                        <p className="mt-3 text-xs leading-5 text-text-secondary">
-                            Forecasted peak demand is{" "}
-                            {peakPoint ? `${peakPoint.value_kw.toFixed(1)} kW` : "-"} at{" "}
-                            {peakPoint ? formatHourLabel(peakPoint.timestamp) : "-"}. Shifting load away
-                            from this hour has the biggest impact on cost.
+                    <div className="rounded-xl border border-border bg-app-bg p-4">
+                        <p className="text-xs font-medium text-text-muted">Peak Intensity</p>
+                        <p className="mt-1 text-sm font-semibold text-text">
+                            {peakHourText !== "N/A" ? `Concentrated at ${peakHourText}` : "Even Distribution"}
+                        </p>
+                        <p className="mt-1 text-xs text-text-secondary">
+                            Maximum demand reaches {Number(peakDemandKw).toFixed(1)} kW.
                         </p>
                     </div>
 
-                    <div className="rounded-xl border border-border p-4 transition-all duration-200 hover:border-primary/40">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                                <Activity className="h-4 w-4" />
-                            </div>
-                            <p className="text-sm font-semibold text-text">Usage pattern</p>
-                        </div>
-                        <p className="mt-3 text-xs leading-5 text-text-secondary">
-                            Demand varies by about {variabilityPct.toFixed(0)}% across the day
-                            relative to the average, {variabilityPct > 25 ? "a fairly variable" : "a fairly steady"}{" "}
-                            load profile.
+                    <div className="rounded-xl border border-border bg-app-bg p-4">
+                        <p className="text-xs font-medium text-text-muted">Grid Dependence</p>
+                        <p className="mt-1 text-sm font-semibold text-text">
+                            {totalKwh > 0 ? "Active Load Optimization" : "Standby"}
+                        </p>
+                        <p className="mt-1 text-xs text-text-secondary">
+                            UrjaSathi automates battery and solar allocation to lower demand spikes.
                         </p>
                     </div>
                 </div>

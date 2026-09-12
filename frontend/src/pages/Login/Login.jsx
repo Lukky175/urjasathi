@@ -130,48 +130,45 @@ export default function Login() {
        ------------------------------------------------------------------------ */
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-
         setSubmitting(true);
         setError("");
 
-
         try {
-
             await login(
                 email.trim(),
-                password
+                password,
+                rememberMe
             );
-
 
             toast.success(
                 "Welcome back!"
             );
 
-
             navigate(from, {
                 replace: true,
             });
-
         } catch (err) {
+            const status = err?.status || err?.response?.status;
+            let message = "Unable to sign in.";
 
-            const message =
-                err?.message ||
-                "Unable to sign in.";
+            if (status === 401) {
+                message = "Invalid email or password.";
+            } else if (err?.response?.data?.detail) {
+                const detail = err.response.data.detail;
+                message = typeof detail === "string" ? detail : (Array.isArray(detail) ? detail.map(d => d.msg).join(". ") : JSON.stringify(detail));
+            } else if (err?.payload?.detail) {
+                const detail = err.payload.detail;
+                message = typeof detail === "string" ? detail : (Array.isArray(detail) ? detail.map(d => d.msg).join(". ") : JSON.stringify(detail));
+            } else if (err?.message) {
+                message = err.message;
+            }
 
             setError(message);
-
-            toast.error(
-                message
-            );
-
+            toast.error(message);
         } finally {
-
             setSubmitting(false);
-
         }
-
     };
 
 
@@ -1013,26 +1010,29 @@ export default function Login() {
                                ------------------------------------------------- */}
 
                             {error && (
-
                                 <div
                                     role="alert"
                                     className="
                                         relative
                                         mt-6
+                                        flex
+                                        items-center
+                                        gap-3
                                         rounded-xl
                                         border
-                                        border-red-200
-                                        bg-red-50
+                                        border-red-500/30
+                                        bg-red-500/10
                                         px-4
                                         py-3
                                         text-sm
                                         font-medium
-                                        text-red-600
+                                        text-red-500
+                                        backdrop-blur-sm
                                     "
                                 >
-                                    {error}
+                                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-xs font-bold text-red-500">!</span>
+                                    <span>{error}</span>
                                 </div>
-
                             )}
 
 

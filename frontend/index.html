@@ -4,47 +4,53 @@
   <head>
     <meta charset="UTF-8" />
 
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
-/>
+    <meta
+      name="description"
+      content="UrjaSathi is an intelligent energy management platform for optimizing electricity consumption, solar generation, battery usage, and grid energy."
+    />
 
-<meta
-  name="description"
-  content="UrjaSathi is an intelligent energy management platform for optimizing electricity consumption, solar generation, battery usage, and grid energy."
-/>
+    <meta
+      name="theme-color"
+      content="#6C1D5F"
+    />
 
-<meta
-  name="theme-color"
-  content="#6C1D5F"
-/>
+    <meta
+      name="color-scheme"
+      content="light dark"
+    />
 
-<meta
-  name="color-scheme"
-  content="light dark"
-/>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/logos/urjasathi-logo.svg"
+    />
 
-<link
-  rel="icon"
-  type="image/svg+xml"
-  href="/logos/urjasathi-logo.svg"
-/>
+    <title>UrjaSathi | Smart Energy Management</title>
 
-<title>UrjaSathi | Smart Energy Management</title>
-
-
+    <!-- Defensive performance & extension error guard -->
+    <script>
+      window.addEventListener('error', function (event) {
+        var msg = (event && (event.message || (event.error && event.error.message))) || '';
+        if (msg.indexOf("reading 'startTime'") !== -1 || msg.indexOf("startTime") !== -1) {
+          if (event.preventDefault) event.preventDefault();
+          if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+          return true;
+        }
+      }, true);
+    </script>
   </head>
 
   <body>
     <div id="root"></div>
 
-
-<script
-  type="module"
-  src="/src/main.jsx"
-></script>
-
-
+    <script
+      type="module"
+      src="/src/main.jsx"
+    ></script>
   </body>
 </html>
