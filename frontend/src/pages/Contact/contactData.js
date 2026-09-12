@@ -10,27 +10,30 @@
 
 export const officeGallery = [
     {
-        src: "/images/urjasathi-office-1.jpg",
-        title: "Building a Smarter Energy Future",
+        src: "/images/team-collaboration.jpg",
+        title: "Ideas Become Impact Together.",
         description:
-            "A platform designed to make energy data easier to understand and act upon.",
+            "A team working together to turn complex energy challenges into simple, intelligent solutions.",
     },
+
     {
-        src: "/images/urjasathi-office-2.jpg",
-        title: "Technology Meets Sustainability",
+        src: "/images/urjasathi-product.jpg",
+        title: "Intelligence for Every Unit of Energy.",
         description:
-            "Bringing intelligent monitoring and renewable energy together.",
+            "UrjaSathi brings solar, battery, and grid data together to help make smarter energy decisions.",
     },
+
     {
-        src: "/images/urjasathi-office-3.jpg",
-        title: "Designed Around Your Energy",
+        src: "/images/renewable-energy.jpg",
+        title: "Technology Built for a Cleaner Future.",
         description:
-            "Simple insights that help households and organizations make better decisions.",
+            "We combine data, automation, and renewable energy insights to make energy management more efficient.",
     },
+
     {
-        src: "/images/urjasathi-office-4.jpg",
-        title: "Innovation for a Greener Tomorrow",
+        src: "/images/solar-powered-future.jpg",
+        title: "Powering a More Sustainable Tomorrow.",
         description:
-            "Helping create a more efficient and sustainable energy ecosystem.",
+            "From generation to consumption, UrjaSathi helps organizations understand their energy and use it better.",
     },
 ];

@@ -31,5 +31,4 @@ services:
       - "443:443"
       
     volumes:
-      - /etc/letsencrypt/live/urjasathi.online:/etc/letsencrypt/live/urjasathi.online:ro
-      - /etc/letsencrypt/archive/urjasathi.online:/etc/letsencrypt/archive/urjasathi.online:ro
+      - /opt/urjasathi/ssl:/etc/nginx/ssl:ro
