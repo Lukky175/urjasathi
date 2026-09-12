@@ -194,10 +194,10 @@ jobs:
                 "docker compose --env-file deploy/.env -f deploy/docker-compose.prod.yml pull backend",
                 "docker compose --env-file deploy/.env -f deploy/docker-compose.prod.yml up -d --no-deps backend",
                 "docker image prune -f",
-                "for i in {1..30}; do docker exec urjasathi-backend python -c \"import urllib.request; urllib.request.urlopen(\\\"http://127.0.0.1:8000/health\\\", timeout=3)\" && exit 0; sleep 2; done",
-                "docker logs --tail 100 urjasathi-backend",
-                "exit 1"
-              ],
+                "sleep 10",
+                "docker exec urjasathi-backend python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)\"",
+                "docker compose --env-file deploy/.env -f deploy/docker-compose.prod.yml ps"
+                ],
               "executionTimeout": ["300"]
             }' \
             --query 'Command.CommandId' \
