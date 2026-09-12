@@ -54,7 +54,7 @@ export default function Battery() {
         },
         {
             title: "Battery Capacity",
-            value: "10",
+            value: "210",
             unit: "kWh",
             description: "Usable storage capacity",
             icon: BatteryFull,
